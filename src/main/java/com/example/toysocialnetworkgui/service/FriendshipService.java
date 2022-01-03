@@ -11,21 +11,21 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class FriendshipService {
-    private Repository<Tuple<Long, Long>, Friendship> repo;
+    public Repository<Tuple<Long, Long>, Friendship> repo;
 
     public FriendshipService(Repository<Tuple<Long, Long>, Friendship> repo) {
         this.repo = repo;
     }
 
-    public void addFriendShip(Friendship friendship) {
+   /* public void addFriendShip(Friendship friendship) {
         repo.save(friendship);
-    }
+    }*/
 
     public void deleteFriendship(Tuple<Long, Long> id) {
         Tuple<Long, Long> original_id = id;
         Tuple<Long, Long> reversed_id = new Tuple<Long, Long>(original_id.getRight(), original_id.getLeft());
-        Friendship original_friendship = repo.findOneById(original_id);
-        Friendship reveresed_friendship = repo.findOneById(reversed_id);
+        Friendship original_friendship = repo.findOne(original_id);
+        Friendship reveresed_friendship = repo.findOne(reversed_id);
         if (original_friendship == null && reveresed_friendship == null)
             return;
         if (original_friendship == null) {

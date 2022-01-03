@@ -1,9 +1,11 @@
 package com.example.toysocialnetworkgui.ui;
 
+import com.example.toysocialnetworkgui.domain.Friendship;
 import com.example.toysocialnetworkgui.domain.Message;
 import com.example.toysocialnetworkgui.domain.User;
 import com.example.toysocialnetworkgui.domain.validators.ValidationException;
 import com.example.toysocialnetworkgui.repository.repoExceptions.RepoException;
+import com.example.toysocialnetworkgui.service.ServiceException;
 import com.example.toysocialnetworkgui.service.SuperService;
 
 import java.util.*;
@@ -45,7 +47,7 @@ public class Runner {
             System.out.println("User already exists!");
     }
 
-    private void  UIAddFriend(User user){
+    /*private void  UIAddFriend(User user){
         Scanner console = new Scanner(System.in);
         System.out.println("First name: ");
         String name = console.next();
@@ -71,7 +73,7 @@ public class Runner {
         } catch (InputMismatchException ex) {
             System.out.println("Invalid friend selected!");
         }
-    }
+    }*/
 
     private void  UIDeleteFriend(User user){
         if(superService.getAllFriendsForGivenUser(user).size() == 0){
@@ -296,9 +298,9 @@ public class Runner {
             String stripped_command = command.strip();
             try{
                 switch (stripped_command){
-                    case ADD_FRIEND:
+                    /*case ADD_FRIEND:
                         UIAddFriend(user);
-                        break;
+                        break;*/
                     case DELETE_FRIEND:
                         UIDeleteFriend(user);
                         break;
@@ -306,7 +308,13 @@ public class Runner {
                         UIDeleteThisUser(user);
                         return;
                     case SHOW_ALL_FRIENDS_FOR_THIS_USER:
-                        UIShowAllFriendsForThisUser(user);
+                        printAllFriendships(user.getId());
+                        break;
+                    case SEND_FRIEND_REQUEST:
+                        sendFriendRequest(user.getId());
+                        break;
+                    case RESPOND_FRIEND_REQUESTS:
+                        responseFriendRequest(user.getId());
                         break;
                     case SHOW_CONVERSATION_BETWEEN_TWO_USERS:
                         UIShowConversation(user);
@@ -439,8 +447,10 @@ public class Runner {
         System.out.println("2. Delete friend");
         System.out.println("3. Delete this user");
         System.out.println("4. Show all friendships for this user");
-        System.out.println("5. Show conversation between this user and another");
-        System.out.println("6. Return to User Operations Menu");
+        System.out.println("5. Return to User Operations Menu");
+        System.out.println("6. Send a friend request");
+        System.out.println("7. Respond to friend requests");
+        System.out.println("8. Show conversation between this user and another");
         System.out.print(">>> ");
     }
 
@@ -463,6 +473,66 @@ public class Runner {
             }
         }
         return newString;
+    }
+
+    public void printAllFriendships(Long id){
+        Iterable<Friendship> friendships = superService.getAllFriendships(id);
+        for(Friendship friendship : friendships)
+            System.out.println(friendship.getId().toString());
+    }
+
+    public void sendFriendRequest(Long idFrom){
+        Scanner input = new Scanner(System.in);
+        System.out.println("Introduce the id of the user: ");
+        String idTo = input.next();
+        try{
+            Long IDTo = Long.parseLong(idTo);
+            superService.sendFriendRequest(idFrom, IDTo);
+
+        }catch (NumberFormatException ex){
+            System.out.println("ID should be a positive number!\n");
+        }catch(ServiceException ex){
+            System.out.println(ex.getMessage());
+        }
+    }
+
+
+    public void responseFriendRequest(Long idFrom){
+        List<Friendship> pendingFriendships = superService.pendingFriendships(idFrom);
+        if(pendingFriendships.size() == 0){
+            System.out.println("There are no friend requests\n");
+            return;
+        }
+        System.out.println("List of friend requests:");
+        for(Friendship friendship: pendingFriendships){
+            if(idFrom.equals(friendship.getId().getLeft()))
+                System.out.println("Id="+String.valueOf(friendship.getId().getRight()) + " " + superService.findOneUser(friendship.getId().getRight()).getLastName() + " " + superService.findOneUser(friendship.getId().getRight()).getFirstName());
+            if(idFrom.equals(friendship.getId().getRight()))
+                System.out.println("Id="+String.valueOf(friendship.getId().getLeft()) + " " + superService.findOneUser(friendship.getId().getLeft()).getLastName() + " " + superService.findOneUser(friendship.getId().getLeft()).getFirstName());
+        }
+        Scanner input = new Scanner(System.in);
+        System.out.println("Introduce the id of the user you want to response:");
+        String idUser = input.next();
+        try {
+            Long IDUser = Long.parseLong(idUser);
+            Long id1 = idFrom;
+            Long id2 = IDUser;
+
+            System.out.println("Type 'approved' or 'rejected': ");
+            String status = input.next();
+            if(!status.equals("approved") && !status.equals("rejected")){
+                System.out.println("Invalid response!\n");
+                return;
+            }
+
+            superService.responseToFriendRequest( id1, id2, status);
+
+        } catch (NumberFormatException ex) {
+            System.out.println("IDs should be positive numbers\n");
+        } catch(ServiceException ex){
+            System.out.println(ex.getMessage());
+        }
+
     }
 
 }

@@ -81,5 +81,7 @@ public interface Repository<ID, E extends Entity<ID>> {
      */
     void update(E entity);
 
+    E findOne(ID longLongTuple);
+
 }
 

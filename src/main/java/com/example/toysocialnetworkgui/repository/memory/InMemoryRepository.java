@@ -70,4 +70,10 @@ public class InMemoryRepository<ID, E extends Entity<ID>> implements Repository<
         entities.put(entity.getId(), entity);
     }
 
+    @Override
+    public E findOne(ID id){
+        if (id==null)
+            throw new IllegalArgumentException("ID must be not null");
+        return entities.get(id);
+    }
 }

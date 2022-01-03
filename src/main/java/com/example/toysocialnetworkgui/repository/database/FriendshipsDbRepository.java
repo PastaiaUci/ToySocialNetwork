@@ -11,7 +11,9 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 import static com.example.toysocialnetworkgui.Utils.constants.RepoConstants.*;
@@ -57,14 +59,24 @@ public class FriendshipsDbRepository implements Repository<Tuple<Long,Long>, Fri
 
     @Override
     public Iterable<Friendship> findAll() {
+        Set<Friendship> friendships = new HashSet<>();
         try (Connection connection = DriverManager.getConnection(url, username, password);
-             PreparedStatement statement = connection.prepareStatement(SELECT_ALL_FRIENDSHIP_DB);)
-        {
-            return getFriendShips(statement);
-        }catch (SQLException ex){
-            ex.printStackTrace();
+             PreparedStatement statement = connection.prepareStatement("SELECT * from friendships");
+             ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                Long id1 = resultSet.getLong("id_1");
+                Long id2 = resultSet.getLong("id_2");
+                String date = resultSet.getString("data_crearii");
+                String friendshipStatus = resultSet.getString("friendship_status");
+                Long sender = resultSet.getLong("sender");
+                Friendship friendship = new Friendship(id1,id2,date,friendshipStatus,sender);
+                friendships.add(friendship);
+            }
+            return friendships;
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return null;
+        return friendships;
     }
 
     @Override
@@ -77,6 +89,8 @@ public class FriendshipsDbRepository implements Repository<Tuple<Long,Long>, Fri
             preparedStatement.setLong(1, entity.getId().getLeft());
             preparedStatement.setLong(2, entity.getId().getRight());
             preparedStatement.setTimestamp(3,Timestamp.valueOf(entity.getDate()));
+            preparedStatement.setString(4, entity.getFriendshipStatus());
+            preparedStatement.setLong(5, entity.getSender());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -104,13 +118,14 @@ public class FriendshipsDbRepository implements Repository<Tuple<Long,Long>, Fri
         if(entity == null)
             throw new IllegalArgumentException("Entity must not be null");
         validator.validate(entity);
-        String sql = UPDATE_FRIENDSHIP_DB;
+        String sql = "UPDATE friendships SET friendship_status='" + entity.getFriendshipStatus() + "', data_crearii='" + entity.getDate() +"' WHERE id_1='" + entity.getId().getLeft() + "' and id_2='" + entity.getId().getRight() + "' ";
+
         try(Connection connection = DriverManager.getConnection(url,username,password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql);)
         {
-            preparedStatement.setTimestamp(1,Timestamp.valueOf(entity.getDate()));
-            preparedStatement.setLong(2, entity.getId().getLeft());
-            preparedStatement.setLong(3, entity.getId().getRight());
+            // preparedStatement.setTimestamp(1,Timestamp.valueOf(entity.getDate()));
+            //  preparedStatement.setLong(2, entity.getId().getLeft());
+            //preparedStatement.setLong(3, entity.getId().getRight());
             preparedStatement.executeUpdate();
         }
         catch(SQLException ex) {
@@ -136,6 +151,8 @@ public class FriendshipsDbRepository implements Repository<Tuple<Long,Long>, Fri
     }
 
 
+
+
     /*public List<Friendship> getAllFriendsForGivenUser(Long id_user){
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement1 = connection.prepareStatement(FIND_ALL_FRIENDS_FOR_GIVEN_USER_RIGHT_TO_LEFT_DB);
@@ -147,5 +164,25 @@ public class FriendshipsDbRepository implements Repository<Tuple<Long,Long>, Fri
         }
         return null;
     }*/
+
+    public Friendship findOne(Tuple<Long,Long> tuple) {
+        String sql="SELECT * from friendships WHERE id_1 = ? and id_2 = ?";
+        try (Connection connection = DriverManager.getConnection(url, username, password))
+
+        {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setLong(1, tuple.getLeft());
+            statement.setLong(2,tuple.getRight());
+            ResultSet resultSet = statement.executeQuery();
+            if(!resultSet.next())
+                return null;
+
+            Friendship friendship = new Friendship(resultSet.getLong("id_1"), resultSet.getLong("id_2"), resultSet.getString("data_crearii"), resultSet.getString("friendship_status"), resultSet.getLong("sender"));
+            return friendship;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
 

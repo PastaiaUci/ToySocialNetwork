@@ -15,17 +15,18 @@ public class RepoConstants {
     public static final int UNSUCCESFUL_OPERATION_RETURN_CODE = 1;
 
     //Sql instructions for 'friendships' table
-    public static final String FIND_FRIENDSHIP_BY_BOTH_ID_DB = "select id_1,id_2,date_of_creation from friendships where id_1 = ? and id_2 = ?";
+    public static final String FIND_FRIENDSHIP_BY_BOTH_ID_DB = "select id_1,id_2,data_crearii from friendships where id_1 = ? and id_2 = ?";
     public static final String FIND_ALL_FRIENDS_FOR_GIVEN_USER_LEFT_TO_RIGHT_DB =   "select F.id_2,U.first_name,U.last_name from users as U\n" +
-                                                                                    "inner join friendships as F on F.id_2 = U.id\n" +
-                                                                                    "where F.id_1 = ?";
+            "inner join friendships as F on F.id_2 = U.id\n" +
+            "where F.id_1 = ?";
     public static final String FIND_ALL_FRIENDS_FOR_GIVEN_USER_RIGHT_TO_LEFT_DB =   "select F.id_1,U.first_name,U.last_name from users as U\n" +
-                                                                                    "inner join friendships as F on F.id_1 = U.id\n" +
-                                                                                    "where F.id_2 = ?";
+            "inner join friendships as F on F.id_1 = U.id\n" +
+            "where F.id_2 = ?";
     public static final String DELETE_FRIENDSHIP_DB = "delete from friendships where id_1 = ? and id_2= ?";
-    public static final String UPDATE_FRIENDSHIP_DB = "update friendships set date_of_creation = ? where id_1 = ? and id_2 = ?";
-    public static final String SAVE_FRIENDSHIP_DB = "insert into friendships(id_1,id_2,date_of_creation) values(?,?,?)";
+    public static final String UPDATE_FRIENDSHIP_DB = "update friendships set data_crearii = ? where id_1 = ? and id_2 = ?";
+    public static final String SAVE_FRIENDSHIP_DB = "insert into friendships (id_1, id_2,data_crearii,friendship_status,sender ) values (?, ?, ?, ?, ?)";
     public static final String SELECT_ALL_FRIENDSHIP_DB = "SELECT * from friendships";
+
 
     //Sql instructions for 'messages' table
     public static final String FIND_MESSAGE_BY_ID_DB = "select id_mesaj,id_from,id_to,mesaj,data_trimitere,id_reply,delete_status "+

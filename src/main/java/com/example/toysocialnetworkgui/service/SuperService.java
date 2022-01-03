@@ -113,7 +113,7 @@ public class SuperService {
         return users1;
     }
 
-    public int addFriendForGivenUser(User given_user, User friend_to_be_added) {
+   /* public int addFriendForGivenUser(User given_user, User friend_to_be_added) {
         for (Friendship friend : friendshipService.findAll())
             if (friend.getId().equals(new Tuple<Long,Long>(given_user.getId(),friend_to_be_added.getId())))
                 return UNSUCCESFUL_OPERATION_RETURN_CODE;
@@ -122,7 +122,7 @@ public class SuperService {
         friendshipService.addFriendShip(newFriendship);
         return SUCCESFUL_OPERATION_RETURN_CODE;
     }
-
+*/
     public List<Message> getMessagesBetweenTwoUsers(User user1, User user2){
         List<Message> convo = StreamSupport.stream(messageService.findAll().spliterator(), false)
                 .filter(message ->  (message.getIdFrom().equals(user1.getId()) && message.getIdTo().equals(user2.getId())) ||
@@ -166,6 +166,67 @@ public class SuperService {
                 current_message.getIdFrom().equals(user2.getId()) && current_message.getIdTo().equals(user1.getId()))
             return true;
         return false;
+    }
+
+    public Iterable<Friendship> getAllFriendships(Long id){
+
+        Iterable<Friendship> allFriendships = friendshipService.repo.findAll();
+        Set<Friendship> friendships = new HashSet<>();
+        for(Friendship friendship : allFriendships)
+            if(friendship.getFriendshipStatus().equals("approved") && ( friendship.getFr1() == id || friendship.getFr2() == id  )  )
+                friendships.add(friendship);
+
+        return friendships;
+
+    }
+
+    public User findOneUser(Long messageTask){
+        User user = userService.repo.findOne(messageTask);
+        return user;
+    }
+
+
+    public void responseToFriendRequest(Long idFrom, Long idTo, String response) throws ServiceException {
+        Long sender = idFrom;
+        if(idFrom > idTo){
+            Long swap = idFrom;
+            idFrom = idTo;
+            idTo = swap;
+        }
+        if(friendshipService.repo.findOne(new Tuple<Long, Long> (idFrom, idTo)) == null)
+            throw new ServiceException("Invalid friend request!");
+        Friendship newFriendship = new Friendship(response, idFrom, idTo, sender);
+        friendshipService.repo.update(newFriendship);
+    }
+
+
+    public List<Friendship> pendingFriendships(Long id) {
+        List<Friendship> pendingFriendships = new ArrayList<>();
+        Iterable<Friendship> friendships = friendshipService.repo.findAll();
+        for (Friendship friendship : friendships) {
+            if( ((friendship.getId().getLeft().equals(id) && !friendship.getId().getLeft().equals(friendship.getSender()) )
+                    || (friendship.getId().getRight().equals(id) && !friendship.getId().getRight().equals(friendship.getSender())))
+                    && friendship.getFriendshipStatus().equals("pending") )
+                pendingFriendships.add(friendship);
+        }
+        return pendingFriendships;
+    }
+
+    public void sendFriendRequest(Long idFrom, Long idTo) throws ServiceException {
+        Long sender = idFrom;
+        if(idFrom > idTo){
+            Long swap = idFrom;
+            idFrom = idTo;
+            idTo = swap;
+        }
+        if(userService.findUserByID(idTo) == null)
+            throw new ServiceException("invalid id!\n");
+        if(friendshipService.repo.findOne(new Tuple<Long, Long> (idFrom, idTo)) != null)
+            throw new ServiceException("There is already a friendship/friend request/rejected friend request between these users\n");
+        if(idTo == idFrom)
+            throw new ServiceException("Wtf cant send a friend request yourself\n");
+        Friendship friendship = new Friendship("pending", idFrom, idTo, sender);
+        friendshipService.repo.save(friendship);
     }
 
 }

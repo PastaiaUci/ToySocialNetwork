@@ -127,4 +127,9 @@ public class MessageDbRepository implements Repository<Long, Message> {
             return messages;
         }
     }
+
+    @Override
+    public Message findOne(Long longLongTuple) {
+        return null;
+    }
 }

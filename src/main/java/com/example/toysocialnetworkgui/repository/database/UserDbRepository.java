@@ -134,5 +134,24 @@ public class UserDbRepository implements Repository<Long, User> {
             return users;
         }
     }
+
+    @Override
+    public User findOne(Long id) {
+        String sql="SELECT * from users WHERE id = ?";
+        try (Connection connection = DriverManager.getConnection(url, username, password))
+        {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if(!resultSet.next())
+                return null;
+            User user = new User(resultSet.getString("first_name"), resultSet.getString("last_name"));
+            user.setId(resultSet.getLong("id"));
+            return user;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
 
