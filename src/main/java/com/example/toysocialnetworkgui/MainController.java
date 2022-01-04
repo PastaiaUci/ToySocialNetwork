@@ -69,9 +69,20 @@ public class MainController {
         firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
 
 
-
-        fromColumn.setCellValueFactory(new PropertyValueFactory<>("fr1"));
-        toColumn.setCellValueFactory(new PropertyValueFactory<>("fr2"));
+        fromColumn.setCellValueFactory( param -> {
+            User user = this.superService.findUserById(param.getValue().getFr1());
+            ReadOnlyObjectWrapper<String> str = new ReadOnlyObjectWrapper<>();
+            if(user != null)
+                str.set(user.getLastName());
+            return str;
+        });
+        toColumn.setCellValueFactory( param -> {
+            User user = this.superService.findUserById(param.getValue().getFr2());
+            ReadOnlyObjectWrapper<String> str = new ReadOnlyObjectWrapper<>();
+            if(user != null)
+                str.set(user.getLastName());
+            return str;
+        });
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("friendshipStatus"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
 
