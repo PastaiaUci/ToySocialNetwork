@@ -38,34 +38,25 @@ public class LoginController {
 
     @FXML
     protected void onLoginButtonClick(ActionEvent event) {
-        String username = usernameTextField.getText();
-        String password = passwordTextField.getText();
-        if(username.equals("")){
-            return;
-        }
-        /*try {
-            User user = superService.findUserByUsername(username);
-            System.out.println("Logging in as: " + user);
-            Node source = (Node) event.getSource();
-            Stage current = (Stage) source.getScene().getWindow();
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main-view.fxml"));
-            Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root, 1024, 768);
-            current.setTitle("Metanauts - " + user.getUsername());
-            current.setScene(scene);
-            MainController ctrl = fxmlLoader.getController();
-            ctrl.afterLoad(this.serviceController, user);
-        } catch(RepositoryException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error!");
-            alert.setHeaderText("This user doesn't exist!\n");
-            alert.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
+
     }
 
     @FXML
-    public void onRegisterButtonClick(ActionEvent actionEvent) {
+    public void onRegisterButtonClick(ActionEvent event) {
+
+       try {
+           Node source = (Node) event.getSource();
+           Stage current = (Stage) source.getScene().getWindow();
+           FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("signup-view.fxml"));
+           Parent root = fxmlLoader.load();
+           SignupController signupController = fxmlLoader.getController();
+           signupController.setSuperService(superService);
+           Scene scene = new Scene(root, 700, 600);
+           current.setTitle("Ian");
+           current.setScene(scene);
+
+       }catch (IOException e) {
+           e.printStackTrace();
+       }
     }
 }

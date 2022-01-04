@@ -68,12 +68,10 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login-view.fxml"));
         Parent root = fxmlLoader.load();
         LoginController mainController = fxmlLoader.getController();
-        //mainController.setServiceController(controller);
-        //mainController.afterLoad();
+        mainController.setServiceController(superService);
 
-
-        Scene scene = new Scene(root, 695, 427);
-        primaryStage.setTitle("App Name");
+        Scene scene = new Scene(root, 700, 600);
+        primaryStage.setTitle("IanAztecaAmuly");
         primaryStage.setScene(scene);
         primaryStage.show();
 
