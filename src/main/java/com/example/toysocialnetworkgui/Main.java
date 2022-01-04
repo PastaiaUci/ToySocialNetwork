@@ -62,8 +62,8 @@ public class Main extends Application {
         FriendshipService friendshipService = new FriendshipService(friendshipDbRepository);
         MessageService messageService = new MessageService(messageDbRepository);
         SuperService superService = new SuperService(friendshipService,userService,messageService);
-        Runner runner = new Runner(superService);
-        runner.runApp();
+      //  Runner runner = new Runner(superService);
+       // runner.runApp();
 
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login-view.fxml"));
         Parent root = fxmlLoader.load();
