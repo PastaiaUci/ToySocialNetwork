@@ -65,4 +65,7 @@ public class LoginController {
         }*/
     }
 
+    @FXML
+    public void onRegisterButtonClick(ActionEvent actionEvent) {
+    }
 }
