@@ -60,11 +60,13 @@ public class LoginController {
                 Stage current = (Stage) source.getScene().getWindow();
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main-view.fxml"));
                 Parent root = fxmlLoader.load();
-                Scene scene = new Scene(root, 1024, 768);
-                current.setTitle("Metanauts - " + username);
+                Scene scene = new Scene(root, 800, 800);
+                current.setTitle("Amuly" + username);
                 current.setScene(scene);
                 MainController ctrl = fxmlLoader.getController();
-                //ctrl.afterLoad(this.serviceController, user);
+                ctrl.afterLoad(superService,superService.findUsersByName(username).get(0));
+
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
