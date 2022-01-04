@@ -33,6 +33,7 @@ public class User extends Entity<Long>{
         return password;
     }
 
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }

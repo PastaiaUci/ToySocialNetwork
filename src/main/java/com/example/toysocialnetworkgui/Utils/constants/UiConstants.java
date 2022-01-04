@@ -11,6 +11,8 @@ public class UiConstants {
     public static final String SELECT_USER = "2";
     public static final String EXIT_USER_OPERATIONS = "3";
     public static final String TEST_LOGIN = "4";
+    public static final String TEST_SENT_FRIEND_REQUESTS = "5";
+    public static final String TEST_INCOMING_FRIEND_REQUESTS = "6";
 
     //SELECTED USER OPERATIONS
     public static final String DELETE_FRIEND = "2";
