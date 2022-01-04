@@ -214,6 +214,9 @@ public class SuperService {
         Friendship friendship = new Friendship("pending", idFrom, idTo, sender);
         friendshipService.repo.save(friendship);
     }
+    public Iterable<User> getAllUsers(){
+        return userService.findAll();
+    }
 
 
     //login function

@@ -7,6 +7,7 @@ module com.example.toysocialnetworkgui {
     requires org.kordamp.bootstrapfx.core;
     requires java.sql;
 
-    opens com.example.toysocialnetworkgui to javafx.fxml;
+    opens com.example.toysocialnetworkgui.domain to javafx.base;
+    opens com.example.toysocialnetworkgui to javafx.fxml, javafx.base;
     exports com.example.toysocialnetworkgui;
 }

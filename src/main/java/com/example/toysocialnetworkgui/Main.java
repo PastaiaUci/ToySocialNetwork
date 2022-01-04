@@ -78,7 +78,6 @@ public class Main extends Application {
         LoginController mainController = fxmlLoader.getController();
         mainController.setServiceController(superService);
 
-        //mainController.afterLoad();
 
         Scene scene = new Scene(root, 700, 600);
         primaryStage.setTitle("IanAztecaAmuly");
