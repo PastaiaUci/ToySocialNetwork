@@ -154,13 +154,19 @@ public class MainController {
             if (friendshipTableView.getSelectionModel().getSelectedItem() == null)
                 return;
             Long id_receiver;
-            if(friendshipTableView.getSelectionModel().getSelectedItem().getFr1() == currentUser.getId())
+            if (friendshipTableView.getSelectionModel().getSelectedItem().getFr1() == currentUser.getId())
                 id_receiver = friendshipTableView.getSelectionModel().getSelectedItem().getFr2();
             else
                 id_receiver = friendshipTableView.getSelectionModel().getSelectedItem().getFr1();
-            this.superService.responseToFriendRequest(currentUser.getId(),id_receiver,response);
-            this.updateRequests();
+
+            Friendship friendship = friendshipTableView.getSelectionModel().getSelectedItem();
+
+            if (currentUser.getId() != friendship.getSender()  && (currentUser.getId() == friendship.getFr1() || currentUser.getId() == friendship.getFr2())  ) {
+                this.superService.responseToFriendRequest(currentUser.getId(), id_receiver, response);
+                this.updateRequests();
+            }
         }
+
         catch (ServiceException e){
             e.printStackTrace();
         }
@@ -179,8 +185,12 @@ public class MainController {
                 id_receiver = friendshipTableView.getSelectionModel().getSelectedItem().getFr2();
             else
                 id_receiver = friendshipTableView.getSelectionModel().getSelectedItem().getFr1();
+            Friendship friendship = friendshipTableView.getSelectionModel().getSelectedItem();
+            if (currentUser.getId() != friendship.getSender()  && (currentUser.getId() == friendship.getFr1() || currentUser.getId() == friendship.getFr2())  )
+            {
             this.superService.responseToFriendRequest(currentUser.getId(),id_receiver,response);
             this.updateRequests();
+            }
         }
         catch (ServiceException e){
             e.printStackTrace();
