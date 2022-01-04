@@ -6,10 +6,17 @@ import com.example.toysocialnetworkgui.service.SuperService;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Date;
 
 public class MainController {
@@ -66,7 +73,6 @@ public class MainController {
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
 
         userTableView.setItems(allUsers);
-
         friendshipTableView.setItems(allRequests);
     }
 
@@ -98,5 +104,28 @@ public class MainController {
         this.setUsernames(users);
     }
 
+
+    @FXML
+    public void sendFriendRequest(ActionEvent actionEvent) {
+
+    }
+
+    @FXML
+    public void onFriendsButtonClick(ActionEvent actionEvent) {
+        try {
+            Node source = (Node) actionEvent.getSource();
+            Stage current = (Stage) source.getScene().getWindow();
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("friends-view.fxml"));
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root, 700, 600);
+            current.setTitle("Ian");
+            current.setScene(scene);
+            FriendsListController ctrl = fxmlLoader.getController();
+            ctrl.afterLoad(superService,superService.findUsersByName(currentUser.getFirstName()).get(0));
+
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
 

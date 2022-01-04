@@ -39,9 +39,15 @@ public class SignupController {
         String first_name = firstNameTextField.getText();
         String last_name = lastNameTextField.getText();
         String password = passwordTextField.getText();
+        if(first_name.equals("") || last_name.equals("") || password.equals("")){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Cabral sad :( !");
+            alert.setHeaderText("Invalid credentials!\n");
+            alert.showAndWait();
+            return;
+        }
         this.superService.addUser(first_name,last_name,password);
     }
-
 
     public void setSuperService(SuperService superService) {
         this.superService = superService;
@@ -58,6 +64,8 @@ public class SignupController {
             Scene scene = new Scene(root, 700, 600);
             current.setTitle("Ian");
             current.setScene(scene);
+            LoginController mainController = fxmlLoader.getController();
+            mainController.setServiceController(superService);
 
         }catch (IOException e) {
             e.printStackTrace();
