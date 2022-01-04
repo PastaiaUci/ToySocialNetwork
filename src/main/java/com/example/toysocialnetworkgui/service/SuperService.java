@@ -229,5 +229,52 @@ public class SuperService {
         return false;
     }
 
+    public List<User> incomingFriendRequests(Long id){
+        List<User> usersWhoSentFriendRequest = new ArrayList<>();
+        Iterable<Friendship> pendingFriendships = friendshipService.findAll();
+        for(Friendship friendship:pendingFriendships){
+            if( friendship.getFr1()!=id ){
+                if(friendship.getFr1() == friendship.getSender()){
+                    User user = userService.findUserByID(friendship.getFr1());
+                    usersWhoSentFriendRequest.add(user);
+                }
+                else{
+                    if(friendship.getFr2() == friendship.getSender()){
+                        User user = userService.findUserByID(friendship.getFr2());
+                        usersWhoSentFriendRequest.add(user);
+                    }
+                }
+            }
+        }
+        return usersWhoSentFriendRequest;
+    }
+
+
+    public List<User> sentFriendRequests(Long id){
+
+        List<User> sentFriendRequest = new ArrayList<>();
+        Iterable<Friendship> pendingFriendships = friendshipService.findAll();
+        for(Friendship friendship:pendingFriendships){
+
+
+            if( friendship.getFr1()!=id ) {
+
+                if (friendship.getFr1() != friendship.getSender()) {
+                    User user = userService.findUserByID(friendship.getFr1());
+                    sentFriendRequest.add(user);
+                }
+            }
+            else{
+
+                    if(friendship.getFr2() != friendship.getSender()){
+                        User user = userService.findUserByID(friendship.getFr2());
+                        sentFriendRequest.add(user);
+                    }
+                }
+
+        }
+        return sentFriendRequest;
+    }
+
 }
 

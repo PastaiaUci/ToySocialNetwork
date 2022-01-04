@@ -347,6 +347,38 @@ public class Runner {
        }
     }
 
+    private void UITest_sent(){
+        Scanner console = new Scanner(System.in);
+
+        System.out.print("Id of user: ");
+        String user_id = console.next();
+        String user_id_valid= user_id.strip();
+
+        long l=Long.parseLong(user_id_valid);
+
+        List<User>users =  superService.sentFriendRequests(l);
+
+        for(User user:users)
+            System.out.println(user.getFirstName());
+
+    }
+
+    private void UIIncomin(){
+        Scanner console = new Scanner(System.in);
+
+        System.out.print("Id of user: ");
+        String user_id = console.next();
+        String user_id_valid= user_id.strip();
+
+        long l=Long.parseLong(user_id_valid);
+
+        List<User>users =  superService.incomingFriendRequests(l);
+
+        for(User user:users)
+            System.out.println(user.getFirstName());
+
+    }
+
     private void runUserOperationMenu(){
         while(true){
             showUserOperationsMenu();
@@ -363,6 +395,12 @@ public class Runner {
                         break;
                     case TEST_LOGIN:
                         UILogin();
+                        break;
+                    case TEST_SENT_FRIEND_REQUESTS:
+                        UITest_sent();
+                        break;
+                    case TEST_INCOMING_FRIEND_REQUESTS:
+                        UIIncomin();
                         break;
                     case EXIT_USER_OPERATIONS:
                         return;
@@ -423,6 +461,9 @@ public class Runner {
         System.out.println("2. Select User");
         System.out.println("3. Return to main Menu");
         System.out.println("4. Test login");
+        System.out.println("5. Test sent requests");
+        System.out.println("6. Test incoming requests");
+
         System.out.print(">>> ");
     }
 
