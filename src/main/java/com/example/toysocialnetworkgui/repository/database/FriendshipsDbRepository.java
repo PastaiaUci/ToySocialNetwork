@@ -140,7 +140,7 @@ public class FriendshipsDbRepository implements Repository<Tuple<Long,Long>, Fri
                 Long id_1 = resultSet.getLong("id_1");
                 Long id_2 = resultSet.getLong("id_2");
                 //String date_of_creation = resultSet.getString("date_of_creation");
-                LocalDateTime date_of_creation = resultSet.getTimestamp("date_of_creation").toLocalDateTime();
+                LocalDateTime date_of_creation = resultSet.getTimestamp("data_crearii").toLocalDateTime();
                 Friendship friendship = new Friendship(date_of_creation);
                 Tuple<Long,Long> friendship_id = new Tuple<>(id_1,id_2);
                 friendship.setId(friendship_id);
