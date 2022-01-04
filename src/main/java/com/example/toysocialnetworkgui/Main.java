@@ -71,11 +71,12 @@ public class Main extends Application {
         Parent root = fxmlLoader.load();
         LoginController mainController = fxmlLoader.getController();
         mainController.setServiceController(superService);
+
         //mainController.afterLoad();
 
-
         Scene scene = new Scene(root, 700, 600);
-        primaryStage.setTitle("App Name");
+        primaryStage.setTitle("IanAztecaAmuly");
+
         primaryStage.setScene(scene);
         primaryStage.show();
 
