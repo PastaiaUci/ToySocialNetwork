@@ -1,5 +1,6 @@
 package com.example.toysocialnetworkgui;
 import com.example.toysocialnetworkgui.domain.User;
+import com.example.toysocialnetworkgui.repository.repoExceptions.RepoException;
 import com.example.toysocialnetworkgui.service.SuperService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,6 +24,8 @@ public class LoginController {
     @FXML
     Label passwordLabel;
     @FXML
+    Label noAccountLabel;
+    @FXML
     TextField usernameTextField;
     @FXML
     TextField passwordTextField;
@@ -43,26 +46,27 @@ public class LoginController {
         if(username.equals("")){
             return;
         }
-        /*try {
-            User user = superService.findUserByUsername(username);
-            System.out.println("Logging in as: " + user);
-            Node source = (Node) event.getSource();
-            Stage current = (Stage) source.getScene().getWindow();
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main-view.fxml"));
-            Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root, 1024, 768);
-            current.setTitle("Metanauts - " + user.getUsername());
-            current.setScene(scene);
-            MainController ctrl = fxmlLoader.getController();
-            ctrl.afterLoad(this.serviceController, user);
-        } catch(RepositoryException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error!");
-            alert.setHeaderText("This user doesn't exist!\n");
-            alert.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
+            try {
+                boolean found = superService.login(username, password);
+                if (found == false) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error!");
+                    alert.setHeaderText("This user doesn't exist!\n");
+                    alert.showAndWait();
+                    return;
+                }
+                Node source = (Node) event.getSource();
+                Stage current = (Stage) source.getScene().getWindow();
+                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main-view.fxml"));
+                Parent root = fxmlLoader.load();
+                Scene scene = new Scene(root, 1024, 768);
+                current.setTitle("Metanauts - " + username);
+                current.setScene(scene);
+                MainController ctrl = fxmlLoader.getController();
+                //ctrl.afterLoad(this.serviceController, user);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
     }
 
     @FXML

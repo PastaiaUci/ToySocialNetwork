@@ -43,9 +43,9 @@ public class Main extends Application {
         Repository<Tuple<Long,Long>, Friendship> friendshipDbRepository = null;
         Repository<Long, Message> messageDbRepository = null;
         try {
-            userDbRepository = new UserDbRepository("jdbc:postgresql://localhost:5432/postgres","postgres","postgres", new UserValidator());
-            friendshipDbRepository = new FriendshipsDbRepository("jdbc:postgresql://localhost:5432/postgres","postgres","postgres",new FriendshipValidator());
-            messageDbRepository = new MessageDbRepository("jdbc:postgresql://localhost:5432/postgres","postgres","postgres", new MessageValidator());
+            userDbRepository = new UserDbRepository("jdbc:postgresql://localhost:5432/academic","postgres","22adc#cJf6", new UserValidator());
+            friendshipDbRepository = new FriendshipsDbRepository("jdbc:postgresql://localhost:5432/academic","postgres","22adc#cJf6",new FriendshipValidator());
+            messageDbRepository = new MessageDbRepository("jdbc:postgresql://localhost:5432/academic","postgres","22adc#cJf6", new MessageValidator());
         }
         catch (FileError ex){
             System.out.println(ex.getMessage());
@@ -62,17 +62,19 @@ public class Main extends Application {
         FriendshipService friendshipService = new FriendshipService(friendshipDbRepository);
         MessageService messageService = new MessageService(messageDbRepository);
         SuperService superService = new SuperService(friendshipService,userService,messageService);
-        //Runner runner = new Runner(superService);
-        //runner.runApp();
+        User user = superService.findUserById(8L);
+        superService.replyAll(user,"salut");
+        Runner runner = new Runner(superService);
+        runner.runApp();
 
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login-view.fxml"));
         Parent root = fxmlLoader.load();
         LoginController mainController = fxmlLoader.getController();
-        //mainController.setServiceController(controller);
+        mainController.setServiceController(superService);
         //mainController.afterLoad();
 
 
-        Scene scene = new Scene(root, 695, 427);
+        Scene scene = new Scene(root, 700, 600);
         primaryStage.setTitle("App Name");
         primaryStage.setScene(scene);
         primaryStage.show();

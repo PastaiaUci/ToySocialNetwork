@@ -88,6 +88,38 @@ public class SuperService {
         return convo;
     }
 
+    public Set<User> getUsersWithWhomExistsAConversation(User current_user){
+        Set<User> users = new HashSet<>();
+        for(Message message: messageService.findAll()){
+            if(message.getIdFrom().equals(current_user.getId()) && message.getIdTo() != current_user.getId()) {
+                users.add(userService.findUserByID(message.getIdTo()));
+            }
+            if(message.getIdTo().equals(current_user.getId()) && message.getIdFrom() != current_user.getId()){
+                users.add(userService.findUserByID(message.getIdFrom()));
+            }
+            if(message.getIdTo().equals(current_user.getId()) && message.getIdFrom().equals(current_user.getId())){
+                Message current_message = message;
+                while (current_message.getIdFrom().equals(current_message.getIdTo())) {
+                    current_message = messageService.findMessageById(current_message.getIdReply());
+                }
+                if(current_message.getIdFrom() != current_user.getId())
+                    users.add(userService.findUserByID(current_message.getIdFrom()));
+                if(current_message.getIdTo() != current_user.getId())
+                    users.add(userService.findUserByID(current_message.getIdTo()));
+            }
+        }
+        return users;
+    }
+
+    public void replyAll(User user_from, String message){
+        Set<User> users_with_convo = getUsersWithWhomExistsAConversation(user_from);
+        for(User user : users_with_convo){
+            List<Message> current_conversation = getMessagesBetweenTwoUsers(user_from, user);
+            if(!current_conversation.get(current_conversation.size()-1).getIdFrom().equals(user_from.getId()))
+                addMessageBetweenTwoUsers(user_from,user,message, (long) (current_conversation.size() - 1));
+        }
+    }
+
     public void addMessageBetweenTwoUsers(User user1, User user2, String message, Long reply_status) {
         Message new_message = null;
         if (reply_status.equals(SIMPLE_MESSAGE))
