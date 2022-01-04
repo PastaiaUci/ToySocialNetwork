@@ -83,5 +83,7 @@ public interface Repository<ID, E extends Entity<ID>> {
 
     E findOne(ID longLongTuple);
 
+     List<E> getUserByUsername(String username);
+
 }
 

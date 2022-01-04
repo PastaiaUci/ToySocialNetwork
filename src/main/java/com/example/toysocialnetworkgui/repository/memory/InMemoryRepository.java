@@ -1,6 +1,8 @@
 package com.example.toysocialnetworkgui.repository.memory;
 
 import com.example.toysocialnetworkgui.domain.Entity;
+import com.example.toysocialnetworkgui.domain.Friendship;
+import com.example.toysocialnetworkgui.domain.Message;
 import com.example.toysocialnetworkgui.domain.validators.Validator;
 import com.example.toysocialnetworkgui.repository.Repository;
 import com.example.toysocialnetworkgui.repository.repoExceptions.DuplicatedIDError;
@@ -76,4 +78,8 @@ public class InMemoryRepository<ID, E extends Entity<ID>> implements Repository<
             throw new IllegalArgumentException("ID must be not null");
         return entities.get(id);
     }
+
+
+    @Override
+    public List getUserByUsername(String username){ return null; }
 }

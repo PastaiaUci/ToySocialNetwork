@@ -79,6 +79,7 @@ public class UserDbRepository implements Repository<Long, User> {
         {
             preparedStatement.setString(1, entity.getFirstName());
             preparedStatement.setString(2, entity.getLastName());
+            preparedStatement.setString(3, entity.getPassword());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -100,8 +101,6 @@ public class UserDbRepository implements Repository<Long, User> {
     }
 
     @Override
-    //daca faci ui-ul cum l-ai facut tu nu mai trebuie sa verifici existenta id-ului//deci orice i-ai da aici
-    //se stie sigur ca se va executa fara probleme
     public void update(User entity) {
         if(entity == null)
             throw new IllegalArgumentException("Entity must not be null");
@@ -127,7 +126,8 @@ public class UserDbRepository implements Repository<Long, User> {
                 Long id = resultSet.getLong("id");
                 String firstName = resultSet.getString("first_name");
                 String lastName = resultSet.getString("last_name");
-                User user = new User(firstName, lastName);
+                String password =  resultSet.getString("password");
+                User user = new User(firstName, lastName,password);
                 user.setId(id);
                 users.add(user);
             }
@@ -145,7 +145,7 @@ public class UserDbRepository implements Repository<Long, User> {
             ResultSet resultSet = statement.executeQuery();
             if(!resultSet.next())
                 return null;
-            User user = new User(resultSet.getString("first_name"), resultSet.getString("last_name"));
+            User user = new User(resultSet.getString("first_name"), resultSet.getString("last_name"),resultSet.getString("password"));
             user.setId(resultSet.getLong("id"));
             return user;
         } catch (SQLException e) {
@@ -153,5 +153,24 @@ public class UserDbRepository implements Repository<Long, User> {
         }
         return null;
     }
+
+    //new add
+   @Override
+    public List<User> getUserByUsername(String username_1){
+       String sql = FIND_USER_BY_USERNAME_DB;
+       try (Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement statement = connection.prepareStatement(sql);)
+       {
+           statement.setString(1, username_1);
+           List<User> rez = getUsers(statement);
+           if (rez.isEmpty())
+               return null;
+           return rez;
+       } catch (SQLException ex) {
+           ex.printStackTrace();
+       }
+       return null;
+   }
+
 }
 
