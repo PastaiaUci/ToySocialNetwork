@@ -17,12 +17,24 @@ import com.example.toysocialnetworkgui.service.MessageService;
 import com.example.toysocialnetworkgui.service.SuperService;
 import com.example.toysocialnetworkgui.service.UserService;
 import com.example.toysocialnetworkgui.ui.Runner;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
-public class Main {
-    public static void main(String[] args) {
 
+public class Main extends Application {
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        //String fileName3= ApplicationContext.getPROPERTIES().getProperty("data.socialnetwork.users");
         String fileName="data/users.csv";
         String fileName2="data/friendships.csv";
         Repository<Long, User> userFileRepository = null;
@@ -50,9 +62,25 @@ public class Main {
         FriendshipService friendshipService = new FriendshipService(friendshipDbRepository);
         MessageService messageService = new MessageService(messageDbRepository);
         SuperService superService = new SuperService(friendshipService,userService,messageService);
-        Runner runner = new Runner(superService);
-        runner.runApp();
+        //Runner runner = new Runner(superService);
+        //runner.runApp();
 
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login-view.fxml"));
+        Parent root = fxmlLoader.load();
+        LoginController mainController = fxmlLoader.getController();
+        //mainController.setServiceController(controller);
+        //mainController.afterLoad();
+
+
+        Scene scene = new Scene(root, 695, 427);
+        primaryStage.setTitle("App Name");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+    }
+
+    public static void main(String[] args) {
+        launch();
     }
 }
 

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="525.0" prefWidth="710.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetworkgui.LoginController">
+   <children>
+      <ImageView fitHeight="150.0" fitWidth="219.0" layoutX="239.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@cabral.jpg" />
+         </image></ImageView>
+      <TextField fx:id="usernameTextField" layoutX="288.0" layoutY="237.0" prefHeight="31.0" prefWidth="326.0" />
+      <Label fx:id="usernameLabel" layoutX="134.0" layoutY="236.0" prefHeight="34.0" prefWidth="132.0" text="Username : " textFill="#690f5d">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Label>
+      <Label fx:id="passwordLabel" layoutX="134.0" layoutY="299.0" prefHeight="34.0" prefWidth="132.0" text="Password :" textFill="#690f5d">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Label>
+      <TextField fx:id="passwordTextField" layoutX="288.0" layoutY="300.0" prefHeight="31.0" prefWidth="326.0" />
+      <Button fx:id="loginButton" layoutX="288.0" layoutY="357.0" mnemonicParsing="false" onAction="#onLoginButtonClick" prefHeight="26.0" prefWidth="90.0" text="Login" />
+      <Label fx:id="noAccountLabel" layoutX="134.0" layoutY="455.0" prefHeight="19.0" prefWidth="184.0" text="No account? No problem bro">
+         <font>
+            <Font name="System Italic" size="13.0" />
+         </font>
+      </Label>
+      <Button fx:id="registerButton" layoutX="318.0" layoutY="451.0" mnemonicParsing="false" onAction="#onRegisterButtonClick" prefHeight="26.0" prefWidth="74.0" text="Register" />
+   </children>
+</AnchorPane>

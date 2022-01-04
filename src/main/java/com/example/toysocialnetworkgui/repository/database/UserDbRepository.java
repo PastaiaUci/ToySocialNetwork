@@ -154,6 +154,7 @@ public class UserDbRepository implements Repository<Long, User> {
         return null;
     }
 
+
     //new add
    @Override
     public List<User> getUserByUsername(String username_1){
@@ -171,6 +172,7 @@ public class UserDbRepository implements Repository<Long, User> {
        }
        return null;
    }
+
 
 }
 
