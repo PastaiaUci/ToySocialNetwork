@@ -2,6 +2,7 @@ package com.example.toysocialnetworkgui;
 
 import com.example.toysocialnetworkgui.domain.Friendship;
 import com.example.toysocialnetworkgui.domain.User;
+import com.example.toysocialnetworkgui.service.ServiceException;
 import com.example.toysocialnetworkgui.service.SuperService;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -80,5 +81,13 @@ public class FriendsListController {
         }catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void onDeleteFriendClick(ActionEvent actionEvent) {
+            if (friendsTableView.getSelectionModel().getSelectedItem() == null)
+                return;
+            Long id_friend = friendsTableView.getSelectionModel().getSelectedItem().getId();
+            this.superService.deleteFriendForUser(currentUser, superService.findUserById(id_friend));
+            this.updateAllFriends();
     }
 }

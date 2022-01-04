@@ -67,7 +67,7 @@ public class SuperService {
 
     public Set<User> getAllFriendsForGivenUser(User user) {
         Set<User> users1 = StreamSupport.stream(friendshipService.findAll().spliterator(), false)
-                .filter(friendship -> friendship.getId().getLeft().equals(user.getId()) || friendship.getId().getRight().equals(user.getId()))
+                .filter(friendship -> (friendship.getId().getLeft().equals(user.getId()) && friendship.getFriendshipStatus().equals("approved") )  || (friendship.getId().getRight().equals(user.getId()) && friendship.getFriendshipStatus().equals("approved")))
                 .map(friendship -> {
                     if (friendship.getId().getLeft().equals(user.getId()))
                         return userService.findUserByID(friendship.getId().getRight());
@@ -217,6 +217,10 @@ public class SuperService {
     public Iterable<User> getAllUsers(){
         return userService.findAll();
     }
+    public Iterable<Friendship> getAllFriendships()
+        {
+            return friendshipService.findAll();
+        }
 
 
     //login function
@@ -279,5 +283,19 @@ public class SuperService {
         return sentFriendRequest;
     }
 
+
+    public List<Friendship> allRequestsOfAUser(Long id){
+
+        List<Friendship> sentFriendRequest = new ArrayList<>();
+        Iterable<Friendship> pendingFriendships = friendshipService.findAll();
+        for(Friendship friendship:pendingFriendships){
+
+
+            if(friendship.getFr1() == id || friendship.getFr2() == id)
+                sentFriendRequest.add(friendship);
+
+        }
+        return sentFriendRequest;
+    }
 }
 

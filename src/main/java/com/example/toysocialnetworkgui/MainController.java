@@ -2,6 +2,7 @@ package com.example.toysocialnetworkgui;
 
 import com.example.toysocialnetworkgui.domain.Friendship;
 import com.example.toysocialnetworkgui.domain.User;
+import com.example.toysocialnetworkgui.service.ServiceException;
 import com.example.toysocialnetworkgui.service.SuperService;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -67,8 +68,21 @@ public class MainController {
         lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
 
-        fromColumn.setCellValueFactory(new PropertyValueFactory<>("fr1"));
-        toColumn.setCellValueFactory(new PropertyValueFactory<>("fr2"));
+
+        fromColumn.setCellValueFactory( param -> {
+            User user = this.superService.findUserById(param.getValue().getFr1());
+            ReadOnlyObjectWrapper<String> str = new ReadOnlyObjectWrapper<>();
+            if(user != null)
+                str.set(user.getLastName());
+            return str;
+        });
+        toColumn.setCellValueFactory( param -> {
+            User user = this.superService.findUserById(param.getValue().getFr2());
+            ReadOnlyObjectWrapper<String> str = new ReadOnlyObjectWrapper<>();
+            if(user != null)
+                str.set(user.getLastName());
+            return str;
+        });
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("friendshipStatus"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
 
@@ -90,18 +104,87 @@ public class MainController {
 
         this.updateUsers();
         userName.setText(currentUser.getLastName());
-        //this.updateRequests();
+
+
+        this.updateRequests();
     }
 
 
+    public void updateRequests(){
+        this.allRequests.clear();
+        Iterable<Friendship> friendships = this.superService.allRequestsOfAUser(currentUser.getId());
+        this.setFriendships(friendships);
+    }
     public void setUsernames(Iterable<User> users) {
         users.forEach( u -> this.allUsers.add(u));
+    }
+    public void setFriendships(Iterable<Friendship> friendships) {
+        friendships.forEach( u -> this.allRequests.add(u));
     }
 
     public void updateUsers() {
         this.allUsers.clear();
         Iterable<User> users = this.superService.getAllUsers();
         this.setUsernames(users);
+    }
+
+    @FXML
+    public void sendRequest() {
+
+        try {
+            if (userTableView.getSelectionModel().getSelectedItem() == null)
+                return;
+            this.superService.sendFriendRequest(currentUser.getId(),userTableView.getSelectionModel().getSelectedItem().getId());
+            this.updateRequests();
+        }
+        catch (ServiceException e){
+           System.out.println("stefaneeee");
+           Alert alert = new Alert(Alert.AlertType.ERROR);
+           alert.setTitle("Can't send friend request!");
+           alert.setHeaderText("Mi ai dat leanul pe jos!");
+           alert.showAndWait();
+
+        }
+    }
+
+    @FXML
+    public void acceptRequest() {
+        String response = "approved";
+        try {
+            if (friendshipTableView.getSelectionModel().getSelectedItem() == null)
+                return;
+            Long id_receiver;
+            if(friendshipTableView.getSelectionModel().getSelectedItem().getFr1() == currentUser.getId())
+                id_receiver = friendshipTableView.getSelectionModel().getSelectedItem().getFr2();
+            else
+                id_receiver = friendshipTableView.getSelectionModel().getSelectedItem().getFr1();
+            this.superService.responseToFriendRequest(currentUser.getId(),id_receiver,response);
+            this.updateRequests();
+        }
+        catch (ServiceException e){
+            e.printStackTrace();
+        }
+    }
+
+
+
+    @FXML
+    public void rejectRequest() {
+        String response = "rejected";
+        try {
+            if (friendshipTableView.getSelectionModel().getSelectedItem() == null)
+                return;
+            Long id_receiver;
+            if(friendshipTableView.getSelectionModel().getSelectedItem().getFr1() == currentUser.getId())
+                id_receiver = friendshipTableView.getSelectionModel().getSelectedItem().getFr2();
+            else
+                id_receiver = friendshipTableView.getSelectionModel().getSelectedItem().getFr1();
+            this.superService.responseToFriendRequest(currentUser.getId(),id_receiver,response);
+            this.updateRequests();
+        }
+        catch (ServiceException e){
+            e.printStackTrace();
+        }
     }
 
 
