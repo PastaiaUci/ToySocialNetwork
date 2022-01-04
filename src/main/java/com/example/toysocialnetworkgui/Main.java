@@ -62,10 +62,10 @@ public class Main extends Application {
         FriendshipService friendshipService = new FriendshipService(friendshipDbRepository);
         MessageService messageService = new MessageService(messageDbRepository);
         SuperService superService = new SuperService(friendshipService,userService,messageService);
-        /*User user = superService.findUserById(8L);
+        User user = superService.findUserById(6L);
         superService.replyAll(user,"salut");
         Runner runner = new Runner(superService);
-        runner.runApp();*/
+        runner.runApp();
 
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login-view.fxml"));
         Parent root = fxmlLoader.load();
@@ -79,7 +79,6 @@ public class Main extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
-
     }
 
     public static void main(String[] args) {

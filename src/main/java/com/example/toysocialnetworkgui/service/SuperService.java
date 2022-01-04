@@ -97,7 +97,7 @@ public class SuperService {
             if(message.getIdTo().equals(current_user.getId()) && message.getIdFrom() != current_user.getId()){
                 users.add(userService.findUserByID(message.getIdFrom()));
             }
-            if(message.getIdTo().equals(current_user.getId()) && message.getIdFrom().equals(current_user.getId())){
+            /*if(message.getIdTo().equals(current_user.getId()) && message.getIdFrom().equals(current_user.getId())){
                 Message current_message = message;
                 while (current_message.getIdFrom().equals(current_message.getIdTo())) {
                     current_message = messageService.findMessageById(current_message.getIdReply());
@@ -106,7 +106,7 @@ public class SuperService {
                     users.add(userService.findUserByID(current_message.getIdFrom()));
                 if(current_message.getIdTo() != current_user.getId())
                     users.add(userService.findUserByID(current_message.getIdTo()));
-            }
+            }*/
         }
         return users;
     }
@@ -116,7 +116,7 @@ public class SuperService {
         for(User user : users_with_convo){
             List<Message> current_conversation = getMessagesBetweenTwoUsers(user_from, user);
             if(!current_conversation.get(current_conversation.size()-1).getIdFrom().equals(user_from.getId()))
-                addMessageBetweenTwoUsers(user_from,user,message, (long) (current_conversation.size() - 1));
+                addMessageBetweenTwoUsers(user_from,user,message, current_conversation.get(current_conversation.size()-1).getId());
         }
     }
 

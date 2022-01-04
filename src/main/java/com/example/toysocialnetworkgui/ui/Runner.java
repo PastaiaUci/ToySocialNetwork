@@ -62,6 +62,9 @@ public class Runner {
         System.out.print("Friend name: ");
         String name = console.next();
         String stripped_name = name.strip();
+        for(User friend : superService.getAllFriendsForGivenUser(user)){
+            System.out.println(friend);
+        }
         List<User> usersMatchingName = superService.findAllFriendsMathcingNameForGivenUser(user,stripped_name);
         if(usersMatchingName.size() == 0){
             System.out.println("No friends found mathcing this name!");
