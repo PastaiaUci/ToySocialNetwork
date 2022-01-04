@@ -67,6 +67,7 @@ public class Main {
         //fsafafasfas
         //modificare
         //mobtrap
+        //amuly
     }
 }
 
