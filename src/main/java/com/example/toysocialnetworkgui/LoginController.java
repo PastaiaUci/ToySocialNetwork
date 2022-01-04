@@ -41,6 +41,7 @@ public class LoginController {
 
     @FXML
     protected void onLoginButtonClick(ActionEvent event) {
+
         String username = usernameTextField.getText();
         String password = passwordTextField.getText();
         if(username.equals("")){
@@ -70,6 +71,21 @@ public class LoginController {
     }
 
     @FXML
-    public void onRegisterButtonClick(ActionEvent actionEvent) {
+    public void onRegisterButtonClick(ActionEvent event) {
+
+       try {
+           Node source = (Node) event.getSource();
+           Stage current = (Stage) source.getScene().getWindow();
+           FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("signup-view.fxml"));
+           Parent root = fxmlLoader.load();
+           SignupController signupController = fxmlLoader.getController();
+           signupController.setSuperService(superService);
+           Scene scene = new Scene(root, 700, 600);
+           current.setTitle("Ian");
+           current.setScene(scene);
+
+       }catch (IOException e) {
+           e.printStackTrace();
+       }
     }
 }
