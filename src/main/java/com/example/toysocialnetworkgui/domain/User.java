@@ -8,10 +8,12 @@ public class User extends Entity<Long>{
     private String firstName;
     private String lastName;
     private List<User> friends;
+    private String password;
 
-    public User(String firstName, String lastName) {
+    public User(String firstName, String lastName,String password) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.password = password;
         friends = new ArrayList<>();
     }
 
@@ -27,6 +29,10 @@ public class User extends Entity<Long>{
         return lastName;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -39,12 +45,6 @@ public class User extends Entity<Long>{
         friends.add(friend);
     }
 
-    public void deleteFriend(){
-        //TO DO
-    }
-//toString method
-    //comment 2
-    //comment 3
     @Override
     public String toString() {
         return "Utilizator{" +

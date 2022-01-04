@@ -1,15 +1,12 @@
 
 package com.example.toysocialnetworkgui.repository.database;
-
 import com.example.toysocialnetworkgui.domain.Friendship;
 import com.example.toysocialnetworkgui.domain.Tuple;
-import com.example.toysocialnetworkgui.domain.User;
 import com.example.toysocialnetworkgui.domain.validators.FriendshipValidator;
 import com.example.toysocialnetworkgui.repository.Repository;
 
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -184,5 +181,7 @@ public class FriendshipsDbRepository implements Repository<Tuple<Long,Long>, Fri
         }
         return null;
     }
+    @Override
+    public List<Friendship> getUserByUsername(String username){ return null; }
 }
 

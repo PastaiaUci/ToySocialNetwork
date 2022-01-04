@@ -32,10 +32,10 @@ public class UserService {
         return repo.findOneById(id);
     }
 
-    public User findUserByFirstAndLastName(String first_name, String last_name) {
-        List<Object> args = new ArrayList<>();
-        args.add(first_name);
-        args.add(last_name);
-        return repo.findOneByOtherAttributes(args);
-    }
+
+   //new add
+   public List<User> getUsersWithUsername(String username){
+       List<User> users = repo.getUserByUsername(username);
+       return users;
+   }
 }

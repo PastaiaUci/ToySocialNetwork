@@ -1,6 +1,7 @@
 package com.example.toysocialnetworkgui.repository.file;
 
 import com.example.toysocialnetworkgui.domain.Friendship;
+import com.example.toysocialnetworkgui.domain.Message;
 import com.example.toysocialnetworkgui.domain.Tuple;
 import com.example.toysocialnetworkgui.domain.validators.Validator;
 import com.example.toysocialnetworkgui.repository.repoExceptions.FileError;
@@ -38,4 +39,7 @@ public class FriendshipFileRepository extends AbstractFileRepository<Tuple<Long,
     protected String createEntityAsString(Friendship entity) {
         return entity.getId().getLeft() + ";" + entity.getId().getRight() + ";" + entity.getDate();
     }
+
+    @Override
+    public List<Friendship> getUserByUsername(String username){ return null; }
 }

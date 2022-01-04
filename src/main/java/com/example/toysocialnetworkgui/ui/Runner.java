@@ -40,40 +40,18 @@ public class Runner {
         System.out.print("Last name: ");
         String last_name = console.next();
         String valid_last_name = last_name.strip();
-        int rez = superService.addUser(valid_first_name,valid_last_name);
+        System.out.println("Password:");
+        String password = console.next();
+        String valid_password = password.strip();
+
+        int rez = superService.addUser(valid_first_name,valid_last_name,valid_password);
         if(rez == SUCCESFUL_OPERATION_RETURN_CODE)
             System.out.println("User added succesfully!");
         else
             System.out.println("User already exists!");
     }
 
-    /*private void  UIAddFriend(User user){
-        Scanner console = new Scanner(System.in);
-        System.out.println("First name: ");
-        String name = console.next();
-        String stripped_name = name.strip();
-        List<User> usersMatchingName = superService.findUsersByName(stripped_name);
-        if(usersMatchingName.size() == 0){
-            System.out.println("No users found mathcing this name!");
-            return;
-        }
-        for(int i=0;i<usersMatchingName.size();i++)
-            System.out.println(String.format("%d. ", i) + usersMatchingName.get(i));
-        try {
-            System.out.println("Select user: ");
-            System.out.print(">>> ");
-            Integer selected_user_index = console.nextInt();
-            if(selected_user_index<0 || selected_user_index >= usersMatchingName.size()){
-                System.out.println("Invalid friend selected!");
-                return;
-            }
-            int rez = superService.addFriendForGivenUser(user,usersMatchingName.get(selected_user_index));
-            if(rez == 1)
-                System.out.println("Friendship already exists!");
-        } catch (InputMismatchException ex) {
-            System.out.println("Invalid friend selected!");
-        }
-    }*/
+
 
     private void  UIDeleteFriend(User user){
         if(superService.getAllFriendsForGivenUser(user).size() == 0){
@@ -112,16 +90,6 @@ public class Runner {
 
     private void  UIDeleteThisUser(User user){
        superService.removeUser(user);
-    }
-
-    private void  UIShowAllFriendsForThisUser(User user){
-       Set<User> friends = superService.getAllFriendsForGivenUser(user);
-       if(friends.size() == 0){
-           System.out.println("No friends to show");
-           return;
-       }
-       for(User friend: friends)
-           System.out.println(friend);
     }
 
     private void showConversationBetweenTwoUsers(User user1, User user2){
@@ -298,9 +266,7 @@ public class Runner {
             String stripped_command = command.strip();
             try{
                 switch (stripped_command){
-                    /*case ADD_FRIEND:
-                        UIAddFriend(user);
-                        break;*/
+
                     case DELETE_FRIEND:
                         UIDeleteFriend(user);
                         break;
@@ -329,6 +295,25 @@ public class Runner {
                 System.out.println(ex.getMessage());
             }
         }
+    }
+    private void UILogin(){
+        Scanner console = new Scanner(System.in);
+
+        System.out.print("First name: ");
+        String first_name = console.next();
+        String valid_first_name = first_name.strip();
+
+        System.out.print("Password:");
+        String password = console.next();
+        String valid_password = password.strip();
+
+
+
+
+        if(superService.login(valid_first_name,valid_password) == true)
+            System.out.println("login succesful");
+        else System.out.println("unlucko");
+
     }
 
     private void UISelectUser(){
@@ -375,6 +360,9 @@ public class Runner {
                         break;
                     case SELECT_USER:
                         UISelectUser();
+                        break;
+                    case TEST_LOGIN:
+                        UILogin();
                         break;
                     case EXIT_USER_OPERATIONS:
                         return;
@@ -424,10 +412,6 @@ public class Runner {
 
     private void showMainMenu(){
         System.out.println("==================== MENU ====================");
-        System.out.println("1. Show all users");
-        System.out.println("2. Show all friendships");
-        System.out.println("3. graf");
-        System.out.println("4. graf");
         System.out.println("5. User Operations");
         System.out.println("6. Exit app");
         System.out.print(">>> ");
@@ -438,6 +422,7 @@ public class Runner {
         System.out.println("1. Add new User");
         System.out.println("2. Select User");
         System.out.println("3. Return to main Menu");
+        System.out.println("4. Test login");
         System.out.print(">>> ");
     }
 

@@ -132,4 +132,7 @@ public class MessageDbRepository implements Repository<Long, Message> {
     public Message findOne(Long longLongTuple) {
         return null;
     }
+
+    @Override
+    public List<Message> getUserByUsername(String username){ return null; }
 }

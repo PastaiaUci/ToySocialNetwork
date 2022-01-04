@@ -1,5 +1,4 @@
 package com.example.toysocialnetworkgui;
-import com.example.toysocialnetworkgui.config.ApplicationContext;
 import com.example.toysocialnetworkgui.domain.Friendship;
 import com.example.toysocialnetworkgui.domain.Message;
 import com.example.toysocialnetworkgui.domain.Tuple;
@@ -11,8 +10,6 @@ import com.example.toysocialnetworkgui.repository.Repository;
 import com.example.toysocialnetworkgui.repository.database.FriendshipsDbRepository;
 import com.example.toysocialnetworkgui.repository.database.MessageDbRepository;
 import com.example.toysocialnetworkgui.repository.database.UserDbRepository;
-import com.example.toysocialnetworkgui.repository.file.FriendshipFileRepository;
-import com.example.toysocialnetworkgui.repository.file.UserFileRepository;
 import com.example.toysocialnetworkgui.repository.repoExceptions.FileError;
 import com.example.toysocialnetworkgui.repository.repoExceptions.RepoException;
 import com.example.toysocialnetworkgui.service.FriendshipService;
@@ -26,6 +23,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,12 +43,9 @@ public class Main extends Application {
         Repository<Tuple<Long,Long>, Friendship> friendshipDbRepository = null;
         Repository<Long, Message> messageDbRepository = null;
         try {
-            userFileRepository = new UserFileRepository(fileName
-                    , new UserValidator());
-            friendshipFileRepository = new FriendshipFileRepository(fileName2, new FriendshipValidator());
-            userDbRepository = new UserDbRepository("jdbc:postgresql://localhost:5432/academic","postgres","22adc#cJf6", new UserValidator());
-            friendshipDbRepository = new FriendshipsDbRepository("jdbc:postgresql://localhost:5432/academic","postgres","22adc#cJf6",new FriendshipValidator());
-            messageDbRepository = new MessageDbRepository("jdbc:postgresql://localhost:5432/academic","postgres","22adc#cJf6", new MessageValidator());
+            userDbRepository = new UserDbRepository("jdbc:postgresql://localhost:5432/postgres","postgres","postgres", new UserValidator());
+            friendshipDbRepository = new FriendshipsDbRepository("jdbc:postgresql://localhost:5432/postgres","postgres","postgres",new FriendshipValidator());
+            messageDbRepository = new MessageDbRepository("jdbc:postgresql://localhost:5432/postgres","postgres","postgres", new MessageValidator());
         }
         catch (FileError ex){
             System.out.println(ex.getMessage());
@@ -60,10 +55,7 @@ public class Main extends Application {
             System.out.println(ex.getMessage());
             return;
         }
-        //FILE
-        /*UserService userService = new UserService(userFileRepository);
-        FriendshipService friendshipService = new FriendshipService(friendshipFileRepository);
-        SuperService superService = new SuperService(friendshipService,userService);*/
+
 
         //DataBase
         UserService userService = new UserService(userDbRepository);
