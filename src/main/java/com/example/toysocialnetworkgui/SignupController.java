@@ -58,6 +58,8 @@ public class SignupController {
             Scene scene = new Scene(root, 700, 600);
             current.setTitle("Ian");
             current.setScene(scene);
+            LoginController mainController = fxmlLoader.getController();
+            mainController.setServiceController(superService);
 
         }catch (IOException e) {
             e.printStackTrace();
