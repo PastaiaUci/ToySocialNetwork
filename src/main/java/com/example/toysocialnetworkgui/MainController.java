@@ -204,6 +204,25 @@ public class MainController {
     }
 
     @FXML
+    public void deleteRequest(ActionEvent actionEvent){
+
+            if (friendshipTableView.getSelectionModel().getSelectedItem() == null)
+                return;
+
+            Friendship friendship = friendshipTableView.getSelectionModel().getSelectedItem();
+            if (currentUser.getId() == friendship.getSender()  && (currentUser.getId() == friendship.getFr1() || currentUser.getId() == friendship.getFr2())  )
+            {
+                //delete friendship from db
+                if(friendship.getFriendshipStatus().equals("pending")) {
+                    this.superService.deleteFriendship(friendship.getFr1(), friendship.getFr2());
+                    this.updateRequests();
+                }
+            }
+    }
+
+
+
+    @FXML
     public void onFriendsButtonClick(ActionEvent actionEvent) {
         try {
             Node source = (Node) actionEvent.getSource();

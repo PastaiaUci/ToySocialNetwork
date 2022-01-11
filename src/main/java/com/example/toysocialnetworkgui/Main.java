@@ -43,9 +43,9 @@ public class Main extends Application {
         Repository<Tuple<Long,Long>, Friendship> friendshipDbRepository = null;
         Repository<Long, Message> messageDbRepository = null;
         try {
-            userDbRepository = new UserDbRepository("jdbc:postgresql://localhost:5432/academic","postgres","22adc#cJf6", new UserValidator());
-            friendshipDbRepository = new FriendshipsDbRepository("jdbc:postgresql://localhost:5432/academic","postgres","22adc#cJf6",new FriendshipValidator());
-            messageDbRepository = new MessageDbRepository("jdbc:postgresql://localhost:5432/academic","postgres","22adc#cJf6", new MessageValidator());
+            userDbRepository = new UserDbRepository("jdbc:postgresql://localhost:5432/postgres","postgres","postgres", new UserValidator());
+            friendshipDbRepository = new FriendshipsDbRepository("jdbc:postgresql://localhost:5432/postgres","postgres","postgres",new FriendshipValidator());
+            messageDbRepository = new MessageDbRepository("jdbc:postgresql://localhost:5432/postgres","postgres","postgres", new MessageValidator());
 
         }
         catch (FileError ex){
@@ -64,8 +64,7 @@ public class Main extends Application {
         MessageService messageService = new MessageService(messageDbRepository);
         SuperService superService = new SuperService(friendshipService,userService,messageService);
 
-        User user = superService.findUserById(6L);
-        superService.replyAll(user,"salut");
+
        /* Runner runner = new Runner(superService);
         runner.runApp();*/
 
