@@ -24,6 +24,7 @@
             <TableColumn fx:id="dateColumn" prefWidth="116.0" text="Data" />
          </columns>
       </TableView>
+
       <Button fx:id="sendRequestButton" onAction="#sendRequest" layoutX="35.0" layoutY="133.0" mnemonicParsing="false" text="Send Friend Request" />
       <Button fx:id="sendAcceptButton" onAction="#acceptRequest" layoutX="425.0" layoutY="133.0" mnemonicParsing="false" text="Accept" />
       <Button fx:id="sendRejectButton" onAction="#rejectRequest" layoutX="531.0" layoutY="133.0" mnemonicParsing="false" text="Reject" />
@@ -41,5 +42,6 @@
             <Font size="10.0" />
          </font>
       </Label>
+      <Button fx:id="logouttButton" onAction="#logout" layoutX="26.0" layoutY="25.0" mnemonicParsing="false" text="Logout" />
    </children>
 </AnchorPane>

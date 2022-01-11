@@ -48,6 +48,10 @@ public class SuperService {
     public void deleteFriendForUser(User user, User friend) {
         friendshipService.deleteFriendship(new Tuple<>(user.getId(), friend.getId()));
     }
+    public void deleteFriendship(Long id1,Long id2){
+        friendshipService.deleteFriendship(new Tuple<>(id1, id2));
+
+    }
 
 
     public List<User> findAllFriendsMathcingNameForGivenUser(User user, String name) {

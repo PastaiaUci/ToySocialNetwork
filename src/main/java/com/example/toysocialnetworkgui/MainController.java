@@ -32,6 +32,8 @@ public class MainController {
     @FXML
     Button sendDeleteButton;
     @FXML
+    Button logouttButton;
+    @FXML
     Button sendRequestButton;
     @FXML
     Button sendAcceptButton;
@@ -210,6 +212,44 @@ public class MainController {
     public void sendFriendRequest(ActionEvent actionEvent) {
 
     }
+
+    @FXML
+    public void deleteRequest(){
+
+            if (friendshipTableView.getSelectionModel().getSelectedItem() == null)
+                return;
+
+            Friendship friendship = friendshipTableView.getSelectionModel().getSelectedItem();
+            if (currentUser.getId() == friendship.getSender()  && (currentUser.getId() == friendship.getFr1() || currentUser.getId() == friendship.getFr2())  )
+            {
+                //delete friendship from db
+                if(friendship.getFriendshipStatus().equals("pending")) {
+                    this.superService.deleteFriendship(friendship.getFr1(), friendship.getFr2());
+                    this.updateRequests();
+                }
+            }
+    }
+
+    @FXML
+    public void logout(ActionEvent event){
+        try {
+            Node source = (Node) event.getSource();
+            Stage current = (Stage) source.getScene().getWindow();
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login-view.fxml"));
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root, 700, 600);
+            current.setTitle("Ian");
+            current.setScene(scene);
+            LoginController mainController = fxmlLoader.getController();
+            mainController.setServiceController(superService);
+
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
 
     @FXML
     public void onFriendsButtonClick(ActionEvent actionEvent) {
