@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.TextField?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="692.0" prefWidth="759.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetworkgui.MainController">
    <children>
       <TableView fx:id="userTableView" layoutX="26.0" layoutY="186.0" prefHeight="384.0" prefWidth="327.0">
@@ -28,9 +29,16 @@
       <Button fx:id="sendRejectButton" onAction="#rejectRequest" layoutX="531.0" layoutY="133.0" mnemonicParsing="false" text="Reject" />
       <Button fx:id="sendDeleteButton" layoutX="628.0" layoutY="133.0" mnemonicParsing="false" text="Delete" />
       <Button fx:id="viewFriendsButton" onAction="#onFriendsButtonClick" layoutX="524.0" layoutY="600.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="186.0" text="Friends" />
+      <Button fx:id="viewMessagesButton" onAction="#onMessagesButtonClick" layoutX="328.0" layoutY="600.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="186.0" text="Messages"/>
       <Label fx:id="userName" layoutX="335.0" layoutY="14.0" prefHeight="90.0" prefWidth="221.0" text="Label">
          <font>
             <Font size="33.0" />
+         </font>
+      </Label>
+      <TextField fx:id="usernameTextField" layoutX="140.0" layoutY="618.0" prefHeight="26.0" prefWidth="150.0" />
+      <Label fx:id="usernameMessagesLabel" layoutX="20.0" layoutY="622.0" prefHeight="18.0" prefWidth="86.0" text="Select username: ">
+         <font>
+            <Font size="10.0" />
          </font>
       </Label>
    </children>

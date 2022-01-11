@@ -64,10 +64,10 @@ public class Main extends Application {
         MessageService messageService = new MessageService(messageDbRepository);
         SuperService superService = new SuperService(friendshipService,userService,messageService);
 
-        User user = superService.findUserById(6L);
-        superService.replyAll(user,"salut");
-       /* Runner runner = new Runner(superService);
-        runner.runApp();*/
+       /* User user = superService.findUserById(6L);
+        superService.replyAll(user,"salut");*/
+       Runner runner = new Runner(superService);
+        runner.runApp();
 
       //  Runner runner = new Runner(superService);
        // runner.runApp();

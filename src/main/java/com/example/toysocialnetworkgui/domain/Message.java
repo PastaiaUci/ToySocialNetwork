@@ -12,6 +12,8 @@ public class Message extends Entity<Long>{
     private LocalDateTime data_trimitere;
     private Long id_reply;
     private String delete_status;
+    private int index_in_convo = -1;
+    private Message replied_message = null;
 
     /**
      * Constructor for a message from the data-base
@@ -120,4 +122,19 @@ public class Message extends Entity<Long>{
         return Objects.hash(id_from,id_to,mesaj,data_trimitere,id_reply,delete_status);
     }
 
+    public int getIndex_in_convo() {
+        return index_in_convo;
+    }
+
+    public void setIndex_in_convo(int index_in_convo) {
+        this.index_in_convo = index_in_convo;
+    }
+
+    public Message getReplied_message() {
+        return replied_message;
+    }
+
+    public void setReplied_message(Message replied_message) {
+        this.replied_message = replied_message;
+    }
 }

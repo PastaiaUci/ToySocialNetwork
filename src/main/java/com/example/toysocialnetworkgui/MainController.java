@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 public class MainController {
 
@@ -38,9 +39,16 @@ public class MainController {
     Button sendRejectButton;
     @FXML
     Button viewFriendsButton;
+    @FXML
+    Button viewMessagesButton;
+
+    @FXML
+    TextField usernameTextField;
 
     @FXML
     Label userName;
+    @FXML
+    Label usernameMessagesLabel;
 
     @FXML
     TableView<User> userTableView;
@@ -215,6 +223,31 @@ public class MainController {
             current.setScene(scene);
             FriendsListController ctrl = fxmlLoader.getController();
             ctrl.afterLoad(superService,superService.findUsersByName(currentUser.getFirstName()).get(0));
+
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void onMessagesButtonClick(ActionEvent actionEvent) {
+        try {
+            Node source = (Node) actionEvent.getSource();
+            Stage current = (Stage) source.getScene().getWindow();
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("chat-view.fxml"));
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root, 700, 600);
+            current.setTitle("Messages");
+            current.setScene(scene);
+            ChatController ctrl = fxmlLoader.getController();
+            List<User> found = superService.findUsersByName(usernameTextField.getText());
+            if (found.isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error!");
+                alert.setHeaderText("This user doesn't exist!\n");
+                alert.showAndWait();
+                return;
+            }
+            ctrl.afterLoad(superService,currentUser,found.get(0));
 
         }catch (IOException e) {
             e.printStackTrace();

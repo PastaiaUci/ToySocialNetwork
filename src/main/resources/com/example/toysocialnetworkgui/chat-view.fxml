@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<BorderPane id="body" xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.toysocialnetworkgui.ChatController"
+            prefHeight="400.0" prefWidth="600.0">
+    <stylesheets>
+        <URL value="@style.css"/>
+    </stylesheets>
+    <top>
+        <HBox spacing="400">
+            <Button fx:id="back">Back</Button>
+            <Label fx:id="destinationLabel">Destination</Label>
+        </HBox>
+    </top>
+    <center>
+        <ListView fx:id = "messagesView">
+        </ListView>
+    </center>
+    <bottom>
+        <HBox alignment="CENTER_RIGHT">
+            <padding>
+                <Insets top="10" bottom="10"/>
+            </padding>
+            <TextArea fx:id="textarea" prefHeight="90">
+            </TextArea>
+            <VBox alignment="CENTER" spacing="10">
+                <Button fx:id="send" onAction="#sendMessageButtonClick"
+                        prefHeight="55" prefWidth="80">
+                    Send
+                </Button>
+                <Button fx:id="reset" onAction="#resetReply"
+                        prefHeight="25" prefWidth="80">
+                    No reply
+                </Button>
+            </VBox>
+        </HBox>
+    </bottom>
+</BorderPane>
