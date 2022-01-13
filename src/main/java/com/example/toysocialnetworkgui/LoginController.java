@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -58,12 +59,12 @@ public class LoginController {
                 }
                 Node source = (Node) event.getSource();
                 Stage current = (Stage) source.getScene().getWindow();
-                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main-view.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main2-view.fxml"));
                 Parent root = fxmlLoader.load();
-                Scene scene = new Scene(root, 800, 800);
+                Scene scene = new Scene(root, 896, 578);
                 current.setTitle("Amuly" + username);
                 current.setScene(scene);
-                MainController ctrl = fxmlLoader.getController();
+                Main2Controller ctrl = fxmlLoader.getController();
                 ctrl.afterLoad(superService,superService.findUsersByName(username).get(0));
 
 

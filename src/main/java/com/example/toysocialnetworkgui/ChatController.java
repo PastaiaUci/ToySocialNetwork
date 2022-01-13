@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.ListView.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 
 import java.util.List;
@@ -23,6 +24,8 @@ public class ChatController {
     protected SuperService superService;
     private User currentUser, destination;
     private final ObservableList<Message> messages = FXCollections.observableArrayList();
+    private final ObservableList<User> allUsers = FXCollections.observableArrayList();
+
     @FXML
     Button back;
     @FXML
@@ -37,9 +40,19 @@ public class ChatController {
     Button send;
 
     @FXML
+    TableView<User> usersTableView;
+    @FXML
+    TableColumn<User,String> lastNameColumn;
+    @FXML
+    TableColumn<User,String> firstNameColumn;
+
+    @FXML
     public void initialize() {
         this.messagesView.setCellFactory(param -> new ListViewCell(currentUser.getId()));
+        lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         this.messagesView.setItems(messages);
+        this.usersTableView.setItems(allUsers);
     }
 
 
@@ -62,6 +75,14 @@ public class ChatController {
             superService.addMessageBetweenTwoUsers(currentUser,destination,textarea.getText(),selected.getId());
         this.messagesView.getSelectionModel().clearSelection();
         this.textarea.clear();
+        updateMessages();
+    }
+
+    public void logout(ActionEvent actionEvent) {
+
+    }
+
+    public void showButtonClick(ActionEvent actionEvent) {
         updateMessages();
     }
 
@@ -169,19 +190,31 @@ public class ChatController {
         }
     }
 
-    public void afterLoad(SuperService superService, User currentUser, User destination) {
+    public void afterLoad(SuperService superService, User currentUser) {
         this.superService = superService;
         this.currentUser = currentUser;
-        this.destination = destination;
         //this.superService.addObserver(this);
-
-        this.destinationLabel.setText(destination.getFirstName() + " " + destination.getLastName());
         this.updateMessages();
+        this.updateUsers();
+    }
+
+    public void updateUsers(){
+        this.allUsers.clear();
+        Iterable<User> users = this.superService.getAllUsers();
+        this.setUsernames(users);
+    }
+
+    public void setUsernames(Iterable<User> users) {
+        users.forEach( u -> this.allUsers.add(u));
     }
 
     public void updateMessages() {
         this.messages.clear();
-        List<Message> convo = this.superService.getMessagesBetweenTwoUsers(currentUser,destination);
+        User current_selected_user = usersTableView.getSelectionModel().getSelectedItem();
+        if(current_selected_user == null){
+            return;
+        }
+        List<Message> convo = this.superService.getMessagesBetweenTwoUsers(currentUser,current_selected_user);
         for(int i =0 ;i<convo.size();i++) {
             Message current = convo.get(i);
             current.setIndex_in_convo(i);

@@ -12,7 +12,7 @@
    <children>
       <ImageView fitHeight="150.0" fitWidth="219.0" layoutX="239.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@cabral.jpg" />
+            <Image url="@Images/cabral.jpg" />
          </image></ImageView>
       <TextField fx:id="usernameTextField" layoutX="288.0" layoutY="237.0" prefHeight="31.0" prefWidth="326.0" />
       <Label fx:id="usernameLabel" layoutX="134.0" layoutY="236.0" prefHeight="34.0" prefWidth="132.0" text="Username : " textFill="#690f5d">

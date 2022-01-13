@@ -21,21 +21,19 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-public class MainController {
+public class Main2Controller {
 
 
     SuperService superService;
     private User currentUser;
 
-    ObservableList<User> allUsers = FXCollections.observableArrayList();
+    //ObservableList<User> allUsers = FXCollections.observableArrayList();
     ObservableList<Friendship> allRequests = FXCollections.observableArrayList();
 
     @FXML
     Button sendDeleteButton;
     @FXML
-    Button logouttButton;
-    @FXML
-    Button sendRequestButton;
+    Button logoutButton;
     @FXML
     Button sendAcceptButton;
     @FXML
@@ -43,21 +41,10 @@ public class MainController {
     @FXML
     Button viewFriendsButton;
     @FXML
-    Button viewMessagesButton;
+    Button messagesButton;
 
     @FXML
-    TextField usernameTextField;
-    @FXML
-    Label userName;
-    @FXML
-    Label usernameMessagesLabel;
-
-    @FXML
-    TableView<User> userTableView;
-    @FXML
-    TableColumn<User,String> lastNameColumn;
-    @FXML
-    TableColumn<User,String> firstNameColumn;
+    Label nameLabel;
 
     @FXML
     TableView<Friendship> friendshipTableView;
@@ -73,11 +60,6 @@ public class MainController {
 
     @FXML
     public void initialize() {
-
-        //this.userTableView.managedProperty().bind(this.userTableView.visibleProperty());
-        lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-        firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-
 
         fromColumn.setCellValueFactory( param -> {
             User user = this.superService.findUserById(param.getValue().getFr1());
@@ -95,25 +77,23 @@ public class MainController {
         });
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("friendshipStatus"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-
-        userTableView.setItems(allUsers);
         friendshipTableView.setItems(allRequests);
     }
 
-        public void setServiceController(SuperService superService) {
-            this.superService = superService;
-        }
+    public void setServiceController(SuperService superService) {
+        this.superService = superService;
+    }
 
-        public void setCurrentUser(User user) {
-            this.currentUser = user;
-        }
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
+    }
 
     public void afterLoad(SuperService superService, User user) {
         this.setServiceController(superService);
         this.setCurrentUser(user);
 
-        this.updateUsers();
-        userName.setText(currentUser.getLastName());
+        //this.updateUsers();
+        nameLabel.setText(currentUser.getLastName());
 
 
         this.updateRequests();
@@ -125,20 +105,20 @@ public class MainController {
         Iterable<Friendship> friendships = this.superService.allRequestsOfAUser(currentUser.getId());
         this.setFriendships(friendships);
     }
-    public void setUsernames(Iterable<User> users) {
+    /*public void setUsernames(Iterable<User> users) {
         users.forEach( u -> this.allUsers.add(u));
-    }
+    }*/
     public void setFriendships(Iterable<Friendship> friendships) {
         friendships.forEach( u -> this.allRequests.add(u));
     }
 
-    public void updateUsers() {
+    /*public void updateUsers() {
         this.allUsers.clear();
         Iterable<User> users = this.superService.getAllUsers();
         this.setUsernames(users);
-    }
+    }*/
 
-    @FXML
+   /* @FXML
     public void sendRequest() {
 
         try {
@@ -148,14 +128,14 @@ public class MainController {
             this.updateRequests();
         }
         catch (ServiceException e){
-           System.out.println("stefaneeee");
-           Alert alert = new Alert(Alert.AlertType.ERROR);
-           alert.setTitle("Can't send friend request!");
-           alert.setHeaderText("Mi ai dat leanul pe jos!");
-           alert.showAndWait();
+            System.out.println("stefaneeee");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Can't send friend request!");
+            alert.setHeaderText("Mi ai dat leanul pe jos!");
+            alert.showAndWait();
 
         }
-    }
+    }*/
 
     @FXML
     public void acceptRequest() {
@@ -198,8 +178,8 @@ public class MainController {
             Friendship friendship = friendshipTableView.getSelectionModel().getSelectedItem();
             if (currentUser.getId() != friendship.getSender()  && (currentUser.getId() == friendship.getFr1() || currentUser.getId() == friendship.getFr2())  )
             {
-            this.superService.responseToFriendRequest(currentUser.getId(),id_receiver,response);
-            this.updateRequests();
+                this.superService.responseToFriendRequest(currentUser.getId(),id_receiver,response);
+                this.updateRequests();
             }
         }
         catch (ServiceException e){
@@ -208,26 +188,22 @@ public class MainController {
     }
 
 
-    @FXML
-    public void sendFriendRequest(ActionEvent actionEvent) {
-
-    }
 
     @FXML
     public void deleteRequest(){
 
-            if (friendshipTableView.getSelectionModel().getSelectedItem() == null)
-                return;
+        if (friendshipTableView.getSelectionModel().getSelectedItem() == null)
+            return;
 
-            Friendship friendship = friendshipTableView.getSelectionModel().getSelectedItem();
-            if (currentUser.getId() == friendship.getSender()  && (currentUser.getId() == friendship.getFr1() || currentUser.getId() == friendship.getFr2())  )
-            {
-                //delete friendship from db
-                if(friendship.getFriendshipStatus().equals("pending")) {
-                    this.superService.deleteFriendship(friendship.getFr1(), friendship.getFr2());
-                    this.updateRequests();
-                }
+        Friendship friendship = friendshipTableView.getSelectionModel().getSelectedItem();
+        if (currentUser.getId() == friendship.getSender()  && (currentUser.getId() == friendship.getFr1() || currentUser.getId() == friendship.getFr2())  )
+        {
+            //delete friendship from db
+            if(friendship.getFriendshipStatus().equals("pending")) {
+                this.superService.deleteFriendship(friendship.getFr1(), friendship.getFr2());
+                this.updateRequests();
             }
+        }
     }
 
     @FXML
@@ -273,13 +249,13 @@ public class MainController {
         try {
             Node source = (Node) actionEvent.getSource();
             Stage current = (Stage) source.getScene().getWindow();
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("proba-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("messages-view.fxml"));
             Parent root = fxmlLoader.load();
             Scene scene = new Scene(root, 700, 600);
             current.setTitle("Messages");
             current.setScene(scene);
             ChatController ctrl = fxmlLoader.getController();
-           /* List<User> found = superService.findUsersByName(usernameTextField.getText());
+            /*List<User> found = superService.findUsersByName(usernameTextField.getText());
             if (found.isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error!");
@@ -287,12 +263,19 @@ public class MainController {
                 alert.showAndWait();
                 return;
             }*/
-            //ctrl.afterLoad(superService,currentUser,found.get(0));
             ctrl.afterLoad(superService,currentUser);
 
         }catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void editButtonClick(ActionEvent actionEvent) {
+        friendshipTableView.setVisible(false);
+    }
+
+    public void groupsButtonClick(ActionEvent actionEvent) {
+        friendshipTableView.setVisible(true);
     }
 }
 
