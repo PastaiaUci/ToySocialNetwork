@@ -24,34 +24,24 @@
             <TableColumn fx:id="dateColumn" prefWidth="116.0" text="Data" />
          </columns>
       </TableView>
-<<<<<<< HEAD
+
       <Button fx:id="sendRequestButton" onAction="#sendRequest" layoutX="35.0" layoutY="133.0" mnemonicParsing="false" text="Send Friend Request" />
       <Button fx:id="sendAcceptButton" onAction="#acceptRequest" layoutX="425.0" layoutY="133.0" mnemonicParsing="false" text="Accept" />
       <Button fx:id="sendRejectButton" onAction="#rejectRequest" layoutX="531.0" layoutY="133.0" mnemonicParsing="false" text="Reject" />
       <Button fx:id="sendDeleteButton" layoutX="628.0" layoutY="133.0" mnemonicParsing="false" text="Delete" />
       <Button fx:id="viewFriendsButton" onAction="#onFriendsButtonClick" layoutX="524.0" layoutY="600.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="186.0" text="Friends" />
       <Button fx:id="viewMessagesButton" onAction="#onMessagesButtonClick" layoutX="328.0" layoutY="600.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="186.0" text="Messages"/>
-=======
-      <Button fx:id="sendRequestButton" layoutX="35.0" layoutY="133.0" mnemonicParsing="false" onAction="#sendRequest" text="Send Friend Request" />
-      <Button fx:id="sendAcceptButton" layoutX="425.0" layoutY="133.0" mnemonicParsing="false" onAction="#acceptRequest" text="Accept" />
-      <Button fx:id="sendRejectButton" layoutX="531.0" layoutY="133.0" mnemonicParsing="false" onAction="#rejectRequest" text="Reject" />
-      <Button fx:id="sendDeleteButton" layoutX="628.0" layoutY="133.0" mnemonicParsing="false" onAction="#deleteRequest" text="Delete" />
-      <Button fx:id="viewFriendsButton" layoutX="524.0" layoutY="600.0" mnemonicParsing="false" onAction="#onFriendsButtonClick" prefHeight="61.0" prefWidth="186.0" text="Friends" />
->>>>>>> aff374ec608ee620917eacf820a91b8a4524ce2d
       <Label fx:id="userName" layoutX="335.0" layoutY="14.0" prefHeight="90.0" prefWidth="221.0" text="Label">
          <font>
             <Font size="33.0" />
          </font>
       </Label>
-<<<<<<< HEAD
       <TextField fx:id="usernameTextField" layoutX="140.0" layoutY="618.0" prefHeight="26.0" prefWidth="150.0" />
       <Label fx:id="usernameMessagesLabel" layoutX="20.0" layoutY="622.0" prefHeight="18.0" prefWidth="86.0" text="Select username: ">
          <font>
             <Font size="10.0" />
          </font>
       </Label>
-=======
       <Button fx:id="logouttButton" onAction="#logout" layoutX="26.0" layoutY="25.0" mnemonicParsing="false" text="Logout" />
->>>>>>> aff374ec608ee620917eacf820a91b8a4524ce2d
    </children>
 </AnchorPane>

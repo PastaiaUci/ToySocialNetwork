@@ -1,9 +1,7 @@
 package com.example.toysocialnetworkgui.service;
 
-import com.example.toysocialnetworkgui.domain.Friendship;
-import com.example.toysocialnetworkgui.domain.Message;
-import com.example.toysocialnetworkgui.domain.Tuple;
-import com.example.toysocialnetworkgui.domain.User;
+import com.example.toysocialnetworkgui.domain.*;
+
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -15,14 +13,19 @@ public class SuperService {
     private FriendshipService friendshipService = null;
     private UserService userService = null;
     private MessageService messageService = null;
+    private EventService eventService = null;
 
 
-    public SuperService(FriendshipService friendshipService, UserService userService, MessageService messageService) {
+    public SuperService(FriendshipService friendshipService, UserService userService, MessageService messageService,EventService eventService) {
         this.friendshipService = friendshipService;
         this.userService = userService;
         this.messageService = messageService;
+        this.eventService = eventService;
 
+    }
 
+    public Iterable<Event> getAllEvents(){
+        return eventService.findAll();
     }
 
     public int addUser(String firstName, String lastName, String password) {
@@ -34,6 +37,20 @@ public class SuperService {
         User newUser = new User(firstName, lastName, password);
         userService.addUser(newUser);
         return SUCCESFUL_OPERATION_RETURN_CODE;
+    }
+
+    public int addEvent(String nume, String descriere, String data){
+
+        List<Event> op = StreamSupport.stream(eventService.findAll().spliterator(), false)
+                .filter(x -> x.getName().matches(nume) && x.getDescriere().matches(descriere) && x.getDate().matches(data))
+                .collect(Collectors.toList());
+        if (!op.isEmpty())
+            return UNSUCCESFUL_OPERATION_RETURN_CODE;
+        Event newEvent = new Event(nume, descriere, data);
+        eventService.addEvent(newEvent);
+
+        return SUCCESFUL_OPERATION_RETURN_CODE;
+
     }
 
     public void removeUser(User user) {
