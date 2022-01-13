@@ -15,7 +15,7 @@
     <children>
         <ImageView fitHeight="150.0" fitWidth="219.0" layoutX="273.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@cabral.jpg" />
+                <Image url="@Images/cabral.jpg" />
             </image></ImageView>
         <Text fontSmoothingType="LCD" layoutX="104.0" layoutY="210.0" text="Sign Up:" textAlignment="CENTER" wrappingWidth="162.134765625">
          <font>

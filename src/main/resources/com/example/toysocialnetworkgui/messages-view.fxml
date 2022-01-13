@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="mainAnchorPaneView" fx:id="mainAnchorPaneView" prefHeight="578.0" prefWidth="896.0" style="-fx-border-radius: 10px;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetworkgui.ChatController">
+    <stylesheets>
+        <URL value="@main2.css" />
+    </stylesheets>
+    <children>
+        <AnchorPane fx:id="leftAnchorPaneView" prefHeight="582.0" prefWidth="167.0">
+            <children>
+                <Pane fx:id="titlePane" layoutX="14.0" prefHeight="90.0" prefWidth="160.0" style="-fx-background-color: #BA2E49 ">
+                    <children>
+                        <Label fx:id="appTitleLabel" layoutY="4.0" prefHeight="83.0" prefWidth="154.0" text="Pixel">
+                        </Label>
+                    </children>
+                </Pane>
+                <Button fx:id="backButton" layoutX="31.0" layoutY="492.0" mnemonicParsing="false" onAction="#logout" prefHeight="46.0" prefWidth="98.0" text="Back" />
+            <ImageView fitHeight="83.0" fitWidth="105.0" layoutX="43.0" layoutY="231.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Images/messages.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="inboxLabel" alignment="BOTTOM_CENTER" layoutX="22.0" layoutY="184.0" prefHeight="46.0" prefWidth="130.0" text="Inbox" />
+            </children>
+        </AnchorPane>
+      <AnchorPane layoutX="174.0" layoutY="-1.0" prefHeight="583.0" prefWidth="260.0">
+         <children>
+            <AnchorPane fx:id="searchAnchorPane" prefHeight="56.0" prefWidth="271.0" style="-fx-background-color: #FFA569;">
+               <children>
+                  <Label fx:id="usersLabel" alignment="BOTTOM_CENTER" layoutX="14.0" layoutY="8.0" prefHeight="38.0" prefWidth="98.0" text="Users" />
+                  <ImageView fitHeight="30.0" fitWidth="32.0" layoutX="227.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@Images/looking-glass2.jpg" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+            <TableView fx:id="usersTableView" layoutX="25.0" layoutY="124.0" prefHeight="391.0" prefWidth="209.0">
+              <columns>
+                <TableColumn fx:id="firstNameColumn" prefWidth="102.4000244140625" text="FirstName" />
+                <TableColumn fx:id="lastNameColumn" prefWidth="116.0" text="LastName" />
+              </columns>
+            </TableView>
+            <TextField fx:id="searchTextField" layoutX="9.0" layoutY="68.0" prefHeight="30.0" prefWidth="130.0" text="Search" />
+            <Button fx:id="refreshButton" layoutX="25.0" layoutY="527.0" mnemonicParsing="false" text="Refresh" />
+            <Button fx:id="findButton" layoutX="167.0" layoutY="68.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="79.0" text="Find" />
+            <Button fx:id="showButton" onAction="#showButtonClick" layoutX="155.0" layoutY="527.0" mnemonicParsing="false" text="Show" />
+         </children>
+      </AnchorPane>
+      <BorderPane id="body" layoutX="451.0" layoutY="92.0" prefHeight="474.0" prefWidth="435.0">
+         <stylesheets>
+            <URL value="@style.css" />
+         </stylesheets>
+         <top>
+            <HBox spacing="400">
+               <children>
+                  <Label fx:id="destinationLabel" prefHeight="40.0" prefWidth="138.0" textFill="#b71111" />
+               </children>
+            </HBox>
+         </top>
+         <center>
+            <ListView fx:id="messagesView" prefHeight="395.0" prefWidth="421.0" />
+         </center>
+         <bottom>
+            <HBox alignment="CENTER_RIGHT">
+               <padding>
+                  <Insets bottom="10" top="10" />
+               </padding>
+               <children>
+                  <TextArea fx:id="textarea" prefHeight="108.0" prefWidth="352.0" />
+                  <VBox alignment="CENTER" spacing="10">
+                     <children>
+                        <Button fx:id="send" onAction="#sendMessageButtonClick" prefHeight="55" prefWidth="80" text="Send" />
+                        <Button fx:id="reset" onAction="#resetReply" prefHeight="25" prefWidth="80" text="Clear" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </bottom>
+      </BorderPane>
+      <AnchorPane fx:id="messageAnchorPane" layoutX="439.0" layoutY="-1.0" prefHeight="56.0" prefWidth="461.0" style="-fx-background-color: #FF6978;">
+         <children>
+            <Label fx:id="convoLabel" layoutX="80.0" prefHeight="56.0" prefWidth="116.0" text="Convo" />
+            <ImageView fitHeight="42.0" fitWidth="86.0" layoutX="397.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Images/conversation.png" />
+               </image></ImageView>
+         </children>
+      </AnchorPane>
+    </children>
+</AnchorPane>

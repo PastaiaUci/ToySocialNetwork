@@ -1,0 +1,27 @@
+#destinationLabel {
+    -fx-background-color: #beb9ff;
+    -fx-padding: 5;
+    -fx-font-size: 20;
+}
+
+#ala{
+    -fx-background-color: red;
+}
+
+.list-cell:even {
+    -fx-background-color: white;
+}
+.list-cell:odd {
+    -fx-background-color: white;
+}
+.list-cell:selected {
+    -fx-background-color: lightgrey;
+}
+
+img{
+    border-radius: 50%;
+}
+
+#senderImageView{
+    -fx-border-radius: 50%;
+}
