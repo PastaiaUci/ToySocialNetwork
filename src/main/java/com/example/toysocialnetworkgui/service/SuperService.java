@@ -24,9 +24,7 @@ public class SuperService {
 
     }
 
-    public Iterable<Event> getAllEvents(){
-        return eventService.findAll();
-    }
+
 
     public int addUser(String firstName, String lastName, String password) {
         List<User> op = StreamSupport.stream(userService.findAll().spliterator(), false)
@@ -39,6 +37,12 @@ public class SuperService {
         return SUCCESFUL_OPERATION_RETURN_CODE;
     }
 
+    public Iterable<Event> getAllEvents(){
+        return eventService.findAll();
+    }
+    public Iterable<Event> getAllEventsForUser (Long id){
+        return eventService.getAllEventsForUser(id);
+    }
     public int addEvent(String nume, String descriere, String data){
 
         List<Event> op = StreamSupport.stream(eventService.findAll().spliterator(), false)
@@ -51,6 +55,13 @@ public class SuperService {
 
         return SUCCESFUL_OPERATION_RETURN_CODE;
 
+    }
+
+    public void subscribeUserToEvent(Long user_id,Long event_id){
+        eventService.subscribe(user_id,event_id);
+    }
+    public void unsubscribeUserToEvent(Long user_id,Long event_id){
+        eventService.unsubscribe(user_id,event_id);
     }
 
     public void removeUser(User user) {

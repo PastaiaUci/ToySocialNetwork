@@ -11,6 +11,7 @@ public class Event extends Entity<Long>{
     private String date;
     private String name;
 
+
     public Event(String nume, String description,String date) {
         this.Descriere = description;
         this.date = date;

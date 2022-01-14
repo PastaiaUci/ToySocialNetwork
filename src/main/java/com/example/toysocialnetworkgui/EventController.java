@@ -3,6 +3,7 @@ package com.example.toysocialnetworkgui;
 import com.example.toysocialnetworkgui.domain.Event;
 import com.example.toysocialnetworkgui.domain.User;
 import com.example.toysocialnetworkgui.service.SuperService;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -40,10 +41,13 @@ public class EventController {
     Button backButton;
     @FXML
     Button addButton;
+    @FXML
+    Button subButton;
 
 
 
     ObservableList<Event> allEvents = FXCollections.observableArrayList();
+
 
     @FXML
     public void initialize() {
@@ -71,10 +75,10 @@ public class EventController {
         events.forEach( u -> this.allEvents.add(u));
     }
 
+
     public void afterLoad(SuperService superService, User user) {
         this.setServiceController(superService);
         this.setCurrentUser(user);
-
         this.updateAllEvents();
     }
 
@@ -83,12 +87,12 @@ public class EventController {
         try {
             Node source = (Node) actionEvent.getSource();
             Stage current = (Stage) source.getScene().getWindow();
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main2-view.fxml"));
             Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root, 700, 600);
+            Scene scene = new Scene(root, 896.0, 578);
             current.setTitle("Ian");
             current.setScene(scene);
-            MainController mainController = fxmlLoader.getController();
+            Main2Controller mainController = fxmlLoader.getController();
             mainController.afterLoad(superService,currentUser);
 
         }catch (IOException e) {
@@ -108,4 +112,14 @@ public class EventController {
         superService.addEvent(nume,descriere,data);
         this.updateAllEvents();
     }
+
+    @FXML
+    public void subButtonClick() {
+            if (eventsTableView.getSelectionModel().getSelectedItem() == null)
+                return;
+            superService.subscribeUserToEvent(currentUser.getId(), eventsTableView.getSelectionModel().getSelectedItem().getId());
+
+            this.updateAllEvents();
+    }
+
 }

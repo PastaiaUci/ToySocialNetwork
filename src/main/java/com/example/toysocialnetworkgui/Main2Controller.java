@@ -1,5 +1,6 @@
 package com.example.toysocialnetworkgui;
 
+import com.example.toysocialnetworkgui.domain.Event;
 import com.example.toysocialnetworkgui.domain.Friendship;
 import com.example.toysocialnetworkgui.domain.User;
 import com.example.toysocialnetworkgui.service.ServiceException;
@@ -27,8 +28,8 @@ public class Main2Controller {
     SuperService superService;
     private User currentUser;
 
-    //ObservableList<User> allUsers = FXCollections.observableArrayList();
     ObservableList<Friendship> allRequests = FXCollections.observableArrayList();
+    ObservableList<Event> allEvents = FXCollections.observableArrayList();
 
     @FXML
     Button sendDeleteButton;
@@ -44,10 +45,26 @@ public class Main2Controller {
     Button messagesButton;
 
     @FXML
+    Button eventsButton;
+
+    @FXML
+    Button unsubButton;
+
+
+    @FXML
     Label nameLabel;
 
     @FXML
     TableView<Friendship> friendshipTableView;
+
+    @FXML
+    TableView<Event> eventTableView;
+    @FXML
+    TableColumn<Friendship,String> numeColumn;
+    @FXML
+    TableColumn<Friendship,String> descColumn;
+    @FXML
+    TableColumn<Friendship,String> dataColumn;
 
     @FXML
     TableColumn<Friendship,String> fromColumn;
@@ -60,6 +77,11 @@ public class Main2Controller {
 
     @FXML
     public void initialize() {
+
+        numeColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        descColumn.setCellValueFactory(new PropertyValueFactory<>("Descriere"));
+        dataColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        eventTableView.setItems(allEvents);
 
         fromColumn.setCellValueFactory( param -> {
             User user = this.superService.findUserById(param.getValue().getFr1());
@@ -91,12 +113,21 @@ public class Main2Controller {
     public void afterLoad(SuperService superService, User user) {
         this.setServiceController(superService);
         this.setCurrentUser(user);
-
-        //this.updateUsers();
         nameLabel.setText(currentUser.getLastName());
-
-
         this.updateRequests();
+        this.updateAllEvents();
+    }
+
+    public void updateAllEvents(){
+        this.allEvents.clear();
+        Iterable<Event> events = this.superService.getAllEventsForUser(currentUser.getId());
+        if(events == null){
+            System.out.println("lskfsdmn");
+        }
+        this.setEvents(events);
+    }
+    public void setEvents(Iterable<Event> events) {
+        events.forEach( u -> this.allEvents.add(u));
     }
 
 
@@ -160,6 +191,34 @@ public class Main2Controller {
         catch (ServiceException e){
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    public void eventsButtonClick(ActionEvent event) {
+        try {
+            Node source = (Node) event.getSource();
+            Stage current = (Stage) source.getScene().getWindow();
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("events-view.fxml"));
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root, 700, 600);
+            current.setTitle("Ian");
+            current.setScene(scene);
+            EventController mainController = fxmlLoader.getController();
+            mainController.setServiceController(superService);
+            mainController.afterLoad(superService,superService.findUsersByName(currentUser.getFirstName()).get(0));
+
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    @FXML
+    public void unsubRequest() {
+        superService.unsubscribeUserToEvent(currentUser.getId(),eventTableView.getSelectionModel().getSelectedItem().getId());
+        this.updateAllEvents();
+
     }
 
 

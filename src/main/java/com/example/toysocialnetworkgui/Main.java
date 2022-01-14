@@ -77,10 +77,13 @@ public class Main extends Application {
        // runner.runApp();
 
 
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("events-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login-view.fxml"));
         Parent root = fxmlLoader.load();
-        EventController mainController = fxmlLoader.getController();
+        LoginController mainController = fxmlLoader.getController();
         mainController.setServiceController(superService);
+        superService.getAllEvents().forEach(
+               x->{System.out.println(x.getId());}
+        );
 
 
 
