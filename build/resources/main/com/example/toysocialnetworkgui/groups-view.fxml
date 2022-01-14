@@ -48,7 +48,7 @@
       <ListView fx:id="groupsListView" layoutX="208.0" layoutY="138.0" prefHeight="334.0" prefWidth="251.0" />
       <Button fx:id="refreshButton" layoutX="210.0" layoutY="499.0" mnemonicParsing="false" onAction="#refreshButtonCLick" text="Refresh" />
       <Button fx:id="showButton" layoutX="352.0" layoutY="499.0" mnemonicParsing="false" onAction="#showButtonClick" text="Show" />
-      <AnchorPane fx:id="messageAnchorPane" layoutX="469.0" prefHeight="56.0" prefWidth="427.0" style="-fx-background-color: #FF6978;">
+      <AnchorPane fx:id="discussionAnchorPane" layoutX="469.0" prefHeight="56.0" prefWidth="427.0" style="-fx-background-color: #FF6978;">
          <children>
             <Label fx:id="convoLabel" layoutX="80.0" prefHeight="56.0" prefWidth="116.0" text="Discussion" />
             <ImageView fitHeight="42.0" fitWidth="86.0" layoutX="356.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">

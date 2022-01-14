@@ -65,7 +65,7 @@ public class LoginController {
                 current.setTitle("Amuly" + username);
                 current.setScene(scene);
                 Main2Controller ctrl = fxmlLoader.getController();
-                ctrl.afterLoad(superService,superService.findUsersByName(username).get(0));
+                ctrl.afterLoad(superService,superService.findUsersByUsernameAndPassword(username,password));
 
 
             } catch (IOException e) {

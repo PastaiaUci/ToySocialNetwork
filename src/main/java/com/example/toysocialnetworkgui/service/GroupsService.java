@@ -27,4 +27,8 @@ public class GroupsService {
             group.setImage_url("group_url.png");
         return groups;
     }
+
+    public void saveGroupMessage(GroupMessage groupMessage){
+        this.repo.saveGroupMessage(groupMessage);
+    }
 }

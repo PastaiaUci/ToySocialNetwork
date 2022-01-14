@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.example.toysocialnetworkgui.domain.GFG.encryptThisString;
+
 
 public class Main extends Application {
 
@@ -69,6 +71,9 @@ public class Main extends Application {
        Runner runner = new Runner(superService);
        runner.runApp();*/
 
+
+        /*String str = "GeeksForGeeks";
+        System.out.println(encryptThisString(str));*/
 
        /* Runner runner = new Runner(superService);
         runner.runApp();*/

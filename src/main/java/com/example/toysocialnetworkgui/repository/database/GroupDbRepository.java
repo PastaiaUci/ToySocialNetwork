@@ -37,6 +37,7 @@ public class GroupDbRepository{
                 Long id_group = resultSet.getLong("id_group");
                 String name = resultSet.getString("name");
                 Group group = new Group(name);
+                group.setId(id_group);
                 groups.add(group);
             }
         } catch (SQLException ex){
@@ -89,4 +90,21 @@ public class GroupDbRepository{
         return groupMessages;
     }
 
+    public void saveGroupMessage(GroupMessage groupMessage) {
+        String sql = "insert into group_messages(id_user_from,id_group_to,mesaj,data_trimitere,id_reply,delete_status)"+
+                " values(?,?,?,?,?,?)";
+        try(Connection connection = DriverManager.getConnection(url,username,password);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);)
+        {
+            preparedStatement.setLong(1,groupMessage.getId__user_from());
+            preparedStatement.setLong(2,groupMessage.getId_group_to());
+            preparedStatement.setString(3,groupMessage.getMesaj());
+            preparedStatement.setTimestamp(4,Timestamp.valueOf(groupMessage.getData_trimitere()));
+            preparedStatement.setLong(5,groupMessage.getId_reply());
+            preparedStatement.setString(6,groupMessage.getDelete_status());
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex){
+            ex.printStackTrace();
+        }
+    }
 }

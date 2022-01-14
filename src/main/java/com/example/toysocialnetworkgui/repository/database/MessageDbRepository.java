@@ -108,7 +108,6 @@ public class MessageDbRepository implements Repository<Long, Message> {
        }
     }
 
-
     private List<Message> getMessages(PreparedStatement preparedStatement) throws SQLException {
         List<Message> messages = new ArrayList<>();
         try(ResultSet resultSet = preparedStatement.executeQuery()){

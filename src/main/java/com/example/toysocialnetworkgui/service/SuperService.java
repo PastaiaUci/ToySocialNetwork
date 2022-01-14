@@ -88,6 +88,14 @@ public class SuperService {
         return users;
     }
 
+    public User findUsersByUsernameAndPassword(String username,String password) {
+       for(User user: getAllUsers()){
+           if(user.getFirstName().matches(username) && user.getPassword().matches(password))
+               return user;
+       }
+       return null;
+    }
+
     public Set<User> getAllFriendsForGivenUser(User user) {
         Set<User> users1 = StreamSupport.stream(friendshipService.findAll().spliterator(), false)
                 .filter(friendship -> (friendship.getId().getLeft().equals(user.getId()) && friendship.getFriendshipStatus().equals("approved") )  || (friendship.getId().getRight().equals(user.getId()) && friendship.getFriendshipStatus().equals("approved")))
@@ -331,6 +339,12 @@ public class SuperService {
 
     public List<Group> findGroupsOfAUser(Long id_user){
         return groupsService.findGroupsOfAUser(id_user);
+    }
+
+    public void saveGroupMessage(Long id_user_from, Long id_grup_to,String mesaj){
+        GroupMessage groupMessage = new GroupMessage(id_user_from,id_grup_to,mesaj);
+        groupMessage.setId(TEMPORARY_MESSAGE_ID);
+        this.groupsService.saveGroupMessage(groupMessage);
     }
 }
 

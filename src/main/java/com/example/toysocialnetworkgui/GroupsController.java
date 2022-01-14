@@ -10,10 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -39,6 +36,8 @@ public class GroupsController {
     @FXML
     TextField searchTextField;
     @FXML
+    TextArea textArea;
+    @FXML
     ListView<Group> groupsListView;
     @FXML
     ListView<GroupMessage> discussionListView;
@@ -47,17 +46,35 @@ public class GroupsController {
     public void initialize() {
         searchTextField.setPromptText("Search");
         this.groupsListView.setCellFactory(param -> new GroupListViewCell(currentUser.getId()));
+        this.discussionListView.setCellFactory(param->new DisscussionListViewCell(currentUser.getId(),superService));
         this.groupsListView.setItems(groups);
-       // this.usersTableView.setItems(allUsers);
+        this.discussionListView.setItems(groupMessages);
     }
+
     public void setServiceController(SuperService superService){
         this.superService = superService;
     }
 
     public void sendMessageButtonClick(ActionEvent actionEvent) {
+        String mesaj = textArea.getText();
+        if(mesaj.strip().isBlank()) {
+            System.out.println("stefaneeee");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Can't send friend request!");
+            alert.setHeaderText("Mi ai dat leanul pe jos!");
+            alert.showAndWait();
+            return;
+        }
+        Group group = groupsListView.getSelectionModel().getSelectedItem();
+        if(group == null)
+            return;
+        this.superService.saveGroupMessage(currentUser.getId(), group.getId(),mesaj);
+        this.textArea.clear();
+        updateGroupMessages();
     }
 
     public void logout(ActionEvent actionEvent) {
+
     }
 
     public void findButtonCLick(ActionEvent actionEvent) {
@@ -67,19 +84,80 @@ public class GroupsController {
     }
 
     public void showButtonClick(ActionEvent actionEvent) {
+        updateGroupMessages();
     }
+
+    static final class DisscussionListViewCell extends ListCell<GroupMessage>{
+        private final Long idCurrentUser;
+        private final SuperService superService;
+
+        public DisscussionListViewCell(Long userid,SuperService superService){
+            this.idCurrentUser = userid;
+            this.superService = superService;
+        }
+
+        @Override
+        public void updateItem(GroupMessage item, boolean empty){
+            super.updateItem(item,empty);
+            if(empty){
+                setGraphic(null);
+            }
+            else{
+                HBox hBox = new HBox();
+                Image image = new Image("com/example/toysocialnetworkgui/Images/group_url.png");
+                ImageView imageView = new ImageView();
+                imageView.setImage(image);
+                imageView.setFitHeight(20);
+                imageView.setFitWidth(20);
+                Label messageLabel = styleLabel(item.getMesaj());
+                Label nameLabel = new Label();
+                nameLabel.setText("--"+superService.findUserById(item.getId__user_from()).getLastName()+"--");
+                nameLabel.setMinHeight(50);
+                nameLabel.setMinWidth(50);
+                if(item.getId__user_from().equals(idCurrentUser)) {
+                    hBox.setAlignment(Pos.CENTER_RIGHT);
+                    nameLabel.setAlignment(Pos.CENTER_RIGHT);
+                    hBox.getChildren().addAll(nameLabel,messageLabel,imageView);
+                }
+                else{
+                    hBox.setAlignment(Pos.CENTER_LEFT);
+                    hBox.getChildren().addAll(imageView,messageLabel,nameLabel);
+                }
+                hBox.setBackground(new Background(new BackgroundFill(Color.LIGHTCORAL,null,null)));
+                setGraphic(hBox);
+            }
+        }
+
+        private Label styleLabel(String msg){
+            var label=new Label(msg);
+            label.setMinWidth(50);
+            label.setMinHeight(50);
+            label.setStyle("-fx-hgap: 10px;" +
+                    "    -fx-padding: 20px;" +
+                    "" +
+                    "    -fx-background-color: #997dff;" +
+                    "    -fx-background-radius: 25px;" +
+                    "" +
+                    "    -fx-border-radius: 25px;" +
+                    "    -fx-border-width: 5px;" +
+                    "    -fx-border-color: #997dff;" +
+                    "-fx-text-fill: white;"+
+                    "-fx-font-size: 25px");
+            return label;
+        }
+
+
+
+    }
+
+
 
     static final class  GroupListViewCell extends ListCell<Group> {
         private final Long idCurrentUser;
-        //private List<Message> convo = null;
 
         public GroupListViewCell(Long userId) {
             this.idCurrentUser = userId;
         }
-
-      /*  public void setConvo(List<Message> convo){
-            this.convo = convo;
-        }*/
 
         @Override
         protected void updateItem(Group item, boolean empty) {
@@ -176,8 +254,17 @@ public class GroupsController {
         this.superService = superService;
         this.currentUser = currentUser;
         //this.superService.addObserver(this);
-        //this.updateMessages();
+        this.updateGroupMessages();
         this.updateGroups();
+    }
+
+    private void updateGroupMessages() {
+        this.groupMessages.clear();
+        Group group = groupsListView.getSelectionModel().getSelectedItem();
+        if(group == null)
+            return;
+       List<GroupMessage> groupMessagess = this.superService.getGroupMessagesFromGroup(group.getId());
+       this.setGroupMessages(groupMessagess);
     }
 
     public void updateGroups(){
@@ -191,6 +278,10 @@ public class GroupsController {
         Iterable<User> users = this.superService.findUsersByName(first_name);
         this.setUsernames(users);
     }*/
+
+    public void setGroupMessages(Iterable<GroupMessage> groupMessagess){
+        groupMessagess.forEach(u->this.groupMessages.add(u));
+    }
 
     public void setGroups(Iterable<Group> groupss) {
         groupss.forEach( u -> this.groups.add(u));
