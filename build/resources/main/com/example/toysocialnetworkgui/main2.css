@@ -51,7 +51,12 @@
 }
 
 #friendshipTableView{
-    -fx-background-color:  #FFDAB9;
+    -fx-background-color: #FFDAB9;
+    -fx-border-radius: 50px;
+}
+
+#eventsTableView{
+    -fx-background-color:  coral;
     -fx-border-radius: 50px;
 }
 
@@ -99,4 +104,8 @@
 
 #groupsListView{
     -fx-background-color:  #FFDAB9;
+}
+
+.table-view{
+    -fx-background-color: #FFDAB9;
 }

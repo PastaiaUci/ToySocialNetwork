@@ -3,6 +3,7 @@ package com.example.toysocialnetworkgui.repository.database;
 import com.example.toysocialnetworkgui.domain.*;
 import com.example.toysocialnetworkgui.domain.validators.EventValidator;
 import com.example.toysocialnetworkgui.repository.Repository;
+import javafx.scene.control.Alert;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -106,7 +107,28 @@ public class EventsDbRepository implements Repository<Long ,Event>
         }
     }
 
-    private List<Event> getEvents(PreparedStatement preparedStatement) throws SQLException {
+    public Iterable<Event> getAllEventsForUser(Long id) {
+        List<Event> events = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement statement = connection.prepareStatement(EVENTS_USER_SUBBED_T0);)
+        {
+                statement.setLong(1,id);
+                try(ResultSet resultSet = statement.executeQuery()){
+                    while(resultSet.next()) {
+
+                        Long event_id = resultSet.getLong("event_id");
+
+                        Event event  = this.findOneById(event_id);
+                        events.add(event);
+                    }
+                }
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
+        return events;
+    }
+
+    public  List<Event> getEvents(PreparedStatement preparedStatement) throws SQLException {
         List<Event> events = new ArrayList<>();
         try(ResultSet resultSet = preparedStatement.executeQuery()){
             while(resultSet.next()) {
@@ -114,11 +136,14 @@ public class EventsDbRepository implements Repository<Long ,Event>
                 String descriere = resultSet.getString("descriere");
                 String data =  resultSet.getString("data");
                 Event event = new Event(nume, descriere,data);
+                event.setId(resultSet.getLong("id"));
                 events.add(event);
             }
             return events;
         }
     }
+
+
 
     @Override
     public Event findOne(Long longLongTuple) {
@@ -130,5 +155,37 @@ public class EventsDbRepository implements Repository<Long ,Event>
 
     @Override
     public Event findOneByOtherAttributes(List<Object> args){ return null; }
+
+    public  void subscribe(Long user_id,Long event_id){
+
+        String sql = SUB_TO_EVENT_DB;
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);)
+        {
+            preparedStatement.setLong(1, user_id);
+            preparedStatement.setLong(2,event_id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error!");
+            alert.setHeaderText("Can not double sub!\n");
+            alert.showAndWait();
+            return;
+        }
+    }
+
+    public  void unsubscribe(Long user_id,Long event_id){
+
+        String sql = UNSUB_TO_EVENT_DB;
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);)
+        {
+            preparedStatement.setLong(1, user_id);
+            preparedStatement.setLong(2,event_id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

@@ -173,6 +173,21 @@ public class UserDbRepository implements Repository<Long, User> {
        return null;
    }
 
+    @Override
+    public void subscribe(Long user_id, Long event_id) {
+
+    }
+
+    @Override
+    public void unsubscribe(Long user_id, Long event_id) {
+
+    }
+
+    @Override
+    public Iterable<User> getAllEventsForUser(Long aLong) {
+        return null;
+    }
+
 
 }
 

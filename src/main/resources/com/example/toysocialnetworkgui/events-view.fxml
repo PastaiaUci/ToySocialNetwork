@@ -8,14 +8,17 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
+<?import java.net.URL?>
 <AnchorPane prefHeight="542.0" prefWidth="703.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetworkgui.EventController">
+    <stylesheets>
+        <URL value="@main2.css" />
+    </stylesheets>
     <children>
-        <TableView fx:id="eventsTableView" layoutX="321.0" layoutY="173.0" prefHeight="214.0" prefWidth="360.0">
+        <TableView fx:id="eventsTableView" layoutX="321.0" layoutY="173.0" prefHeight="214.0" prefWidth="360.0" style="-fx-background-color: #FFDAB9">
             <columns>
-                <TableColumn fx:id="nameColumn" prefWidth="77.0" text="Nume" />
-                <TableColumn fx:id="descriereColumn" minWidth="0.0" prefWidth="109.0" text="Descriere" />
-                <TableColumn fx:id="dataColumn" minWidth="0.0" prefWidth="70.0" text="Data" />
-            <TableColumn fx:id="statusColumn" prefWidth="103.0" text="Status" />
+                <TableColumn fx:id="nameColumn" prefWidth="123.0" text="Nume" />
+                <TableColumn fx:id="descriereColumn" minWidth="0.0" prefWidth="141.0" text="Descriere" />
+                <TableColumn fx:id="dataColumn" minWidth="0.0" prefWidth="95.0" text="Data" />
             </columns>
         </TableView>
         <Label fx:id="eventsLabel" layoutX="308.0" layoutY="46.0" prefHeight="82.0" prefWidth="200.0" text="EVENTS">
@@ -24,9 +27,8 @@
             </font>
         </Label>
         <Button fx:id="backButton" layoutX="33.0" layoutY="507.0" mnemonicParsing="false" onAction="#onBackButtonClick" prefHeight="26.0" prefWidth="74.0" text="Back" />
-      <Button fx:id="addButton" layoutX="96.0" layoutY="424.0" mnemonicParsing="false" onAction="#onAddButtonClick" prefHeight="26.0" prefWidth="74.0" text="ADD" />
-      <Button fx:id="subButton" layoutX="386.0" layoutY="424.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="SUBSCRIBE" />
-      <Button fx:id="unsubButton" layoutX="537.0" layoutY="424.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="UNSUBSCRIBE" />
+      <Button fx:id="addButton" layoutX="134.0" layoutY="424.0" mnemonicParsing="false" onAction="#onAddButtonClick" prefHeight="26.0" prefWidth="74.0" text="ADD" />
+      <Button fx:id="subButton" layoutX="442.0" layoutY="424.0" mnemonicParsing="false" onAction="#subButtonClick" prefHeight="26.0" prefWidth="96.0" text="SUBSCRIBE" />
       <TextField fx:id="nameTextField" layoutX="119.0" layoutY="182.0" />
       <TextField fx:id="descriereTextField" layoutX="119.0" layoutY="258.0" />
       <TextField fx:id="dataTextField" layoutX="119.0" layoutY="349.0" />

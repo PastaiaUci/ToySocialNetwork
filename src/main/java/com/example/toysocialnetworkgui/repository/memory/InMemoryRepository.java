@@ -82,4 +82,19 @@ public class InMemoryRepository<ID, E extends Entity<ID>> implements Repository<
 
     @Override
     public List getUserByUsername(String username){ return null; }
+
+    @Override
+    public void subscribe(ID user_id, ID event_id) {
+
+    }
+
+    @Override
+    public void unsubscribe(ID user_id, ID event_id) {
+
+    }
+
+    @Override
+    public Iterable<E> getAllEventsForUser(ID id) {
+        return null;
+    }
 }

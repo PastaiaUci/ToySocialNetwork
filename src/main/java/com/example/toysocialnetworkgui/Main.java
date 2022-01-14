@@ -87,6 +87,9 @@ public class Main extends Application {
         Parent root = fxmlLoader.load();
         LoginController mainController = fxmlLoader.getController();
         mainController.setServiceController(superService);
+        superService.getAllEvents().forEach(
+               x->{System.out.println(x.getId());}
+        );
 
 
         Scene scene = new Scene(root, 700, 600);

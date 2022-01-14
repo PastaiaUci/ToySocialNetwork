@@ -70,12 +70,12 @@ public class FriendsListController {
         try {
             Node source = (Node) actionEvent.getSource();
             Stage current = (Stage) source.getScene().getWindow();
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main2-view.fxml"));
             Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root, 700, 600);
+            Scene scene = new Scene(root, 896, 578);
             current.setTitle("Ian");
             current.setScene(scene);
-            MainController mainController = fxmlLoader.getController();
+            Main2Controller mainController = fxmlLoader.getController();
             mainController.afterLoad(superService,currentUser);
 
         }catch (IOException e) {

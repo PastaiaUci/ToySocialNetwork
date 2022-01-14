@@ -21,5 +21,15 @@ public class EventService {
     public void addEvent(Event event) {
         repo.save(event);
     }
+    public  void  subscribe(Long user_id,Long event_id){
+        this.repo.subscribe(user_id,event_id);
+    }
+    public  void  unsubscribe(Long user_id,Long event_id){
+        this.repo.unsubscribe(user_id,event_id);
+    }
+
+    public Iterable<Event> getAllEventsForUser(Long id){
+        return repo.getAllEventsForUser(id);
+    }
 
 }
