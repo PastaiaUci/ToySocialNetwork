@@ -25,7 +25,7 @@
             </Pane>
             <Button fx:id="groupsButton" onAction="#groupsButtonClick" layoutX="29.0" layoutY="148.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="206.0" text="Groups" />
             <Button fx:id="messagesButton" onAction="#onMessagesButtonClick" layoutX="29.0" layoutY="204.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="206.0" text="Messages" />
-            <Button fx:id="eventsButton" layoutX="29.0" layoutY="259.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="206.0" style="-fx-border-radius: 10px" text="Events" />
+            <Button fx:id="eventsButton" onAction="#eventsButtonClick" layoutX="29.0" layoutY="259.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="206.0" style="-fx-border-radius: 10px" text="Events" />
             <Button fx:id="editButton" onAction="#editButtonClick" layoutX="31.0" layoutY="375.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="206.0" text="Edit Profile" />
             <Button fx:id="logoutButton"  onAction="#logout"  layoutX="31.0" layoutY="492.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="206.0" text="Logout" />
             <Button fx:id="viewFriendsButton" layoutX="29.0" layoutY="317.0" mnemonicParsing="false" onAction="#onFriendsButtonClick" prefHeight="46.0" prefWidth="206.0" text="Friends" />

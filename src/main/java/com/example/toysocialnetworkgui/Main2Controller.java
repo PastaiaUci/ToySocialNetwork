@@ -18,6 +18,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -94,8 +98,6 @@ public class Main2Controller {
 
         //this.updateUsers();
         nameLabel.setText(currentUser.getLastName());
-
-
         this.updateRequests();
     }
 
@@ -275,7 +277,43 @@ public class Main2Controller {
     }
 
     public void groupsButtonClick(ActionEvent actionEvent) {
-        friendshipTableView.setVisible(true);
+        try {
+            Node source = (Node) actionEvent.getSource();
+            Stage current = (Stage) source.getScene().getWindow();
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("groups-view.fxml"));
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root, 700, 600);
+            current.setTitle("Ian");
+            current.setScene(scene);
+            GroupsController mainController = fxmlLoader.getController();
+            mainController.setServiceController(superService);
+            //mainController.afterLoad(superService,superService.findUsersByName(currentUser.getFirstName()).get(0));
+            mainController.afterLoad(superService,currentUser);
+
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void eventsButtonClick(ActionEvent event) {
+        try {
+            Node source = (Node) event.getSource();
+            Stage current = (Stage) source.getScene().getWindow();
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("events-view.fxml"));
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root, 700, 600);
+            current.setTitle("Ian");
+            current.setScene(scene);
+            EventController mainController = fxmlLoader.getController();
+            mainController.setServiceController(superService);
+            //mainController.afterLoad(superService,superService.findUsersByName(currentUser.getFirstName()).get(0));
+            mainController.afterLoad(superService,currentUser);
+
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
 

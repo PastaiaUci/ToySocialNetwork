@@ -15,7 +15,7 @@
                 <TableColumn fx:id="nameColumn" prefWidth="77.0" text="Nume" />
                 <TableColumn fx:id="descriereColumn" minWidth="0.0" prefWidth="109.0" text="Descriere" />
                 <TableColumn fx:id="dataColumn" minWidth="0.0" prefWidth="70.0" text="Data" />
-            <TableColumn fx:id="nameColumn1" prefWidth="103.0" text="Status" />
+            <TableColumn fx:id="statusColumn" prefWidth="103.0" text="Status" />
             </columns>
         </TableView>
         <Label fx:id="eventsLabel" layoutX="308.0" layoutY="46.0" prefHeight="82.0" prefWidth="200.0" text="EVENTS">

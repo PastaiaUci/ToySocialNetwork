@@ -113,7 +113,7 @@ public class EventsDbRepository implements Repository<Long ,Event>
                 String nume = resultSet.getString("nume");
                 String descriere = resultSet.getString("descriere");
                 String data =  resultSet.getString("data");
-                Event event = new Event(descriere,data,nume);
+                Event event = new Event(nume, descriere,data);
                 events.add(event);
             }
             return events;

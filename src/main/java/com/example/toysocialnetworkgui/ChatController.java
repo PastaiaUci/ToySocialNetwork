@@ -8,12 +8,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.ListView.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.example.toysocialnetworkgui.Utils.constants.DomainConstants.ACTIVE_MESSAGE;
@@ -38,6 +44,8 @@ public class ChatController {
     Button reset;
     @FXML
     Button send;
+    @FXML
+    TextField searchTextField;
 
     @FXML
     TableView<User> usersTableView;
@@ -48,6 +56,7 @@ public class ChatController {
 
     @FXML
     public void initialize() {
+        searchTextField.setPromptText("Search");
         this.messagesView.setCellFactory(param -> new ListViewCell(currentUser.getId()));
         lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
@@ -62,12 +71,16 @@ public class ChatController {
 
     public void sendMessageButtonClick(ActionEvent actionEvent) {
         Message selected = messagesView.getSelectionModel().getSelectedItem();
+        User destination = usersTableView.getSelectionModel().getSelectedItem();
+        if(destination == null)
+            return;
         if(textarea.getText().strip().isBlank()) {
             System.out.println("stefaneeee");
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Can't send friend request!");
             alert.setHeaderText("Mi ai dat leanul pe jos!");
             alert.showAndWait();
+            return;
         }
         if(selected == null)
             superService.addMessageBetweenTwoUsers(currentUser,destination,textarea.getText(),SIMPLE_MESSAGE);
@@ -85,6 +98,96 @@ public class ChatController {
     public void showButtonClick(ActionEvent actionEvent) {
         updateMessages();
     }
+
+    public void findButtonCLick(ActionEvent actionEvent) {
+        String first_name = searchTextField.getText();
+        if(first_name.strip().isBlank())
+            return;
+        updateUsersAfterSearch(first_name);
+    }
+
+    public void refreshButtonCLick(ActionEvent actionEvent) {
+        updateUsers();
+    }
+
+    public void backButtonCLick(ActionEvent actionEvent) {
+        try {
+            Node source = (Node) actionEvent.getSource();
+            Stage current = (Stage) source.getScene().getWindow();
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main2-view.fxml"));
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root, 700, 600);
+            current.setTitle("Messages");
+            current.setScene(scene);
+            Main2Controller ctrl = fxmlLoader.getController();
+            /*List<User> found = superService.findUsersByName(usernameTextField.getText());
+            if (found.isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error!");
+                alert.setHeaderText("This user doesn't exist!\n");
+                alert.showAndWait();
+                return;
+            }*/
+            ctrl.afterLoad(superService,currentUser);
+
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteButtonClick(ActionEvent actionEvent) {
+        Message selected = messagesView.getSelectionModel().getSelectedItem();
+        User destination = usersTableView.getSelectionModel().getSelectedItem();
+        if(destination == null)
+            return;
+        if(selected == null)
+            return;
+        else {
+            if(!selected.getIdFrom().equals(currentUser.getId())){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error!");
+                alert.setHeaderText("Can't delete messages from another user!\n");
+                alert.showAndWait();
+                return;
+            }
+            else{
+                superService.deleteMessage(selected);
+            }
+
+        }
+        this.messagesView.getSelectionModel().clearSelection();
+        updateMessages();
+    }
+
+    public void undoButtonClick(ActionEvent actionEvent) {
+        Message selected = messagesView.getSelectionModel().getSelectedItem();
+        User destination = usersTableView.getSelectionModel().getSelectedItem();
+        if(destination == null)
+            return;
+        if(selected == null)
+            return;
+        else {
+            if(!selected.getIdFrom().equals(currentUser.getId())){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error!");
+                alert.setHeaderText("Can't undo deleted messages from another user!\n");
+                alert.showAndWait();
+                return;
+            }
+            else{
+                if(selected.getDeleteStatus().equals("deleted")){
+                    superService.undoDeleteMessage(selected);
+                }
+                else{
+                    return;
+                }
+            }
+
+        }
+        this.messagesView.getSelectionModel().clearSelection();
+        updateMessages();
+    }
+
 
     static final class ListViewCell extends ListCell<Message> {
         private final Long idCurrentUser;
@@ -117,6 +220,10 @@ public class ChatController {
                         label = styleLabel(String.format("%d. --reply to %d-- %s", item.getIndex_in_convo(),item.getReplied_message().getIndex_in_convo(),item.getMesaj()));
                         label.setAlignment(Pos.CENTER_RIGHT);
                     }
+                    if(item.getDeleteStatus().equals("deleted")){
+                        label = styleLabel("<<deleted>>");
+                        label.setAlignment(Pos.CENTER_RIGHT);
+                    }
                     var reply=item.getReplied_message();
                     if(reply==null)
                         vBox.getChildren().add(label);
@@ -138,6 +245,10 @@ public class ChatController {
                     }
                     else if(item.getDeleteStatus().equals(ACTIVE_MESSAGE) && !item.getIdReply().equals(SIMPLE_MESSAGE)){
                         label = styleLabel(String.format("%d. --reply to %d-- %s", item.getIndex_in_convo(),item.getReplied_message().getIndex_in_convo(),item.getMesaj()));
+                        label.setAlignment(Pos.CENTER_RIGHT);
+                    }
+                    if(item.getDeleteStatus().equals("deleted")){
+                        label = styleLabel("<<deleted>>");
                         label.setAlignment(Pos.CENTER_RIGHT);
                     }
                     var reply=item.getReplied_message();
@@ -201,6 +312,12 @@ public class ChatController {
     public void updateUsers(){
         this.allUsers.clear();
         Iterable<User> users = this.superService.getAllUsers();
+        this.setUsernames(users);
+    }
+
+    public void updateUsersAfterSearch(String first_name){
+        this.allUsers.clear();
+        Iterable<User> users = this.superService.findUsersByName(first_name);
         this.setUsernames(users);
     }
 

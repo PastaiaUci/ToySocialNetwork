@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+<AnchorPane id="mainAnchorPaneView" fx:id="mainAnchorPaneView" prefHeight="578.0" prefWidth="896.0" style="-fx-border-radius: 10px;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetworkgui.GroupsController">
+    <stylesheets>
+        <URL value="@main2.css" />
+    </stylesheets>
+    <children>
+        <AnchorPane fx:id="leftAnchorPaneView" layoutX="-12.0" prefHeight="582.0" prefWidth="194.0">
+            <children>
+                <Pane fx:id="titlePane" layoutX="14.0" prefHeight="90.0" prefWidth="195.0" style="-fx-background-color: #BA2E49 ">
+                    <children>
+                        <Label fx:id="appTitleLabel" layoutX="14.0" layoutY="4.0" prefHeight="36.0" prefWidth="168.0" text="Pixel">
+                        </Label>
+                    </children>
+                </Pane>
+                <Button fx:id="backButton" layoutX="31.0" layoutY="492.0" mnemonicParsing="false" onAction="#logout" prefHeight="46.0" prefWidth="129.0" text="Back" />
+            <Label fx:id="groupsLabel" alignment="TOP_CENTER" layoutX="31.0" layoutY="187.0" prefHeight="46.0" prefWidth="147.0" text="Groups" />
+            <ImageView fitHeight="113.0" fitWidth="130.0" layoutX="48.0" layoutY="234.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Images/groups.png" />
+               </image>
+            </ImageView>
+            </children>
+        </AnchorPane>
+      <AnchorPane fx:id="searchAnchorPane" layoutX="198.0" prefHeight="56.0" prefWidth="271.0" style="-fx-background-color: #FFA569;">
+         <children>
+            <Label fx:id="usersLabel" alignment="BOTTOM_CENTER" layoutX="14.0" layoutY="8.0" prefHeight="38.0" prefWidth="98.0" text="Your Groups" />
+            <ImageView fitHeight="30.0" fitWidth="32.0" layoutX="227.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Images/looking-glass2.jpg" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+      <TextField fx:id="searchTextField" layoutX="210.0" layoutY="79.0" prefHeight="30.0" prefWidth="130.0" />
+      <Button fx:id="findButton" layoutX="379.0" layoutY="76.0" mnemonicParsing="false" onAction="#findButtonCLick" prefHeight="30.0" prefWidth="79.0" text="Find" />
+      <ListView fx:id="groupsListView" layoutX="208.0" layoutY="138.0" prefHeight="334.0" prefWidth="251.0" />
+      <Button fx:id="refreshButton" layoutX="210.0" layoutY="499.0" mnemonicParsing="false" onAction="#refreshButtonCLick" text="Refresh" />
+      <Button fx:id="showButton" layoutX="352.0" layoutY="499.0" mnemonicParsing="false" onAction="#showButtonClick" text="Show" />
+      <AnchorPane fx:id="messageAnchorPane" layoutX="469.0" prefHeight="56.0" prefWidth="427.0" style="-fx-background-color: #FF6978;">
+         <children>
+            <Label fx:id="convoLabel" layoutX="80.0" prefHeight="56.0" prefWidth="116.0" text="Discussion" />
+            <ImageView fitHeight="42.0" fitWidth="86.0" layoutX="356.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Images/conversation.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+      <ListView fx:id="discussionListView" layoutX="505.0" layoutY="94.0" prefHeight="334.0" prefWidth="355.0" />
+      <TextArea fx:id="textArea" layoutX="505.0" layoutY="445.0" prefHeight="90.0" prefWidth="230.0" />
+      <Button fx:id="sendButton" layoutX="762.0" layoutY="444.0" onAction="#sendMessageButtonClick" prefHeight="55" prefWidth="80" text="Send" />
+    </children>
+</AnchorPane>

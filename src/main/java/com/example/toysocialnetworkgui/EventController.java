@@ -13,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import java.io.IOException;
 
@@ -30,6 +31,8 @@ public class EventController {
     TableColumn<Event,String> descriereColumn;
     @FXML
     TableColumn<Event,String> dataColumn;
+    @FXML
+    TableColumn<Event,String> statusColumn;
     @FXML
     TextField nameTextField;
     @FXML

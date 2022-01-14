@@ -10,6 +10,7 @@ public class User extends Entity<Long>{
     private List<User> friends;
     private String password;
 
+
     public User(String firstName, String lastName,String password) {
         this.firstName = firstName;
         this.lastName = lastName;

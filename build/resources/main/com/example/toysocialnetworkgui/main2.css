@@ -91,3 +91,12 @@
     -fx-font-size: 25;
     -fx-text-fill: black;
 }
+
+#groupsLabel{
+    -fx-text-fill: white;
+    -fx-font-size: 35;
+}
+
+#groupsListView{
+    -fx-background-color:  #FFDAB9;
+}

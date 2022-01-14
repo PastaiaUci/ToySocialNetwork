@@ -14,13 +14,15 @@ public class SuperService {
     private UserService userService = null;
     private MessageService messageService = null;
     private EventService eventService = null;
+    private GroupsService groupsService = null;
 
 
-    public SuperService(FriendshipService friendshipService, UserService userService, MessageService messageService,EventService eventService) {
+    public SuperService(FriendshipService friendshipService, UserService userService, MessageService messageService,EventService eventService, GroupsService groupsService) {
         this.friendshipService = friendshipService;
         this.userService = userService;
         this.messageService = messageService;
         this.eventService = eventService;
+        this.groupsService = groupsService;
 
     }
 
@@ -314,9 +316,21 @@ public class SuperService {
 
             if(friendship.getFr1() == id || friendship.getFr2() == id)
                 sentFriendRequest.add(friendship);
-
         }
         return sentFriendRequest;
+    }
+
+    public List<Long> getUsersIdPartOfGroup(Long id_group){
+        return groupsService.getUsersIdPartOfGroup(id_group);
+    }
+
+    public List<GroupMessage> getGroupMessagesFromGroup(Long id_group){
+        return groupsService.getGroupMessagesFromGroup(id_group).stream().sorted(Comparator.comparing(GroupMessage::getData_trimitere))
+                .collect(Collectors.toList());
+    }
+
+    public List<Group> findGroupsOfAUser(Long id_user){
+        return groupsService.findGroupsOfAUser(id_user);
     }
 }
 

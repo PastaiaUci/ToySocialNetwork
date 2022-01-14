@@ -5,10 +5,7 @@ import com.example.toysocialnetworkgui.domain.validators.FriendshipValidator;
 import com.example.toysocialnetworkgui.domain.validators.MessageValidator;
 import com.example.toysocialnetworkgui.domain.validators.UserValidator;
 import com.example.toysocialnetworkgui.repository.Repository;
-import com.example.toysocialnetworkgui.repository.database.EventsDbRepository;
-import com.example.toysocialnetworkgui.repository.database.FriendshipsDbRepository;
-import com.example.toysocialnetworkgui.repository.database.MessageDbRepository;
-import com.example.toysocialnetworkgui.repository.database.UserDbRepository;
+import com.example.toysocialnetworkgui.repository.database.*;
 import com.example.toysocialnetworkgui.repository.repoExceptions.FileError;
 import com.example.toysocialnetworkgui.repository.repoExceptions.RepoException;
 import com.example.toysocialnetworkgui.service.*;
@@ -39,11 +36,13 @@ public class Main extends Application {
         Repository<Tuple<Long,Long>, Friendship> friendshipDbRepository = null;
         Repository<Long, Event> eventDbRepository = null;
         Repository<Long, Message> messageDbRepository = null;
+        GroupDbRepository groupDbRepository = null;
         try {
-            userDbRepository = new UserDbRepository("jdbc:postgresql://localhost:5432/postgres","postgres","postgres", new UserValidator());
-            friendshipDbRepository = new FriendshipsDbRepository("jdbc:postgresql://localhost:5432/postgres","postgres","postgres",new FriendshipValidator());
-            messageDbRepository = new MessageDbRepository("jdbc:postgresql://localhost:5432/postgres","postgres","postgres", new MessageValidator());
-            eventDbRepository = new EventsDbRepository("jdbc:postgresql://localhost:5432/postgres","postgres","postgres", new EventValidator());
+            userDbRepository = new UserDbRepository("jdbc:postgresql://localhost:5432/academic","postgres","22adc#cJf6", new UserValidator());
+            friendshipDbRepository = new FriendshipsDbRepository("jdbc:postgresql://localhost:5432/academic","postgres","22adc#cJf6",new FriendshipValidator());
+            messageDbRepository = new MessageDbRepository("jdbc:postgresql://localhost:5432/academic","postgres","22adc#cJf6", new MessageValidator());
+            eventDbRepository = new EventsDbRepository("jdbc:postgresql://localhost:5432/academic","postgres","22adc#cJf6", new EventValidator());
+            groupDbRepository = new GroupDbRepository("jdbc:postgresql://localhost:5432/academic","postgres","22adc#cJf6");
         }
         catch (FileError ex){
             System.out.println(ex.getMessage());
@@ -60,13 +59,15 @@ public class Main extends Application {
         FriendshipService friendshipService = new FriendshipService(friendshipDbRepository);
         MessageService messageService = new MessageService(messageDbRepository);
         EventService eventService = new EventService(eventDbRepository);
-        SuperService superService = new SuperService(friendshipService,userService,messageService,eventService);
+        GroupsService groupsService = new GroupsService(groupDbRepository);
+        SuperService superService = new SuperService(friendshipService,userService,messageService,eventService,groupsService);
 
 
        /* User user = superService.findUserById(6L);
         superService.replyAll(user,"salut");*/
-       /*Runner runner = new Runner(superService);
-        runner.runApp();*/
+       /* System.out.println(superService.findGroupsOfAUser(11L).size());
+       Runner runner = new Runner(superService);
+       runner.runApp();*/
 
 
        /* Runner runner = new Runner(superService);
@@ -77,11 +78,10 @@ public class Main extends Application {
        // runner.runApp();
 
 
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("events-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login-view.fxml"));
         Parent root = fxmlLoader.load();
-        EventController mainController = fxmlLoader.getController();
+        LoginController mainController = fxmlLoader.getController();
         mainController.setServiceController(superService);
-
 
 
         Scene scene = new Scene(root, 700, 600);
