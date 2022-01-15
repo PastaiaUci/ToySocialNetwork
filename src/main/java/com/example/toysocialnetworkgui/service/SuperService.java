@@ -399,5 +399,9 @@ public class SuperService {
     public void turnOnNotifications(Long id, Long id1) {
         eventService.turnOnNotifications(id,id1);
     }
+
+    public boolean isNotificationOn(Long id, Long id1) {
+        return eventService.isNotificationOn(id,id1);
+    }
 }
 

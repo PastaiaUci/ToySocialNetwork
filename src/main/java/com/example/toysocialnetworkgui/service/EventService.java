@@ -39,4 +39,8 @@ public class EventService {
     public void turnOnNotifications(Long id, Long id1) {
         repo.turnOnNotifications(id,id1);
     }
+
+    public boolean isNotificationOn(Long id, Long id1) {
+        return repo.isNotificationOn(id,id1);
+    }
 }

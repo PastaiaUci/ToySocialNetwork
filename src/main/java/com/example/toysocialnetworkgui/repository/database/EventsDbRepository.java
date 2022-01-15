@@ -8,7 +8,6 @@ import javafx.scene.control.Alert;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static com.example.toysocialnetworkgui.Utils.constants.RepoConstants.*;
@@ -210,6 +209,32 @@ public class EventsDbRepository implements Repository<Long ,Event>
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean isNotificationOn(Long aLong, Long id1) {
+
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement statement = connection.prepareStatement(IS_NOTIFICATION_ON);)
+        {
+            statement.setLong(1,aLong);
+            statement.setLong(2,id1);
+            try(ResultSet resultSet = statement.executeQuery()){
+                while(resultSet.next()) {
+
+                    String notification_status = resultSet.getString("notifications");
+                    if(notification_status.equals("On"))
+                        return  true;
+                    else return false;
+
+
+
+                }
+            }
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
+        return true;
     }
 
     public  void unsubscribe(Long user_id,Long event_id){

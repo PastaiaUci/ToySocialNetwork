@@ -332,9 +332,9 @@ public class Main2Controller {
                     Thread.sleep(100);
                     for (Event event : allEvents) {
                             long minutes = ChronoUnit.MINUTES.between(LocalDateTime.now(), event.getDate());
-                            if ( minutes > 0 && minutes <1440) {
+                            if ( (minutes > 0 && minutes <1440) && superService.isNotificationOn(currentUser.getId(),event.getId()) ) {
                                 Platform.runLater(() -> {
-                                    String text = event.getName().toUpperCase(Locale.ROOT) + " will start in less than an hour!!!";
+                                    String text = event.getName().toUpperCase(Locale.ROOT) + " will start in less than an day!!!";
 
                                     Stage dialog = new Stage();
                                     dialog.setResizable(false);

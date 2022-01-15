@@ -107,4 +107,9 @@ public class InMemoryRepository<ID, E extends Entity<ID>> implements Repository<
     public void turnOnNotifications(ID id, ID id1) {
 
     }
+
+    @Override
+    public boolean isNotificationOn(ID id, ID id1) {
+        return true;
+    }
 }

@@ -195,5 +195,10 @@ public class FriendshipsDbRepository implements Repository<Tuple<Long,Long>, Fri
     public void turnOnNotifications(Tuple<Long, Long> longLongTuple, Tuple<Long, Long> id1) {
 
     }
+
+    @Override
+    public boolean isNotificationOn(Tuple<Long, Long> longLongTuple, Tuple<Long, Long> id1) {
+        return true;
+    }
 }
 

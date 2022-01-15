@@ -158,4 +158,9 @@ public class MessageDbRepository implements Repository<Long, Message> {
     public void turnOnNotifications(Long aLong, Long id1) {
 
     }
+
+    @Override
+    public boolean isNotificationOn(Long aLong, Long id1) {
+        return true;
+    }
 }

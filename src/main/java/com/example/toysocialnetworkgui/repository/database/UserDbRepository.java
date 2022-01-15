@@ -198,6 +198,11 @@ public class UserDbRepository implements Repository<Long, User> {
 
     }
 
+    @Override
+    public boolean isNotificationOn(Long aLong, Long id1) {
+        return true;
+    }
+
 
 }
 
