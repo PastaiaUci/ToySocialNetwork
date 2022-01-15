@@ -31,7 +31,7 @@ public class SignupController {
 
 
     @FXML
-    protected void onRegisterButtonClick(ActionEvent event) {
+    protected void onRegisterButtonClick() {
         String first_name = firstNameTextField.getText();
         String last_name = lastNameTextField.getText();
         String password = passwordTextField.getText();
@@ -57,7 +57,7 @@ public class SignupController {
             Stage current = (Stage) source.getScene().getWindow();
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login-view.fxml"));
             Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root, 700, 600);
+            Scene scene = new Scene(root, 900, 600);
             current.setTitle("Ian");
             current.setScene(scene);
             LoginController mainController = fxmlLoader.getController();

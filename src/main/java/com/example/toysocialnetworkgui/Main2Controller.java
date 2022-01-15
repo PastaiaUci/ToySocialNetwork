@@ -2,6 +2,7 @@ package com.example.toysocialnetworkgui;
 
 import com.example.toysocialnetworkgui.domain.Event;
 import com.example.toysocialnetworkgui.domain.Friendship;
+import com.example.toysocialnetworkgui.domain.Message;
 import com.example.toysocialnetworkgui.domain.User;
 import com.example.toysocialnetworkgui.service.ServiceException;
 import com.example.toysocialnetworkgui.service.SuperService;
@@ -16,15 +17,26 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
+
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main2Controller {
 
@@ -34,15 +46,14 @@ public class Main2Controller {
 
     ObservableList<Friendship> allRequests = FXCollections.observableArrayList();
     ObservableList<Event> allEvents = FXCollections.observableArrayList();
+    ObservableList<User> allUsers = FXCollections.observableArrayList();
+
+
 
     @FXML
-    Button sendDeleteButton;
+    Button pdfButton;
     @FXML
     Button logoutButton;
-    @FXML
-    Button sendAcceptButton;
-    @FXML
-    Button sendRejectButton;
     @FXML
     Button viewFriendsButton;
     @FXML
@@ -78,6 +89,12 @@ public class Main2Controller {
     TableColumn<Friendship,String> statusColumn;
     @FXML
     TableColumn<Friendship, Date>  dateColumn;
+
+    @FXML
+    DatePicker startDatePicker;
+
+    @FXML
+    DatePicker endDatePicker;
 
     @FXML
     public void initialize() {
@@ -140,37 +157,14 @@ public class Main2Controller {
         Iterable<Friendship> friendships = this.superService.allRequestsOfAUser(currentUser.getId());
         this.setFriendships(friendships);
     }
-    /*public void setUsernames(Iterable<User> users) {
-        users.forEach( u -> this.allUsers.add(u));
-    }*/
+
     public void setFriendships(Iterable<Friendship> friendships) {
         friendships.forEach( u -> this.allRequests.add(u));
     }
 
-    /*public void updateUsers() {
-        this.allUsers.clear();
-        Iterable<User> users = this.superService.getAllUsers();
-        this.setUsernames(users);
-    }*/
 
-   /* @FXML
-    public void sendRequest() {
 
-        try {
-            if (userTableView.getSelectionModel().getSelectedItem() == null)
-                return;
-            this.superService.sendFriendRequest(currentUser.getId(),userTableView.getSelectionModel().getSelectedItem().getId());
-            this.updateRequests();
-        }
-        catch (ServiceException e){
-            System.out.println("stefaneeee");
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Can't send friend request!");
-            alert.setHeaderText("Mi ai dat leanul pe jos!");
-            alert.showAndWait();
 
-        }
-    }*/
 
     @FXML
     public void acceptRequest() {
@@ -230,10 +224,95 @@ public class Main2Controller {
         }
     }
 
+    @FXML
+    public void pdfButtonClick() throws IOException {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        File selectedDirectory = directoryChooser.showDialog(Main.mainStage);
+
+        if(selectedDirectory == null)
+            return;
+
+        int textX = 100;
+        AtomicInteger textY = new AtomicInteger(700);
+        LocalTime  time = LocalTime.of(0,0,0,0);
+        LocalDateTime  startDate = LocalDateTime.of(startDatePicker.getValue(), time);
+        LocalDateTime  endDate = LocalDateTime.of(endDatePicker.getValue(), time);
+
+        Iterable<Message> messages_sent = superService.findAllSentMassagesToUsers(currentUser.getId());
+        Iterable<Message> messages_received = superService.findAllReceivedMassagesFromUsers(currentUser.getId());
+        Iterable<Friendship> friends = superService.getFriendsInInterval(currentUser.getId(),startDate,endDate);
+
+        PDDocument document = new PDDocument();
+        PDPage page = new PDPage();
+        document.addPage( page );
+
+        PDFont font1 = PDType1Font.HELVETICA_BOLD;
+        PDFont font2 = PDType1Font.HELVETICA;
+        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+        contentStream.beginText();
+        contentStream.setFont(font1, 20 );
+        contentStream.newLineAtOffset(textX,textY.get());
+        contentStream.showText("New friends of " + currentUser.getFirstName() + ":");
+        contentStream.endText();
+        textY.addAndGet(-20);
+
+        friends.forEach(x -> {
+            try {
+                contentStream.beginText();
+                contentStream.setFont( font2, 10 );
+                contentStream.newLineAtOffset(textX-20,textY.get());
+                String friend = superService.findUserById(x.getFr1()).getFirstName();
+                String user = superService.findUserById(x.getFr2()).getFirstName();
+                contentStream.showText(friend + " s-a imprietenit cu  " +  user+ " pe data de " + x.getDate());
+                contentStream.endText();
+                textY.addAndGet(-10);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        messages_sent.forEach(x -> {
+            try {
+                contentStream.beginText();
+                contentStream.setFont( font2, 10 );
+                contentStream.newLineAtOffset(textX-20,textY.get());
+                contentStream.showText(currentUser.getFirstName() + " a trimis mesajul " + x.getMesaj() + " pe data de " +x.getDataTrimitere() );
+                contentStream.endText();
+                textY.addAndGet(-10);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+
+        messages_received.forEach(x -> {
+            try {
+                contentStream.beginText();
+                contentStream.setFont( font2, 10 );
+                contentStream.newLineAtOffset(textX-20,textY.get());
+                contentStream.showText(currentUser.getFirstName() + " a primit mesajul " + x.getMesaj() + " pe data de " +x.getDataTrimitere() );
+                contentStream.endText();
+                textY.addAndGet(-10);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+
+
+        contentStream.close();
+        document.save( selectedDirectory+"/"+currentUser.getFirstName()+" "+currentUser.getLastName()+".pdf");
+        document.close();
+
+    }
 
 
     @FXML
-    public void deleteRequest(){
+    public void cancelRequest(){
 
         if (friendshipTableView.getSelectionModel().getSelectedItem() == null)
             return;
@@ -256,7 +335,7 @@ public class Main2Controller {
             Stage current = (Stage) source.getScene().getWindow();
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login-view.fxml"));
             Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root, 700, 600);
+            Scene scene = new Scene(root, 900, 600);
             current.setTitle("Ian");
             current.setScene(scene);
             LoginController mainController = fxmlLoader.getController();
@@ -277,7 +356,7 @@ public class Main2Controller {
             Stage current = (Stage) source.getScene().getWindow();
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("friends-view.fxml"));
             Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root, 700, 600);
+            Scene scene = new Scene(root, 900, 600);
             current.setTitle("Ian");
             current.setScene(scene);
             FriendsListController ctrl = fxmlLoader.getController();
@@ -294,7 +373,7 @@ public class Main2Controller {
             Stage current = (Stage) source.getScene().getWindow();
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("messages-view.fxml"));
             Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root, 700, 600);
+            Scene scene = new Scene(root, 900, 600);
             current.setTitle("Messages");
             current.setScene(scene);
             ChatController ctrl = fxmlLoader.getController();
@@ -323,7 +402,7 @@ public class Main2Controller {
             Stage current = (Stage) source.getScene().getWindow();
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("groups-view.fxml"));
             Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root, 700, 600);
+            Scene scene = new Scene(root, 900, 600);
             current.setTitle("Ian");
             current.setScene(scene);
             GroupsController mainController = fxmlLoader.getController();
@@ -343,7 +422,7 @@ public class Main2Controller {
             Stage current = (Stage) source.getScene().getWindow();
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("events-view.fxml"));
             Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root, 700, 600);
+            Scene scene = new Scene(root, 900, 600);
             current.setTitle("Ian");
             current.setScene(scene);
             EventController mainController = fxmlLoader.getController();
@@ -357,24 +436,6 @@ public class Main2Controller {
 
     }
 
-   /* @FXML
-    public void eventsButtonClick(ActionEvent event) {
-        try {
-            Node source = (Node) event.getSource();
-            Stage current = (Stage) source.getScene().getWindow();
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("events-view.fxml"));
-            Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root, 700, 600);
-            current.setTitle("Ian");
-            current.setScene(scene);
-            EventController mainController = fxmlLoader.getController();
-            mainController.setServiceController(superService);
-            mainController.afterLoad(superService,superService.findUsersByName(currentUser.getFirstName()).get(0));
 
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }*/
 }
 

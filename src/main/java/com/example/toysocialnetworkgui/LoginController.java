@@ -61,7 +61,7 @@ public class LoginController {
                 Stage current = (Stage) source.getScene().getWindow();
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main2-view.fxml"));
                 Parent root = fxmlLoader.load();
-                Scene scene = new Scene(root, 896, 578);
+                Scene scene = new Scene(root, 900, 600);
                 current.setTitle("Amuly" + username);
                 current.setScene(scene);
                 Main2Controller ctrl = fxmlLoader.getController();
@@ -83,7 +83,7 @@ public class LoginController {
            Parent root = fxmlLoader.load();
            SignupController signupController = fxmlLoader.getController();
            signupController.setSuperService(superService);
-           Scene scene = new Scene(root, 700, 600);
+           Scene scene = new Scene(root, 900, 600);
            current.setTitle("Ian");
            current.setScene(scene);
 

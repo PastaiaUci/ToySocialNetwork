@@ -2,6 +2,8 @@ package com.example.toysocialnetworkgui.service;
 
 import com.example.toysocialnetworkgui.domain.*;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -208,6 +210,16 @@ public class SuperService {
 
     }
 
+    public Iterable<Friendship> getFriendsInInterval(Long id, LocalDateTime startDate,LocalDateTime endDate){
+        Iterable<Friendship> allFriendships = friendshipService.repo.findAll();
+        Set<Friendship> friendships = new HashSet<>();
+        for (Friendship friendship : allFriendships)
+            if (  (friendship.getFr1() == id || friendship.getFr2() == id) &&  (friendship.getDate().isAfter(startDate) && friendship.getDate().isBefore(endDate) ))
+                friendships.add(friendship);
+        return friendships;
+
+    }
+
     public User findOneUser(Long messageTask) {
         User user = userService.repo.findOne(messageTask);
         return user;
@@ -356,6 +368,16 @@ public class SuperService {
         GroupMessage groupMessage = new GroupMessage(id_user_from,id_grup_to,mesaj);
         groupMessage.setId(TEMPORARY_MESSAGE_ID);
         this.groupsService.saveGroupMessage(groupMessage);
+    }
+
+
+
+    public List<Message> findAllSentMassagesToUsers(Long id_user_from){
+        return messageService.findAllSentMassagesToUsers(id_user_from);
+    }
+
+    public List<Message> findAllReceivedMassagesFromUsers(Long id_to){
+        return messageService.findAllReceivedMassagesFromUsers(id_to);
     }
 }
 

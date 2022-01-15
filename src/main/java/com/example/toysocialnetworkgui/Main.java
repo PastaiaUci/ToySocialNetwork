@@ -16,6 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 
 import java.util.ArrayList;
@@ -26,6 +27,8 @@ import static com.example.toysocialnetworkgui.domain.GFG.encryptThisString;
 
 
 public class Main extends Application {
+
+    public static Window mainStage;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -40,11 +43,11 @@ public class Main extends Application {
         Repository<Long, Message> messageDbRepository = null;
         GroupDbRepository groupDbRepository = null;
         try {
-            userDbRepository = new UserDbRepository("jdbc:postgresql://localhost:5432/academic","postgres","22adc#cJf6", new UserValidator());
-            friendshipDbRepository = new FriendshipsDbRepository("jdbc:postgresql://localhost:5432/academic","postgres","22adc#cJf6",new FriendshipValidator());
-            messageDbRepository = new MessageDbRepository("jdbc:postgresql://localhost:5432/academic","postgres","22adc#cJf6", new MessageValidator());
-            eventDbRepository = new EventsDbRepository("jdbc:postgresql://localhost:5432/academic","postgres","22adc#cJf6", new EventValidator());
-            groupDbRepository = new GroupDbRepository("jdbc:postgresql://localhost:5432/academic","postgres","22adc#cJf6");
+            userDbRepository = new UserDbRepository("jdbc:postgresql://localhost:5432/postgres","postgres","postgres", new UserValidator());
+            friendshipDbRepository = new FriendshipsDbRepository("jdbc:postgresql://localhost:5432/postgres","postgres","postgres",new FriendshipValidator());
+            messageDbRepository = new MessageDbRepository("jdbc:postgresql://localhost:5432/postgres","postgres","postgres", new MessageValidator());
+            eventDbRepository = new EventsDbRepository("jdbc:postgresql://localhost:5432/postgres","postgres","postgres", new EventValidator());
+            groupDbRepository = new GroupDbRepository("jdbc:postgresql://localhost:5432/postgres","postgres","postgres");
         }
         catch (FileError ex){
             System.out.println(ex.getMessage());
@@ -92,7 +95,7 @@ public class Main extends Application {
         );
 
 
-        Scene scene = new Scene(root, 700, 600);
+        Scene scene = new Scene(root, 800, 600);
         primaryStage.setTitle("IanAztecaAmuly");
 
         primaryStage.setScene(scene);

@@ -92,7 +92,7 @@ public class EventController {
             Stage current = (Stage) source.getScene().getWindow();
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main2-view.fxml"));
             Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root, 896.0, 578);
+            Scene scene = new Scene(root, 900, 600);
             current.setTitle("Ian");
             current.setScene(scene);
             Main2Controller mainController = fxmlLoader.getController();

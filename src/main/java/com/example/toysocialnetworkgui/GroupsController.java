@@ -9,7 +9,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -19,9 +23,11 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import org.w3c.dom.Text;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import static com.example.toysocialnetworkgui.Utils.constants.DomainConstants.ACTIVE_MESSAGE;
@@ -43,6 +49,9 @@ public class GroupsController {
     ListView<GroupMessage> discussionListView;
 
     @FXML
+    Button backButton;
+
+    @FXML
     public void initialize() {
         searchTextField.setPromptText("Search");
         this.groupsListView.setCellFactory(param -> new GroupListViewCell(currentUser.getId()));
@@ -54,6 +63,26 @@ public class GroupsController {
     public void setServiceController(SuperService superService){
         this.superService = superService;
     }
+
+
+
+    public void back(ActionEvent actionEvent) {
+        try {
+            Node source = (Node) actionEvent.getSource();
+            Stage current = (Stage) source.getScene().getWindow();
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main2-view.fxml"));
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root, 900, 600);
+            current.setTitle("Messages");
+            current.setScene(scene);
+            Main2Controller ctrl = fxmlLoader.getController();
+            ctrl.afterLoad(superService,currentUser);
+
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void sendMessageButtonClick(ActionEvent actionEvent) {
         String mesaj = textArea.getText();

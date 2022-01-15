@@ -24,7 +24,7 @@
                         </Label>
                     </children>
                 </Pane>
-                <Button fx:id="backButton" layoutX="31.0" layoutY="492.0" mnemonicParsing="false" onAction="#logout" prefHeight="46.0" prefWidth="129.0" text="Back" />
+                <Button fx:id="backButton" layoutX="31.0" layoutY="492.0" mnemonicParsing="false" onAction="#back" prefHeight="46.0" prefWidth="129.0" text="Back" />
             <Label fx:id="groupsLabel" alignment="TOP_CENTER" layoutX="31.0" layoutY="187.0" prefHeight="46.0" prefWidth="147.0" text="Groups" />
             <ImageView fitHeight="113.0" fitWidth="130.0" layoutX="48.0" layoutY="234.0" pickOnBounds="true" preserveRatio="true">
                <image>
