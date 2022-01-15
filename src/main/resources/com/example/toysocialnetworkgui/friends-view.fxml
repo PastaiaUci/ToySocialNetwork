@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="mainAnchorPaneView" fx:id="mainAnchorPaneView" prefHeight="578.0" prefWidth="896.0" style="-fx-border-radius: 10px;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetworkgui.Main2Controller">
+<AnchorPane id="mainAnchorPaneView" fx:id="mainAnchorPaneView" prefHeight="578.0" prefWidth="896.0" style="-fx-border-radius: 10px;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetworkgui.FriendsListController">
     <stylesheets>
         <URL value="@main2.css" />
     </stylesheets>
@@ -24,7 +24,7 @@
                         </Label>
                     </children>
                 </Pane>
-                <Button fx:id="backButton" layoutX="39.0" layoutY="491.0" mnemonicParsing="false" onAction="#logout" prefHeight="46.0" prefWidth="139.0" text="Back" />
+                <Button fx:id="backButton" layoutX="39.0" layoutY="491.0" mnemonicParsing="false" onAction="#backButtonClick" prefHeight="46.0" prefWidth="139.0" text="Back" />
             <Label alignment="CENTER" layoutX="25.0" layoutY="171.0" prefHeight="29.0" prefWidth="168.0" text="Friends" textFill="#fffdfd">
                <font>
                   <Font size="42.0" />

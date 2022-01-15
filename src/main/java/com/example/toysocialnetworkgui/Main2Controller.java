@@ -268,8 +268,6 @@ public class Main2Controller {
 
     }
 
-
-
     @FXML
     public void onFriendsButtonClick(ActionEvent actionEvent) {
         try {
@@ -277,11 +275,11 @@ public class Main2Controller {
             Stage current = (Stage) source.getScene().getWindow();
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("friends-view.fxml"));
             Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root, 700, 600);
+            Scene scene = new Scene(root, 896, 578);
             current.setTitle("Ian");
             current.setScene(scene);
             FriendsListController ctrl = fxmlLoader.getController();
-            ctrl.afterLoad(superService,superService.findUsersByName(currentUser.getFirstName()).get(0));
+            ctrl.afterLoad(superService,currentUser);
 
         }catch (IOException e) {
             e.printStackTrace();
