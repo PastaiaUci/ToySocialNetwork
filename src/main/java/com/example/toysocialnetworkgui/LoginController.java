@@ -29,7 +29,7 @@ public class LoginController {
     @FXML
     TextField usernameTextField;
     @FXML
-    TextField passwordTextField;
+    PasswordField passwordTextField;
     @FXML
     Button loginButton;
     @FXML
@@ -44,7 +44,7 @@ public class LoginController {
     protected void onLoginButtonClick(ActionEvent event) {
 
         String username = usernameTextField.getText();
-        String password = passwordTextField.getText();
+        String password = HashPassword.passHashing(passwordTextField.getText());
         if(username.equals("")){
             return;
         }
@@ -61,8 +61,8 @@ public class LoginController {
                 Stage current = (Stage) source.getScene().getWindow();
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main2-view.fxml"));
                 Parent root = fxmlLoader.load();
-                Scene scene = new Scene(root, 896, 578);
-                current.setTitle("Amuly" + username);
+                Scene scene = new Scene(root, 900, 600);
+                current.setTitle("Pixel " + username);
                 current.setScene(scene);
                 Main2Controller ctrl = fxmlLoader.getController();
                 ctrl.afterLoad(superService,superService.findUsersByUsernameAndPassword(username,password));
@@ -83,12 +83,13 @@ public class LoginController {
            Parent root = fxmlLoader.load();
            SignupController signupController = fxmlLoader.getController();
            signupController.setSuperService(superService);
-           Scene scene = new Scene(root, 700, 600);
-           current.setTitle("Ian");
+           Scene scene = new Scene(root, 900, 600);
+           current.setTitle("Pixel");
            current.setScene(scene);
 
        }catch (IOException e) {
            e.printStackTrace();
        }
     }
+
 }

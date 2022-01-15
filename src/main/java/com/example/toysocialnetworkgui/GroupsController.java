@@ -1,5 +1,6 @@
 package com.example.toysocialnetworkgui;
 
+import com.example.toysocialnetworkgui.Observer.Observer;
 import com.example.toysocialnetworkgui.domain.Group;
 import com.example.toysocialnetworkgui.domain.GroupMessage;
 import com.example.toysocialnetworkgui.domain.Message;
@@ -9,7 +10,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -19,15 +24,17 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import org.w3c.dom.Text;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import static com.example.toysocialnetworkgui.Utils.constants.DomainConstants.ACTIVE_MESSAGE;
 import static com.example.toysocialnetworkgui.Utils.constants.DomainConstants.SIMPLE_MESSAGE;
 
-public class GroupsController {
+public class GroupsController implements Observer {
     protected SuperService superService;
     private User currentUser;
     private final ObservableList<GroupMessage> groupMessages = FXCollections.observableArrayList();
@@ -43,6 +50,9 @@ public class GroupsController {
     ListView<GroupMessage> discussionListView;
 
     @FXML
+    Button backButton;
+
+    @FXML
     public void initialize() {
         searchTextField.setPromptText("Search");
         this.groupsListView.setCellFactory(param -> new GroupListViewCell(currentUser.getId()));
@@ -55,13 +65,32 @@ public class GroupsController {
         this.superService = superService;
     }
 
+
+
+    public void back(ActionEvent actionEvent) {
+        try {
+            Node source = (Node) actionEvent.getSource();
+            Stage current = (Stage) source.getScene().getWindow();
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main2-view.fxml"));
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root, 900, 600);
+            current.setTitle("Pixel");
+            current.setScene(scene);
+            Main2Controller ctrl = fxmlLoader.getController();
+            ctrl.afterLoad(superService,currentUser);
+
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public void sendMessageButtonClick(ActionEvent actionEvent) {
         String mesaj = textArea.getText();
         if(mesaj.strip().isBlank()) {
-            System.out.println("stefaneeee");
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Can't send friend request!");
-            alert.setHeaderText("Mi ai dat leanul pe jos!");
+            alert.setTitle("Can't send message!");
+            alert.setHeaderText("Can't send message!");
             alert.showAndWait();
             return;
         }
@@ -70,23 +99,13 @@ public class GroupsController {
             return;
         this.superService.saveGroupMessage(currentUser.getId(), group.getId(),mesaj);
         this.textArea.clear();
-        updateGroupMessages();
+        //updateGroupMessages();
     }
 
-    public void logout(ActionEvent actionEvent) {
-
-    }
-
-    public void findButtonCLick(ActionEvent actionEvent) {
-    }
-
-    public void refreshButtonCLick(ActionEvent actionEvent) {
-    }
 
     public void showButtonClick(ActionEvent actionEvent) {
         updateGroupMessages();
     }
-
     static final class DisscussionListViewCell extends ListCell<GroupMessage>{
         private final Long idCurrentUser;
         private final SuperService superService;
@@ -175,43 +194,6 @@ public class GroupsController {
                 hBox.setBackground(new Background(new BackgroundFill(Color.LIGHTCORAL,null,null)));
                 hBox.setAlignment(Pos.CENTER_LEFT);
                 hBox.getChildren().addAll(imageView,groupNameLabel);
-                //hBox.getChildren().add(groupNameLabel);
-                    /*else {
-                        var index_in_convo = reply.getIndex_in_convo();
-                        Label textReply = new Label("You replied to: " + index_in_convo);
-                        textReply.setAlignment(Pos.CENTER_RIGHT);
-                        Label replyLabel = styleReplyLabel(reply.getMesaj());
-                        replyLabel.setAlignment(Pos.CENTER_LEFT);
-                        vBox.getChildren().addAll(textReply, replyLabel, label);
-                    }*/
-
-                //Messages from other user
-               /* else{
-                    vBox.setAlignment(Pos.CENTER_LEFT);
-                    if(item.getDeleteStatus().equals(ACTIVE_MESSAGE) && item.getIdReply().equals(SIMPLE_MESSAGE)) {
-                        label = styleLabel(String.format("%d. %s", item.getIndex_in_convo(), item.getMesaj()));
-                        label.setAlignment(Pos.CENTER_RIGHT);
-                    }
-                    else if(item.getDeleteStatus().equals(ACTIVE_MESSAGE) && !item.getIdReply().equals(SIMPLE_MESSAGE)){
-                        label = styleLabel(String.format("%d. --reply to %d-- %s", item.getIndex_in_convo(),item.getReplied_message().getIndex_in_convo(),item.getMesaj()));
-                        label.setAlignment(Pos.CENTER_RIGHT);
-                    }
-                    if(item.getDeleteStatus().equals("deleted")){
-                        label = styleLabel("<<deleted>>");
-                        label.setAlignment(Pos.CENTER_RIGHT);
-                    }
-                    var reply=item.getReplied_message();
-                    if(reply==null)
-                        vBox.getChildren().add(label);
-                    else {
-                        var index_in_convo = reply.getIndex_in_convo();
-                        Label textReply = new Label("You replied to: " + index_in_convo);
-                        textReply.setAlignment(Pos.CENTER_RIGHT);
-                        Label replyLabel = styleReplyLabel(reply.getMesaj());
-                        replyLabel.setAlignment(Pos.CENTER_LEFT);
-                        vBox.getChildren().addAll(textReply, replyLabel, label);
-                    }
-                }*/
                 setGraphic(hBox);
             }
         }
@@ -233,32 +215,42 @@ public class GroupsController {
             return label;
         }
 
-        private Label styleReplyLabel(String msg){
-            var label=new Label(msg);
-            label.setMinWidth(50);
-            label.setMinHeight(50);
-            label.setStyle("-fx-hgap: 5px;" +
-                    "    -fx-padding: 5px;" +
-                    "" +
-                    "    -fx-background-color: #bbadff;" +
-                    "    -fx-background-radius: 13px;" +
-                    "" +
-                    "    -fx-border-radius: 13px;" +
-                    "    -fx-border-width: 5px;" +
-                    "    -fx-border-color: #bbadff;" +
-                    "-fx-text-fill: white;");
-            return label;
-        }
     }
     public void afterLoad(SuperService superService, User currentUser) {
         this.superService = superService;
         this.currentUser = currentUser;
-        //this.superService.addObserver(this);
+        this.superService.addObserver(this);
         this.updateGroupMessages();
         this.updateGroups();
     }
 
-    private void updateGroupMessages() {
+    @Override
+    public void updateFriends() {
+
+    }
+
+    @Override
+    public void updateRequests() {
+
+    }
+
+    @Override
+    public void updateEvents() {
+
+    }
+
+    @Override
+    public void updateUsers() {
+
+    }
+
+    @Override
+    public void updateMessages() {
+
+    }
+
+    @Override
+    public void updateGroupMessages() {
         this.groupMessages.clear();
         Group group = groupsListView.getSelectionModel().getSelectedItem();
         if(group == null)

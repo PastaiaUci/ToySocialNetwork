@@ -1,6 +1,6 @@
 package com.example.toysocialnetworkgui.Observer;
 
 public enum UpdateType {
-    USERS,FRIENDS,REQUESTS, SOLVEDREQUESTS, MESSAGES;
+    USERS,FRIENDS,REQUESTS, MESSAGES,GROUP_MESSAGES,GROUPS,EVENTS;
 }
 

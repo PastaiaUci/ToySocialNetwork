@@ -17,9 +17,7 @@ public class FriendshipService {
         this.repo = repo;
     }
 
-   /* public void addFriendShip(Friendship friendship) {
-        repo.save(friendship);
-    }*/
+
 
     public void deleteFriendship(Tuple<Long, Long> id) {
         Tuple<Long, Long> original_id = id;

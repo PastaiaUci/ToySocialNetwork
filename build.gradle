@@ -38,6 +38,7 @@ dependencies {
     implementation('com.dlsc.formsfx:formsfx-core:11.3.2') {
         exclude(group: 'org.openjfx')
     }
+    implementation('org.apache.pdfbox:pdfbox:2.0.25')
     implementation('org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0')
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
@@ -46,6 +47,7 @@ dependencies {
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.3.1'
 
 }
+
 
 test {
     useJUnitPlatform()

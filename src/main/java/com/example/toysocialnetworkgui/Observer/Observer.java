@@ -4,7 +4,9 @@ public interface Observer{
 
     void updateFriends();
     void updateRequests();
-    void updateSolvedRequests();
+    void updateEvents();
     void updateUsers();
     void updateMessages();
+    void updateGroupMessages();
+    void updateGroups();
 }

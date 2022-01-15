@@ -16,6 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 
 import java.util.ArrayList;
@@ -26,6 +27,8 @@ import static com.example.toysocialnetworkgui.domain.GFG.encryptThisString;
 
 
 public class Main extends Application {
+
+    public static Window mainStage;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -92,7 +95,7 @@ public class Main extends Application {
         );
 
 
-        Scene scene = new Scene(root, 700, 600);
+        Scene scene = new Scene(root, 800, 600);
         primaryStage.setTitle("IanAztecaAmuly");
 
         primaryStage.setScene(scene);

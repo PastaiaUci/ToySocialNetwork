@@ -1,5 +1,6 @@
 package com.example.toysocialnetworkgui;
 
+import com.example.toysocialnetworkgui.Observer.Observer;
 import com.example.toysocialnetworkgui.domain.Event;
 import com.example.toysocialnetworkgui.domain.User;
 import com.example.toysocialnetworkgui.service.SuperService;
@@ -19,7 +20,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 
-public class EventController {
+public class EventController implements Observer {
 
 
     SuperService superService;
@@ -68,7 +69,8 @@ public class EventController {
         this.currentUser = user;
     }
 
-    public void updateAllEvents(){
+    @Override
+    public void updateEvents(){
         this.allEvents.clear();
         Iterable<Event> events = this.superService.getAllEvents();
         this.setEvents(events);
@@ -82,7 +84,8 @@ public class EventController {
     public void afterLoad(SuperService superService, User user) {
         this.setServiceController(superService);
         this.setCurrentUser(user);
-        this.updateAllEvents();
+        this.updateEvents();
+        this.superService.addObserver(this);
     }
 
     @FXML
@@ -92,7 +95,7 @@ public class EventController {
             Stage current = (Stage) source.getScene().getWindow();
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main2-view.fxml"));
             Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root, 896.0, 578);
+            Scene scene = new Scene(root, 900, 600);
             current.setTitle("Ian");
             current.setScene(scene);
             Main2Controller mainController = fxmlLoader.getController();
@@ -113,7 +116,12 @@ public class EventController {
             return;
         }
         superService.addEvent(nume,descriere,data);
-        this.updateAllEvents();
+        //this.updateEvents();
+    }
+
+    @Override
+    public void updateGroups() {
+
     }
 
     @FXML
@@ -122,7 +130,32 @@ public class EventController {
                 return;
             superService.subscribeUserToEvent(currentUser.getId(), eventsTableView.getSelectionModel().getSelectedItem().getId());
 
-            this.updateAllEvents();
+            //this.updateEvents();
     }
 
+    @Override
+    public void updateFriends() {
+
+    }
+
+    @Override
+    public void updateRequests() {
+
+    }
+
+
+    @Override
+    public void updateUsers() {
+
+    }
+
+    @Override
+    public void updateMessages() {
+
+    }
+
+    @Override
+    public void updateGroupMessages() {
+
+    }
 }

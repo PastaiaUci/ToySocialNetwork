@@ -27,12 +27,12 @@
                   </Label>
                </children>
             </Pane>
-            <Button fx:id="groupsButton" onAction="#groupsButtonClick" layoutX="29.0" layoutY="148.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="206.0" text="Groups" />
-            <Button fx:id="messagesButton" onAction="#onMessagesButtonClick" layoutX="29.0" layoutY="204.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="206.0" text="Messages" />
-            <Button fx:id="eventsButton" onAction="#eventsButtonClick" layoutX="29.0" layoutY="259.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="206.0" style="-fx-border-radius: 10px" text="Events" />
-            <Button fx:id="editButton" onAction="#editButtonClick" layoutX="31.0" layoutY="375.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="206.0" text="Edit Profile" />
-            <Button fx:id="logoutButton"  onAction="#logout"  layoutX="31.0" layoutY="492.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="206.0" text="Logout" />
-            <Button fx:id="viewFriendsButton" layoutX="29.0" layoutY="317.0" mnemonicParsing="false" onAction="#onFriendsButtonClick" prefHeight="46.0" prefWidth="206.0" text="Friends" />
+            <Button fx:id="groupsButton" layoutX="29.0" layoutY="90.0" mnemonicParsing="false" onAction="#groupsButtonClick" prefHeight="46.0" prefWidth="206.0" text="Groups" />
+            <Button fx:id="messagesButton" layoutX="24.0" layoutY="146.0" mnemonicParsing="false" onAction="#onMessagesButtonClick" prefHeight="46.0" prefWidth="206.0" text="Messages" />
+            <Button fx:id="eventsButton" layoutX="24.0" layoutY="206.0" mnemonicParsing="false" onAction="#eventsButtonClick" prefHeight="46.0" prefWidth="206.0" style="-fx-border-radius: 10px" text="Events" />
+            <Button fx:id="editButton" layoutX="24.0" layoutY="326.0" mnemonicParsing="false" onAction="#editButtonClick" prefHeight="46.0" prefWidth="206.0" text="Edit Profile" />
+            <Button fx:id="logoutButton" layoutX="31.0" layoutY="492.0" mnemonicParsing="false" onAction="#logout" prefHeight="46.0" prefWidth="206.0" text="Logout" />
+            <Button fx:id="viewFriendsButton" layoutX="24.0" layoutY="268.0" mnemonicParsing="false" onAction="#onFriendsButtonClick" prefHeight="46.0" prefWidth="206.0" text="Friends" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="profileAnchorPane" layoutX="243.0" layoutY="27.0" prefHeight="128.0" prefWidth="656.0">
@@ -55,7 +55,7 @@
       </TableView>
       <Button fx:id="acceptButton" layoutX="594.0" layoutY="529.0" mnemonicParsing="false" onAction="#acceptRequest" text="Accept" />
       <Button fx:id="rejectButton" layoutX="709.0" layoutY="529.0" mnemonicParsing="false" onAction="#rejectRequest" text="Reject" />
-      <Button fx:id="deleteButton" layoutX="824.0" layoutY="529.0" mnemonicParsing="false" text="Delete" />
+      <Button fx:id="deleteButton" layoutX="824.0" layoutY="529.0" mnemonicParsing="false" onAction="#cancelRequest" text="Delete" />
       <Label fx:id="istoricLabel" layoutX="632.0" layoutY="171.0" prefHeight="40.0" prefWidth="206.0" text="Istoricul cererilor de prietenie" />
       <TableView fx:id="eventTableView" layoutX="243.0" layoutY="219.0" prefHeight="298.0" prefWidth="316.0">
          <columns>

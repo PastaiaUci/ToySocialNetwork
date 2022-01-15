@@ -1,5 +1,6 @@
 package com.example.toysocialnetworkgui;
 
+import com.example.toysocialnetworkgui.Observer.Observer;
 import com.example.toysocialnetworkgui.domain.Message;
 import com.example.toysocialnetworkgui.domain.Tuple;
 import com.example.toysocialnetworkgui.domain.User;
@@ -25,7 +26,7 @@ import java.util.List;
 import static com.example.toysocialnetworkgui.Utils.constants.DomainConstants.ACTIVE_MESSAGE;
 import static com.example.toysocialnetworkgui.Utils.constants.DomainConstants.SIMPLE_MESSAGE;
 
-public class ChatController {
+public class ChatController implements Observer {
 
     protected SuperService superService;
     private User currentUser, destination;
@@ -75,10 +76,9 @@ public class ChatController {
         if(destination == null)
             return;
         if(textarea.getText().strip().isBlank()) {
-            System.out.println("stefaneeee");
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Can't send friend request!");
-            alert.setHeaderText("Mi ai dat leanul pe jos!");
+            alert.setTitle("Can't send message request!");
+            alert.setHeaderText("Can't send message request!");
             alert.showAndWait();
             return;
         }
@@ -116,8 +116,8 @@ public class ChatController {
             Stage current = (Stage) source.getScene().getWindow();
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main2-view.fxml"));
             Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root, 700, 600);
-            current.setTitle("Messages");
+            Scene scene = new Scene(root, 900, 600);
+            current.setTitle("Pixel");
             current.setScene(scene);
             Main2Controller ctrl = fxmlLoader.getController();
             /*List<User> found = superService.findUsersByName(usernameTextField.getText());
@@ -185,7 +185,7 @@ public class ChatController {
 
         }
         this.messagesView.getSelectionModel().clearSelection();
-        updateMessages();
+        //updateMessages();
     }
 
 
@@ -309,6 +309,21 @@ public class ChatController {
         this.updateUsers();
     }
 
+    @Override
+    public void updateFriends() {
+
+    }
+
+    @Override
+    public void updateRequests() {
+
+    }
+
+    @Override
+    public void updateEvents() {
+
+    }
+
     public void updateUsers(){
         this.allUsers.clear();
         Iterable<User> users = this.superService.getAllUsers();
@@ -343,6 +358,16 @@ public class ChatController {
             }
             messages.add(current);
         }
+    }
+
+    @Override
+    public void updateGroupMessages() {
+
+    }
+
+    @Override
+    public void updateGroups() {
+
     }
 
 }

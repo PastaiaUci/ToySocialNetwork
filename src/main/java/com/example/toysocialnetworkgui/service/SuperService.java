@@ -1,7 +1,12 @@
 package com.example.toysocialnetworkgui.service;
 
+import com.example.toysocialnetworkgui.Observer.Observable;
+import com.example.toysocialnetworkgui.Observer.Observer;
+import com.example.toysocialnetworkgui.Observer.UpdateType;
 import com.example.toysocialnetworkgui.domain.*;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -9,12 +14,13 @@ import static com.example.toysocialnetworkgui.Utils.constants.DomainConstants.*;
 import static com.example.toysocialnetworkgui.Utils.constants.RepoConstants.*;
 import static com.example.toysocialnetworkgui.Utils.constants.ValidatorConstants.TEMPORARY_MESSAGE_ID;
 
-public class SuperService {
+public class SuperService implements Observable {
     private FriendshipService friendshipService = null;
     private UserService userService = null;
     private MessageService messageService = null;
     private EventService eventService = null;
     private GroupsService groupsService = null;
+    List<Observer> allObservers = new ArrayList<>();
 
 
     public SuperService(FriendshipService friendshipService, UserService userService, MessageService messageService,EventService eventService, GroupsService groupsService) {
@@ -36,6 +42,7 @@ public class SuperService {
             return UNSUCCESFUL_OPERATION_RETURN_CODE;
         User newUser = new User(firstName, lastName, password);
         userService.addUser(newUser);
+        notifyObservers(UpdateType.USERS);
         return SUCCESFUL_OPERATION_RETURN_CODE;
     }
 
@@ -54,6 +61,7 @@ public class SuperService {
             return UNSUCCESFUL_OPERATION_RETURN_CODE;
         Event newEvent = new Event(nume, descriere, data);
         eventService.addEvent(newEvent);
+        notifyObservers(UpdateType.EVENTS);
 
         return SUCCESFUL_OPERATION_RETURN_CODE;
 
@@ -61,9 +69,11 @@ public class SuperService {
 
     public void subscribeUserToEvent(Long user_id,Long event_id){
         eventService.subscribe(user_id,event_id);
+        notifyObservers(UpdateType.EVENTS);
     }
     public void unsubscribeUserToEvent(Long user_id,Long event_id){
         eventService.unsubscribe(user_id,event_id);
+        notifyObservers(UpdateType.EVENTS);
     }
 
     public void removeUser(User user) {
@@ -80,7 +90,8 @@ public class SuperService {
     }
     public void deleteFriendship(Long id1,Long id2){
         friendshipService.deleteFriendship(new Tuple<>(id1, id2));
-
+        this.notifyObservers(UpdateType.REQUESTS);
+        notifyObservers(UpdateType.FRIENDS);
     }
 
 
@@ -139,16 +150,7 @@ public class SuperService {
             if(message.getIdTo().equals(current_user.getId()) && message.getIdFrom() != current_user.getId()){
                 users.add(userService.findUserByID(message.getIdFrom()));
             }
-            /*if(message.getIdTo().equals(current_user.getId()) && message.getIdFrom().equals(current_user.getId())){
-                Message current_message = message;
-                while (current_message.getIdFrom().equals(current_message.getIdTo())) {
-                    current_message = messageService.findMessageById(current_message.getIdReply());
-                }
-                if(current_message.getIdFrom() != current_user.getId())
-                    users.add(userService.findUserByID(current_message.getIdFrom()));
-                if(current_message.getIdTo() != current_user.getId())
-                    users.add(userService.findUserByID(current_message.getIdTo()));
-            }*/
+
         }
         return users;
     }
@@ -170,15 +172,18 @@ public class SuperService {
             new_message = new Message(user1.getId(), user2.getId(), message, reply_status);
         new_message.setId(TEMPORARY_MESSAGE_ID);
         messageService.addMessage(new_message);
+        notifyObservers(UpdateType.MESSAGES);
     }
 
     public void deleteMessage(Message message) {
         messageService.deleteMessage(message.getId());
+        this.notifyObservers(UpdateType.MESSAGES);
     }
 
     public void undoDeleteMessage(Message message) {
         message.setDeleteStatus(ACTIVE_MESSAGE);
         messageService.undoMessageDelete(message);
+        this.notifyObservers(UpdateType.MESSAGES);
     }
 
     public User findUserById(Long id) {
@@ -208,6 +213,8 @@ public class SuperService {
 
     }
 
+
+
     public User findOneUser(Long messageTask) {
         User user = userService.repo.findOne(messageTask);
         return user;
@@ -225,6 +232,8 @@ public class SuperService {
             throw new ServiceException("Invalid friend request!");
         Friendship newFriendship = new Friendship(response, idFrom, idTo, sender);
         friendshipService.repo.update(newFriendship);
+        notifyObservers(UpdateType.REQUESTS);
+        notifyObservers(UpdateType.FRIENDS);
     }
 
 
@@ -255,7 +264,10 @@ public class SuperService {
             throw new ServiceException("Wtf cant send a friend request yourself\n");
         Friendship friendship = new Friendship("pending", idFrom, idTo, sender);
         friendshipService.repo.save(friendship);
+        notifyObservers(UpdateType.REQUESTS);
     }
+
+
     public Iterable<User> getAllUsers(){
         return userService.findAll();
     }
@@ -354,8 +366,70 @@ public class SuperService {
         GroupMessage groupMessage = new GroupMessage(id_user_from,id_grup_to,mesaj);
         groupMessage.setId(TEMPORARY_MESSAGE_ID);
         this.groupsService.saveGroupMessage(groupMessage);
+        this.notifyObservers(UpdateType.GROUP_MESSAGES);
     }
 
+    public Iterable<Friendship> getFriendsInInterval(Long id, LocalDateTime startDate,LocalDateTime endDate){
+        Iterable<Friendship> allFriendships = friendshipService.repo.findAll();
+        Set<Friendship> friendships = new HashSet<>();
+        for (Friendship friendship : allFriendships)
+            if (  (friendship.getFr1() == id || friendship.getFr2() == id) &&  (friendship.getDate().isAfter(startDate) && friendship.getDate().isBefore(endDate) ))
+                friendships.add(friendship);
+        return friendships;
 
+    }
+
+    public Iterable<Message> findAllSentMassagesToUsers(Long id_user_from,LocalDateTime startDate,LocalDateTime endDate){
+        Iterable<Message> allMsj = messageService.findAllSentMassagesToUsers(id_user_from);
+        Set<Message> messages = new HashSet<>();
+        for (Message msg : allMsj)
+            if (  msg.getDataTrimitere().isAfter(startDate) && msg.getDataTrimitere().isBefore(endDate) )
+                messages.add(msg);
+        return messages;
+
+    }
+
+    public Iterable<Message> findAllReceivedMassagesFromUsers(Long id_to,LocalDateTime startDate,LocalDateTime endDate){
+        Iterable<Message> allMsj = messageService.findAllReceivedMassagesFromUsers(id_to);
+        Set<Message> messages = new HashSet<>();
+        for (Message msg : allMsj)
+            if (  msg.getDataTrimitere().isAfter(startDate) && msg.getDataTrimitere().isBefore(endDate) )
+                messages.add(msg);
+        return messages;
+    }
+
+    public Iterable<Message> findAllReceivedMassagesFromUser(Long id, Long id1, LocalDateTime startDate, LocalDateTime endDate) {
+        Iterable<Message> allMsj = messageService.findAllReceivedMassagesFromUser(id,id1);
+        Set<Message> messages = new HashSet<>();
+        for (Message msg : allMsj)
+            if (  msg.getDataTrimitere().isAfter(startDate) && msg.getDataTrimitere().isBefore(endDate) )
+                messages.add(msg);
+        return messages;
+
+    }
+
+    @Override
+    public void notifyObservers(UpdateType type) {
+        for(Observer obs : allObservers){
+            if(type == UpdateType.USERS)
+                obs.updateUsers();
+            if(type == UpdateType.FRIENDS){
+                obs.updateFriends();
+            }
+            if(type == UpdateType.REQUESTS)
+                obs.updateRequests();
+            if(type == UpdateType.MESSAGES)
+                obs.updateMessages();
+            if(type == UpdateType.GROUP_MESSAGES)
+                obs.updateGroupMessages();
+            if(type == UpdateType.EVENTS)
+                obs.updateEvents();
+        }
+    }
+
+    @Override
+    public void addObserver(Observer obs) {
+        allObservers.add(obs);
+    }
 }
 

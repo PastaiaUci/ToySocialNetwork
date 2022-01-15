@@ -4,7 +4,9 @@ import com.example.toysocialnetworkgui.domain.Message;
 import com.example.toysocialnetworkgui.repository.Repository;
 
 import java.util.List;
+
 import java.util.Set;
+
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -40,9 +42,16 @@ public class MessageService {
                 .collect(Collectors.toList());
     }
 
+
     public List<Message> findAllReceivedMassagesFromUsers(Long id_to){
         return StreamSupport.stream(repo.findAll().spliterator(), false)
                 .filter(x->(x.getIdTo().equals(id_to)))
+                .collect(Collectors.toList());
+    }
+
+    public List<Message> findAllReceivedMassagesFromUser(Long id_to,Long id_from){
+        return StreamSupport.stream(repo.findAll().spliterator(), false)
+                .filter(x->(x.getIdTo().equals(id_to) && x.getIdFrom().equals(id_from)))
                 .collect(Collectors.toList());
     }
 
