@@ -188,6 +188,16 @@ public class UserDbRepository implements Repository<Long, User> {
         return null;
     }
 
+    @Override
+    public void turnOffNotifications(Long aLong, Long id1) {
+
+    }
+
+    @Override
+    public void turnOnNotifications(Long aLong, Long id1) {
+
+    }
+
 
 }
 

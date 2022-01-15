@@ -67,7 +67,7 @@ public class EventsDbRepository implements Repository<Long ,Event>
         {
             preparedStatement.setString(1, entity.getName());
             preparedStatement.setString(2, entity.getDescriere());
-            preparedStatement.setString(3, entity.getDate());
+            preparedStatement.setTimestamp(3,Timestamp.valueOf(entity.getDate()));
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -99,7 +99,7 @@ public class EventsDbRepository implements Repository<Long ,Event>
         {
             preparedStatement.setString(1,entity.getName());
             preparedStatement.setString(2,entity.getDescriere());
-            preparedStatement.setString(3,entity.getDate());
+            preparedStatement.setTimestamp(3,Timestamp.valueOf(entity.getDate()));
             preparedStatement.executeUpdate();
         }
         catch(SQLException ex) {
@@ -134,7 +134,7 @@ public class EventsDbRepository implements Repository<Long ,Event>
             while(resultSet.next()) {
                 String nume = resultSet.getString("nume");
                 String descriere = resultSet.getString("descriere");
-                String data =  resultSet.getString("data");
+                LocalDateTime data = resultSet.getTimestamp("data").toLocalDateTime();
                 Event event = new Event(nume, descriere,data);
                 event.setId(resultSet.getLong("id"));
                 events.add(event);
@@ -171,6 +171,44 @@ public class EventsDbRepository implements Repository<Long ,Event>
             alert.setHeaderText("Can not double sub!\n");
             alert.showAndWait();
             return;
+        }
+    }
+
+    public void turnOffNotifications(Long id1,Long id2){
+        String sql = TURN_OFF_NOTIFICATIONS;
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);)
+        {
+            preparedStatement.setLong(1, id1);
+            preparedStatement.setLong(2,id2);
+            preparedStatement.executeUpdate();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation!");
+            alert.setHeaderText("Notifications turned off for event!\n");
+            alert.showAndWait();
+            return;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    public void turnOnNotifications(Long id1,Long id2){
+        String sql = TURN_ON_NOTIFICATIONS;
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);)
+        {
+            preparedStatement.setLong(1, id1);
+            preparedStatement.setLong(2,id2);
+            preparedStatement.executeUpdate();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation!");
+            alert.setHeaderText("Notifications turned on for event!\n");
+            alert.showAndWait();
+            return;
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 

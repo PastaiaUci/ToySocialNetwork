@@ -120,9 +120,7 @@ public class FriendshipsDbRepository implements Repository<Tuple<Long,Long>, Fri
         try(Connection connection = DriverManager.getConnection(url,username,password);
             PreparedStatement preparedStatement = connection.prepareStatement(sql);)
         {
-            // preparedStatement.setTimestamp(1,Timestamp.valueOf(entity.getDate()));
-            //  preparedStatement.setLong(2, entity.getId().getLeft());
-            //preparedStatement.setLong(3, entity.getId().getRight());
+
             preparedStatement.executeUpdate();
         }
         catch(SQLException ex) {
@@ -150,17 +148,6 @@ public class FriendshipsDbRepository implements Repository<Tuple<Long,Long>, Fri
 
 
 
-    /*public List<Friendship> getAllFriendsForGivenUser(Long id_user){
-        try (Connection connection = DriverManager.getConnection(url, username, password);
-             PreparedStatement statement1 = connection.prepareStatement(FIND_ALL_FRIENDS_FOR_GIVEN_USER_RIGHT_TO_LEFT_DB);
-             PreparedStatement statement2 = connection.prepareStatement(FIND_ALL_FRIENDS_FOR_GIVEN_USER_RIGHT_TO_LEFT_DB))
-        {
-            return getFriendShips(statement);
-        }catch (SQLException ex){
-            ex.printStackTrace();
-        }
-        return null;
-    }*/
 
     public Friendship findOne(Tuple<Long,Long> tuple) {
         String sql="SELECT * from friendships WHERE id_1 = ? and id_2 = ?";
@@ -197,6 +184,16 @@ public class FriendshipsDbRepository implements Repository<Tuple<Long,Long>, Fri
     @Override
     public Iterable<Friendship> getAllEventsForUser(Tuple<Long, Long> longLongTuple) {
         return null;
+    }
+
+    @Override
+    public void turnOffNotifications(Tuple<Long, Long> longLongTuple, Tuple<Long, Long> id1) {
+
+    }
+
+    @Override
+    public void turnOnNotifications(Tuple<Long, Long> longLongTuple, Tuple<Long, Long> id1) {
+
     }
 }
 

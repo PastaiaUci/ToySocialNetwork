@@ -91,5 +91,8 @@ public interface Repository<ID, E extends Entity<ID>> {
 
     Iterable<E> getAllEventsForUser(ID id);
 
+    void turnOffNotifications(ID id, ID id1);
+
+    void turnOnNotifications(ID id, ID id1);
 }
 

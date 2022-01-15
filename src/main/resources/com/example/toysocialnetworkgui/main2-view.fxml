@@ -85,6 +85,8 @@
             </RadialGradient>
          </textFill>
       </Label>
-      <Button fx:id="unsubButton" layoutX="261.0" layoutY="529.0" mnemonicParsing="false" onAction="#unsubRequest" text="Unsubscirbe" />
+      <Button fx:id="unsubButton" layoutX="249.0" layoutY="529.0" mnemonicParsing="false" onAction="#unsubRequest" text="Unsubscribe" />
+      <Button fx:id="notOnButton" layoutX="349.0" layoutY="529.0" mnemonicParsing="false" onAction="#onNotifications" text="Notifications on" />
+      <Button fx:id="notOffButton" layoutX="463.0" layoutY="529.0" mnemonicParsing="false" onAction="#offNotifications" prefHeight="36.0" prefWidth="105.0" text="Notifications off" />
    </children>
 </AnchorPane>

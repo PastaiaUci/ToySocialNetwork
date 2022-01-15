@@ -2,10 +2,10 @@ package com.example.toysocialnetworkgui;
 
 import com.example.toysocialnetworkgui.domain.Event;
 import com.example.toysocialnetworkgui.domain.Friendship;
-import com.example.toysocialnetworkgui.domain.Message;
 import com.example.toysocialnetworkgui.domain.User;
 import com.example.toysocialnetworkgui.service.ServiceException;
 import com.example.toysocialnetworkgui.service.SuperService;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,41 +17,29 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.DirectoryChooser;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-
-
-import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Locale;
 
 public class Main2Controller {
 
 
-    SuperService superService;
-    private User currentUser;
+    private static SuperService superService;
+    private static User currentUser;
 
     ObservableList<Friendship> allRequests = FXCollections.observableArrayList();
-    ObservableList<Event> allEvents = FXCollections.observableArrayList();
-    ObservableList<User> allUsers = FXCollections.observableArrayList();
+    static ObservableList<Event> allEvents = FXCollections.observableArrayList();
 
 
 
-    @FXML
-    Button pdfButton;
+
+
     @FXML
     Button logoutButton;
     @FXML
@@ -337,6 +325,56 @@ public class Main2Controller {
 
     }
 
+    public static  void startThread(){
+        Thread thread = new Thread(() -> {
 
+                try {
+                    Thread.sleep(100);
+                    for (Event event : allEvents) {
+                            long minutes = ChronoUnit.MINUTES.between(LocalDateTime.now(), event.getDate());
+                            if ( minutes > 0 && minutes <1440) {
+                                Platform.runLater(() -> {
+                                    String text = event.getName().toUpperCase(Locale.ROOT) + " will start in less than an hour!!!";
+
+                                    Stage dialog = new Stage();
+                                    dialog.setResizable(false);
+                                    VBox dialogVbox = new VBox(20);
+                                    dialogVbox.setStyle("-fx-background-color: #F2003C");
+
+                                    Label label = new Label(text);
+                                    label.setStyle("-fx-font-weight: bold;" +
+                                            "-fx-font-family: 'Times New Roman';" +
+                                            "-fx-text-fill: white;" +
+                                            "-fx-font-size: 20px;" +
+                                            "-fx-padding: 10 10 10 10;"
+                                    );
+
+                                    dialogVbox.getChildren().add(label);
+                                    Scene dialogScene = new Scene(dialogVbox, 600, 50);
+
+                                    dialog.setScene(dialogScene);
+                                    dialog.show();
+                                });
+                            }
+
+                    }
+
+                } catch (Error | InterruptedException e) {
+                    System.out.println(e.getMessage());
+
+                }
+
+
+        });
+        thread.start();
+    }
+
+    public void offNotifications() {
+        superService.turnOffNotifications(currentUser.getId(),eventTableView.getSelectionModel().getSelectedItem().getId());
+    }
+
+    public void onNotifications(ActionEvent actionEvent) {
+        superService.turnOnNotifications(currentUser.getId(),eventTableView.getSelectionModel().getSelectedItem().getId());
+    }
 }
 

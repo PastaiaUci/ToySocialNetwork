@@ -67,17 +67,15 @@ public class FriendsListController {
 
 
 
-    public void findButtonCLick(ActionEvent actionEvent) {
-    }
-
-    public void refreshButtonCLick(ActionEvent actionEvent) {
-    }
 
     @FXML
     public void raport2ButtonClick() throws IOException {
 
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File selectedDirectory = directoryChooser.showDialog(Main.mainStage);
+
+
+
         if(selectedDirectory == null)
             return;
 
@@ -87,43 +85,54 @@ public class FriendsListController {
         LocalDateTime startDate = LocalDateTime.of(startDatePicker.getValue(), time);
         LocalDateTime  endDate = LocalDateTime.of(endDatePicker.getValue(), time);
 
-        User user = allFriendsListView.getSelectionModel().getSelectedItem();
-        Iterable<Message> messages_from_user= superService.findAllReceivedMassagesFromUser(currentUser.getId(),user.getId(),startDate,endDate);
 
-        PDDocument document = new PDDocument();
-        PDPage page = new PDPage();
-        document.addPage( page );
-
-        PDFont font1 = PDType1Font.HELVETICA_BOLD;
-        PDFont font2 = PDType1Font.HELVETICA;
-
-        PDPageContentStream contentStream = new PDPageContentStream(document, page);
-        contentStream.beginText();
-        contentStream.setFont(font1, 20 );
-        contentStream.newLineAtOffset(textX,textY.get());
-        contentStream.showText("Messages received by " + currentUser.getFirstName() + " from " + user.getLastName()+ ":");
-        contentStream.endText();
-        textY.addAndGet(-20);
+        if(startDate.isBefore(endDate)) {
 
 
+            User user = allFriendsListView.getSelectionModel().getSelectedItem();
+            Iterable<Message> messages_from_user = superService.findAllReceivedMassagesFromUser(currentUser.getId(), user.getId(), startDate, endDate);
 
-        messages_from_user.forEach(x -> {
-            try {
-                contentStream.beginText();
-                contentStream.setFont( font2, 10 );
-                contentStream.newLineAtOffset(textX-20,textY.get());
-                contentStream.showText(currentUser.getFirstName() + " a primit mesajul " +x.getMesaj() + " pe data de " +x.getDataTrimitere() +" de la "+user.getFirstName());
-                contentStream.endText();
-                textY.addAndGet(-10);
+            PDDocument document = new PDDocument();
+            PDPage page = new PDPage();
+            document.addPage(page);
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+            PDFont font1 = PDType1Font.HELVETICA_BOLD;
+            PDFont font2 = PDType1Font.HELVETICA;
 
-        contentStream.close();
-        document.save( selectedDirectory+"/"+currentUser.getFirstName()+" "+currentUser.getLastName()+"2.pdf");
-        document.close();
+            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+            contentStream.beginText();
+            contentStream.setFont(font1, 20);
+            contentStream.newLineAtOffset(textX, textY.get());
+            contentStream.showText("Messages received by " + currentUser.getFirstName() + " from " + user.getLastName() + ":");
+            contentStream.endText();
+            textY.addAndGet(-20);
+
+
+            messages_from_user.forEach(x -> {
+                try {
+                    contentStream.beginText();
+                    contentStream.setFont(font2, 10);
+                    contentStream.newLineAtOffset(textX - 20, textY.get());
+                    contentStream.showText(currentUser.getFirstName() + " a primit mesajul " + x.getMesaj() + " pe data de " + x.getDataTrimitere() + " de la " + user.getFirstName());
+                    contentStream.endText();
+                    textY.addAndGet(-10);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
+            contentStream.close();
+            document.save(selectedDirectory + "/" + currentUser.getFirstName() + " " + currentUser.getLastName() + "2.pdf");
+            document.close();
+        }
+        else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error!");
+            alert.setHeaderText("Start date must be before end date!\n");
+            alert.showAndWait();
+            return;
+        }
 
 
     }
@@ -141,94 +150,102 @@ public class FriendsListController {
         LocalDateTime startDate = LocalDateTime.of(startDatePicker.getValue(), time);
         LocalDateTime  endDate = LocalDateTime.of(endDatePicker.getValue(), time);
 
-        Iterable<Message> messages_sent = superService.findAllSentMassagesToUsers(currentUser.getId(),startDate,endDate);
-        Iterable<Message> messages_received = superService.findAllReceivedMassagesFromUsers(currentUser.getId(),startDate,endDate);
-        Iterable<Friendship> friends = superService.getFriendsInInterval(currentUser.getId(),startDate,endDate);
+        if(startDate.isBefore(endDate)) {
 
-        PDDocument document = new PDDocument();
-        PDPage page = new PDPage();
-        document.addPage( page );
+            Iterable<Message> messages_sent = superService.findAllSentMassagesToUsers(currentUser.getId(), startDate, endDate);
+            Iterable<Message> messages_received = superService.findAllReceivedMassagesFromUsers(currentUser.getId(), startDate, endDate);
+            Iterable<Friendship> friends = superService.getFriendsInInterval(currentUser.getId(), startDate, endDate);
 
-        PDFont font1 = PDType1Font.HELVETICA_BOLD;
-        PDFont font2 = PDType1Font.HELVETICA;
+            PDDocument document = new PDDocument();
+            PDPage page = new PDPage();
+            document.addPage(page);
 
-        PDPageContentStream contentStream = new PDPageContentStream(document, page);
-        contentStream.beginText();
-        contentStream.setFont(font1, 20 );
-        contentStream.newLineAtOffset(textX,textY.get());
-        contentStream.showText("New friends of " + currentUser.getFirstName() + ":");
-        contentStream.endText();
-        textY.addAndGet(-20);
+            PDFont font1 = PDType1Font.HELVETICA_BOLD;
+            PDFont font2 = PDType1Font.HELVETICA;
 
-        friends.forEach(x -> {
-            try {
-                contentStream.beginText();
-                contentStream.setFont( font2, 10 );
-                contentStream.newLineAtOffset(textX-20,textY.get());
-                String friend = superService.findUserById(x.getFr1()).getFirstName();
-                String user = superService.findUserById(x.getFr2()).getFirstName();
-                contentStream.showText(friend + " s-a imprietenit cu  " +  user+ " pe data de " + x.getDate());
-                contentStream.endText();
-                textY.addAndGet(-10);
+            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+            contentStream.beginText();
+            contentStream.setFont(font1, 20);
+            contentStream.newLineAtOffset(textX, textY.get());
+            contentStream.showText("New friends of " + currentUser.getFirstName() + ":");
+            contentStream.endText();
+            textY.addAndGet(-20);
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+            friends.forEach(x -> {
+                try {
+                    contentStream.beginText();
+                    contentStream.setFont(font2, 10);
+                    contentStream.newLineAtOffset(textX - 20, textY.get());
+                    String friend = superService.findUserById(x.getFr1()).getFirstName();
+                    String user = superService.findUserById(x.getFr2()).getFirstName();
+                    contentStream.showText(friend + " s-a imprietenit cu  " + user + " pe data de " + x.getDate());
+                    contentStream.endText();
+                    textY.addAndGet(-10);
 
-
-
-        textY.addAndGet(-20);
-        contentStream.beginText();
-        contentStream.setFont(font1, 20 );
-        contentStream.newLineAtOffset(textX,textY.get());
-        contentStream.showText("Messages sent by " + currentUser.getFirstName() + ":");
-        contentStream.endText();
-        textY.addAndGet(-20);
-
-        messages_sent.forEach(x -> {
-            try {
-                contentStream.beginText();
-                contentStream.setFont( font2, 10 );
-                contentStream.newLineAtOffset(textX-20,textY.get());
-                contentStream.showText(currentUser.getFirstName() + " a trimis mesajul " + x.getMesaj() + " pe data de " +x.getDataTrimitere() );
-                contentStream.endText();
-                textY.addAndGet(-10);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
 
 
-        textY.addAndGet(-20);
-        contentStream.beginText();
-        contentStream.setFont(font1, 20 );
-        contentStream.newLineAtOffset(textX,textY.get());
-        contentStream.showText("Messages received by " + currentUser.getFirstName() + ":");
-        contentStream.endText();
-        textY.addAndGet(-20);
+            textY.addAndGet(-20);
+            contentStream.beginText();
+            contentStream.setFont(font1, 20);
+            contentStream.newLineAtOffset(textX, textY.get());
+            contentStream.showText("Messages sent by " + currentUser.getFirstName() + ":");
+            contentStream.endText();
+            textY.addAndGet(-20);
 
-        messages_received.forEach(x -> {
-            try {
-                contentStream.beginText();
-                contentStream.setFont( font2, 10 );
-                contentStream.newLineAtOffset(textX-20,textY.get());
-                contentStream.showText(currentUser.getFirstName() + " a primit mesajul " +x.getMesaj() + " pe data de " +x.getDataTrimitere() );
-                contentStream.endText();
-                textY.addAndGet(-10);
+            messages_sent.forEach(x -> {
+                try {
+                    contentStream.beginText();
+                    contentStream.setFont(font2, 10);
+                    contentStream.newLineAtOffset(textX - 20, textY.get());
+                    contentStream.showText(currentUser.getFirstName() + " a trimis mesajul " + x.getMesaj() + " pe data de " + x.getDataTrimitere());
+                    contentStream.endText();
+                    textY.addAndGet(-10);
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
 
 
+            textY.addAndGet(-20);
+            contentStream.beginText();
+            contentStream.setFont(font1, 20);
+            contentStream.newLineAtOffset(textX, textY.get());
+            contentStream.showText("Messages received by " + currentUser.getFirstName() + ":");
+            contentStream.endText();
+            textY.addAndGet(-20);
 
-        contentStream.close();
-        document.save( selectedDirectory+"/"+currentUser.getFirstName()+" "+currentUser.getLastName()+".pdf");
-        document.close();
+            messages_received.forEach(x -> {
+                try {
+                    contentStream.beginText();
+                    contentStream.setFont(font2, 10);
+                    contentStream.newLineAtOffset(textX - 20, textY.get());
+                    contentStream.showText(currentUser.getFirstName() + " a primit mesajul " + x.getMesaj() + " pe data de " + x.getDataTrimitere());
+                    contentStream.endText();
+                    textY.addAndGet(-10);
 
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
+
+            contentStream.close();
+            document.save(selectedDirectory + "/" + currentUser.getFirstName() + " " + currentUser.getLastName() + ".pdf");
+            document.close();
+
+        }
+        else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error!");
+            alert.setHeaderText("Start date must be before end date!\n");
+            alert.showAndWait();
+            return;
+        }
     }
 
     public void backButtonClick(ActionEvent actionEvent) {

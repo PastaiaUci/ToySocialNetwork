@@ -5,7 +5,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="ToySocialNetworkGUI.main" options="--add-exports jdk.hotspot.agent/sun.jvm.hotspot.debugger.posix.elf=com.example.toysocialnetworkgui" />
+      <module name="ToySocialNetworkGUI.main" options="--add-exports jdk.hotspot.agent/sun.jvm.hotspot.debugger.posix.elf=com.example.toysocialnetworkgui --add-exports javafx.base/com.sun.javafx.collections=com.example.toysocialnetworkgui" />
     </option>
   </component>
 </project>
