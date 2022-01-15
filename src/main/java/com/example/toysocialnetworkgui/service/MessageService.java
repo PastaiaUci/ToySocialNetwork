@@ -49,4 +49,10 @@ public class MessageService {
                 .collect(Collectors.toList());
     }
 
+    public List<Message> findAllReceivedMassagesFromUser(Long id_to,Long id_from){
+        return StreamSupport.stream(repo.findAll().spliterator(), false)
+                .filter(x->(x.getIdTo().equals(id_to) && x.getIdFrom().equals(id_from)))
+                .collect(Collectors.toList());
+    }
+
 }

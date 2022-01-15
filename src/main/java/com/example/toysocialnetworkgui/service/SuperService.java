@@ -141,16 +141,7 @@ public class SuperService {
             if(message.getIdTo().equals(current_user.getId()) && message.getIdFrom() != current_user.getId()){
                 users.add(userService.findUserByID(message.getIdFrom()));
             }
-            /*if(message.getIdTo().equals(current_user.getId()) && message.getIdFrom().equals(current_user.getId())){
-                Message current_message = message;
-                while (current_message.getIdFrom().equals(current_message.getIdTo())) {
-                    current_message = messageService.findMessageById(current_message.getIdReply());
-                }
-                if(current_message.getIdFrom() != current_user.getId())
-                    users.add(userService.findUserByID(current_message.getIdFrom()));
-                if(current_message.getIdTo() != current_user.getId())
-                    users.add(userService.findUserByID(current_message.getIdTo()));
-            }*/
+
         }
         return users;
     }
@@ -210,15 +201,7 @@ public class SuperService {
 
     }
 
-    public Iterable<Friendship> getFriendsInInterval(Long id, LocalDateTime startDate,LocalDateTime endDate){
-        Iterable<Friendship> allFriendships = friendshipService.repo.findAll();
-        Set<Friendship> friendships = new HashSet<>();
-        for (Friendship friendship : allFriendships)
-            if (  (friendship.getFr1() == id || friendship.getFr2() == id) &&  (friendship.getDate().isAfter(startDate) && friendship.getDate().isBefore(endDate) ))
-                friendships.add(friendship);
-        return friendships;
 
-    }
 
     public User findOneUser(Long messageTask) {
         User user = userService.repo.findOne(messageTask);
@@ -268,6 +251,8 @@ public class SuperService {
         Friendship friendship = new Friendship("pending", idFrom, idTo, sender);
         friendshipService.repo.save(friendship);
     }
+
+
     public Iterable<User> getAllUsers(){
         return userService.findAll();
     }
@@ -368,14 +353,43 @@ public class SuperService {
         this.groupsService.saveGroupMessage(groupMessage);
     }
 
+    public Iterable<Friendship> getFriendsInInterval(Long id, LocalDateTime startDate,LocalDateTime endDate){
+        Iterable<Friendship> allFriendships = friendshipService.repo.findAll();
+        Set<Friendship> friendships = new HashSet<>();
+        for (Friendship friendship : allFriendships)
+            if (  (friendship.getFr1() == id || friendship.getFr2() == id) &&  (friendship.getDate().isAfter(startDate) && friendship.getDate().isBefore(endDate) ))
+                friendships.add(friendship);
+        return friendships;
 
-    public List<Message> findAllSentMassagesToUsers(Long id_user_from){
-        return messageService.findAllSentMassagesToUsers(id_user_from);
     }
 
-    public List<Message> findAllReceivedMassagesFromUsers(Long id_to){
-        return messageService.findAllReceivedMassagesFromUsers(id_to);
+    public Iterable<Message> findAllSentMassagesToUsers(Long id_user_from,LocalDateTime startDate,LocalDateTime endDate){
+        Iterable<Message> allMsj = messageService.findAllSentMassagesToUsers(id_user_from);
+        Set<Message> messages = new HashSet<>();
+        for (Message msg : allMsj)
+            if (  msg.getDataTrimitere().isAfter(startDate) && msg.getDataTrimitere().isBefore(endDate) )
+                messages.add(msg);
+        return messages;
+
     }
 
+    public Iterable<Message> findAllReceivedMassagesFromUsers(Long id_to,LocalDateTime startDate,LocalDateTime endDate){
+        Iterable<Message> allMsj = messageService.findAllReceivedMassagesFromUsers(id_to);
+        Set<Message> messages = new HashSet<>();
+        for (Message msg : allMsj)
+            if (  msg.getDataTrimitere().isAfter(startDate) && msg.getDataTrimitere().isBefore(endDate) )
+                messages.add(msg);
+        return messages;
+    }
+
+    public Iterable<Message> findAllReceivedMassagesFromUser(Long id, Long id1, LocalDateTime startDate, LocalDateTime endDate) {
+        Iterable<Message> allMsj = messageService.findAllReceivedMassagesFromUser(id,id1);
+        Set<Message> messages = new HashSet<>();
+        for (Message msg : allMsj)
+            if (  msg.getDataTrimitere().isAfter(startDate) && msg.getDataTrimitere().isBefore(endDate) )
+                messages.add(msg);
+        return messages;
+
+    }
 }
 

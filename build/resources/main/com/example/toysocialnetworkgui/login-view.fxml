@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.PasswordField?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetworkgui.LoginController">
    <children>
       <ImageView fitHeight="150.0" fitWidth="219.0" layoutX="239.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
@@ -25,7 +26,7 @@
             <Font size="23.0" />
          </font>
       </Label>
-      <TextField fx:id="passwordTextField" layoutX="288.0" layoutY="300.0" prefHeight="31.0" prefWidth="326.0" />
+      <PasswordField fx:id="passwordTextField" layoutX="288.0" layoutY="300.0" prefHeight="31.0" prefWidth="326.0" />
       <Button fx:id="loginButton" layoutX="288.0" layoutY="357.0" mnemonicParsing="false" onAction="#onLoginButtonClick" prefHeight="26.0" prefWidth="90.0" text="Login" />
       <Label fx:id="noAccountLabel" layoutX="91.0" layoutY="441.0" prefHeight="19.0" prefWidth="184.0" text="No account? No problem bro">
          <font>

@@ -90,11 +90,6 @@ public class Main2Controller {
     @FXML
     TableColumn<Friendship, Date>  dateColumn;
 
-    @FXML
-    DatePicker startDatePicker;
-
-    @FXML
-    DatePicker endDatePicker;
 
     @FXML
     public void initialize() {
@@ -224,91 +219,7 @@ public class Main2Controller {
         }
     }
 
-    @FXML
-    public void pdfButtonClick() throws IOException {
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        File selectedDirectory = directoryChooser.showDialog(Main.mainStage);
 
-        if(selectedDirectory == null)
-            return;
-
-        int textX = 100;
-        AtomicInteger textY = new AtomicInteger(700);
-        LocalTime  time = LocalTime.of(0,0,0,0);
-        LocalDateTime  startDate = LocalDateTime.of(startDatePicker.getValue(), time);
-        LocalDateTime  endDate = LocalDateTime.of(endDatePicker.getValue(), time);
-
-        Iterable<Message> messages_sent = superService.findAllSentMassagesToUsers(currentUser.getId());
-        Iterable<Message> messages_received = superService.findAllReceivedMassagesFromUsers(currentUser.getId());
-        Iterable<Friendship> friends = superService.getFriendsInInterval(currentUser.getId(),startDate,endDate);
-
-        PDDocument document = new PDDocument();
-        PDPage page = new PDPage();
-        document.addPage( page );
-
-        PDFont font1 = PDType1Font.HELVETICA_BOLD;
-        PDFont font2 = PDType1Font.HELVETICA;
-        PDPageContentStream contentStream = new PDPageContentStream(document, page);
-
-        contentStream.beginText();
-        contentStream.setFont(font1, 20 );
-        contentStream.newLineAtOffset(textX,textY.get());
-        contentStream.showText("New friends of " + currentUser.getFirstName() + ":");
-        contentStream.endText();
-        textY.addAndGet(-20);
-
-        friends.forEach(x -> {
-            try {
-                contentStream.beginText();
-                contentStream.setFont( font2, 10 );
-                contentStream.newLineAtOffset(textX-20,textY.get());
-                String friend = superService.findUserById(x.getFr1()).getFirstName();
-                String user = superService.findUserById(x.getFr2()).getFirstName();
-                contentStream.showText(friend + " s-a imprietenit cu  " +  user+ " pe data de " + x.getDate());
-                contentStream.endText();
-                textY.addAndGet(-10);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-        messages_sent.forEach(x -> {
-            try {
-                contentStream.beginText();
-                contentStream.setFont( font2, 10 );
-                contentStream.newLineAtOffset(textX-20,textY.get());
-                contentStream.showText(currentUser.getFirstName() + " a trimis mesajul " + x.getMesaj() + " pe data de " +x.getDataTrimitere() );
-                contentStream.endText();
-                textY.addAndGet(-10);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-
-        messages_received.forEach(x -> {
-            try {
-                contentStream.beginText();
-                contentStream.setFont( font2, 10 );
-                contentStream.newLineAtOffset(textX-20,textY.get());
-                contentStream.showText(currentUser.getFirstName() + " a primit mesajul " + x.getMesaj() + " pe data de " +x.getDataTrimitere() );
-                contentStream.endText();
-                textY.addAndGet(-10);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-
-
-        contentStream.close();
-        document.save( selectedDirectory+"/"+currentUser.getFirstName()+" "+currentUser.getLastName()+".pdf");
-        document.close();
-
-    }
 
 
     @FXML
@@ -347,8 +258,6 @@ public class Main2Controller {
 
     }
 
-
-
     @FXML
     public void onFriendsButtonClick(ActionEvent actionEvent) {
         try {
@@ -360,7 +269,7 @@ public class Main2Controller {
             current.setTitle("Ian");
             current.setScene(scene);
             FriendsListController ctrl = fxmlLoader.getController();
-            ctrl.afterLoad(superService,superService.findUsersByName(currentUser.getFirstName()).get(0));
+            ctrl.afterLoad(superService,currentUser);
 
         }catch (IOException e) {
             e.printStackTrace();
@@ -377,14 +286,6 @@ public class Main2Controller {
             current.setTitle("Messages");
             current.setScene(scene);
             ChatController ctrl = fxmlLoader.getController();
-            /*List<User> found = superService.findUsersByName(usernameTextField.getText());
-            if (found.isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error!");
-                alert.setHeaderText("This user doesn't exist!\n");
-                alert.showAndWait();
-                return;
-            }*/
             ctrl.afterLoad(superService,currentUser);
 
         }catch (IOException e) {

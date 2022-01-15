@@ -29,7 +29,7 @@ public class LoginController {
     @FXML
     TextField usernameTextField;
     @FXML
-    TextField passwordTextField;
+    PasswordField passwordTextField;
     @FXML
     Button loginButton;
     @FXML
@@ -44,7 +44,7 @@ public class LoginController {
     protected void onLoginButtonClick(ActionEvent event) {
 
         String username = usernameTextField.getText();
-        String password = passwordTextField.getText();
+        String password = HashPassword.passHashing(passwordTextField.getText());
         if(username.equals("")){
             return;
         }

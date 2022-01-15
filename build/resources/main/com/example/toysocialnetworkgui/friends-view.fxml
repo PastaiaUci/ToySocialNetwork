@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="mainAnchorPaneView" fx:id="mainAnchorPaneView" prefHeight="578.0" prefWidth="896.0" style="-fx-border-radius: 10px;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetworkgui.Main2Controller">
+<AnchorPane id="mainAnchorPaneView" fx:id="mainAnchorPaneView" prefHeight="578.0" prefWidth="896.0" style="-fx-border-radius: 10px;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetworkgui.FriendsListController">
     <stylesheets>
         <URL value="@main2.css" />
     </stylesheets>
@@ -24,7 +24,7 @@
                         </Label>
                     </children>
                 </Pane>
-                <Button fx:id="backButton" layoutX="39.0" layoutY="491.0" mnemonicParsing="false" onAction="#logout" prefHeight="46.0" prefWidth="139.0" text="Back" />
+                <Button fx:id="backButton" layoutX="39.0" layoutY="491.0" mnemonicParsing="false" onAction="#backButtonClick" prefHeight="46.0" prefWidth="139.0" text="Back" />
             <Label alignment="CENTER" layoutX="25.0" layoutY="171.0" prefHeight="29.0" prefWidth="168.0" text="Friends" textFill="#fffdfd">
                <font>
                   <Font size="42.0" />
@@ -37,7 +37,7 @@
             </ImageView>
             </children>
         </AnchorPane>
-        <Button fx:id="sendRequestButton" layoutX="279.0" layoutY="374.0" mnemonicParsing="false" onAction="#acceptRequest" text="Send Friend Request" />
+        <Button fx:id="sendRequestButton" layoutX="279.0" layoutY="374.0" mnemonicParsing="false" onAction="#sendRequest" text="Send Friend Request" />
       <ListView fx:id="allUsersListView" layoutX="225.0" layoutY="67.0" prefHeight="295.0" prefWidth="264.0" />
       <Label layoutX="266.0" layoutY="21.0" prefHeight="30.0" prefWidth="181.0" text="All Users">
          <font>
@@ -46,11 +46,12 @@
       </Label>
       <ListView fx:id="allFriendsListView" layoutX="564.0" layoutY="67.0" prefHeight="295.0" prefWidth="278.0" />
       <Label layoutX="647.0" layoutY="21.0" prefHeight="30.0" prefWidth="130.0" text="Your Friends" />
-      <DatePicker layoutX="564.0" layoutY="429.0" />
-      <DatePicker layoutX="714.0" layoutY="429.0" />
+      <DatePicker fx:id="startDatePicker" layoutX="564.0" layoutY="429.0" />
+      <DatePicker fx:id="endDatePicker" layoutX="714.0" layoutY="429.0" />
       <Label layoutX="593.0" layoutY="403.0" prefHeight="15.0" prefWidth="33.0" text="FROM:" />
       <Label layoutX="749.0" layoutY="402.0" prefHeight="15.0" prefWidth="51.0" text="TO:" />
-      <Button fx:id="raport1Button" layoutX="630.0" layoutY="480.0" mnemonicParsing="false" text="Raport 1" />
-      <Button fx:id="raport2Button" layoutX="719.0" layoutY="480.0" mnemonicParsing="false" text="Raport 2" />
+      <Button fx:id="raport1Button" layoutX="630.0" layoutY="480.0" mnemonicParsing="false" onAction="#pdfButtonClick" text="Raport 1" />
+      <Button fx:id="raport2Button" layoutX="719.0" layoutY="480.0" mnemonicParsing="false" onAction="#raport2ButtonClick" text="Raport 2" />
+      <Button fx:id="raport1Button1" layoutX="279.0" layoutY="434.0" mnemonicParsing="false" onAction="#deleteButtonClick" text="Delete friend" />
     </children>
 </AnchorPane>

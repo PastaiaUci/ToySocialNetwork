@@ -25,7 +25,7 @@ public class SignupController {
     @FXML
     TextField lastNameTextField;
     @FXML
-    TextField passwordTextField;
+    PasswordField passwordTextField;
     @FXML
     Button loginButton;
 
@@ -34,7 +34,7 @@ public class SignupController {
     protected void onRegisterButtonClick() {
         String first_name = firstNameTextField.getText();
         String last_name = lastNameTextField.getText();
-        String password = passwordTextField.getText();
+        String password = HashPassword.passHashing(passwordTextField.getText());
         if(first_name.equals("") || last_name.equals("") || password.equals("")){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Cabral sad :( !");
