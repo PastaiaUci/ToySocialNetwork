@@ -331,8 +331,6 @@ public class SuperService {
         List<Friendship> sentFriendRequest = new ArrayList<>();
         Iterable<Friendship> pendingFriendships = friendshipService.findAll();
         for(Friendship friendship:pendingFriendships){
-
-
             if(friendship.getFr1() == id || friendship.getFr2() == id)
                 sentFriendRequest.add(friendship);
         }
@@ -357,5 +355,7 @@ public class SuperService {
         groupMessage.setId(TEMPORARY_MESSAGE_ID);
         this.groupsService.saveGroupMessage(groupMessage);
     }
+
+
 }
 
