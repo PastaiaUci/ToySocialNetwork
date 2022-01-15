@@ -106,6 +106,13 @@ public class GroupsController implements Observer {
     public void showButtonClick(ActionEvent actionEvent) {
         updateGroupMessages();
     }
+
+    public void findButtonCLick(ActionEvent actionEvent) {
+    }
+
+    public void refreshButtonCLick(ActionEvent actionEvent) {
+    }
+
     static final class DisscussionListViewCell extends ListCell<GroupMessage>{
         private final Long idCurrentUser;
         private final SuperService superService;

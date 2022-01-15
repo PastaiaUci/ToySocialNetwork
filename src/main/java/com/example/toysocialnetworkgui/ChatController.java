@@ -73,6 +73,14 @@ public class ChatController implements Observer {
     public void sendMessageButtonClick(ActionEvent actionEvent) {
         Message selected = messagesView.getSelectionModel().getSelectedItem();
         User destination = usersTableView.getSelectionModel().getSelectedItem();
+        if(destination.getId().equals(currentUser.getId())){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Can't send message to yourself!");
+            alert.setHeaderText("Can't send message to yourself!");
+            alert.showAndWait();
+            return;
+        }
+
         if(destination == null)
             return;
         if(textarea.getText().strip().isBlank()) {
