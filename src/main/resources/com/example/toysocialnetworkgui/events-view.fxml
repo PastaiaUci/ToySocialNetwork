@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.DatePicker?>
 <AnchorPane prefHeight="542.0" prefWidth="703.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetworkgui.EventController">
     <stylesheets>
         <URL value="@main2.css" />
@@ -31,7 +32,7 @@
       <Button fx:id="subButton" layoutX="442.0" layoutY="424.0" mnemonicParsing="false" onAction="#subButtonClick" prefHeight="26.0" prefWidth="96.0" text="SUBSCRIBE" />
       <TextField fx:id="nameTextField" layoutX="119.0" layoutY="182.0" />
       <TextField fx:id="descriereTextField" layoutX="119.0" layoutY="258.0" />
-      <TextField fx:id="dataTextField" layoutX="118.0" layoutY="345.0" />
+        <DatePicker fx:id="DatePicker" layoutX="118.0" layoutY="345.0"/>
       <Label layoutX="14.0" layoutY="275.0" text="Descriere">
          <font>
             <Font name="Bauhaus 93" size="15.0" />
@@ -46,5 +47,6 @@
             <Font name="Bauhaus 93" size="15.0" />
          </font>
       </Label>
+
     </children>
 </AnchorPane>

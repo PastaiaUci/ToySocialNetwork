@@ -52,10 +52,10 @@ public class SuperService implements Observable {
     public Iterable<Event> getAllEventsForUser (Long id){
         return eventService.getAllEventsForUser(id);
     }
-    public int addEvent(String nume, String descriere, String data){
+    public int addEvent(String nume, String descriere, LocalDateTime data){
 
         List<Event> op = StreamSupport.stream(eventService.findAll().spliterator(), false)
-                .filter(x -> x.getName().matches(nume) && x.getDescriere().matches(descriere) && x.getDate().matches(data))
+                .filter(x -> x.getName().matches(nume)  && x.getDate().equals(data)&& x.getDescriere().matches(descriere))
                 .collect(Collectors.toList());
         if (!op.isEmpty())
             return UNSUCCESFUL_OPERATION_RETURN_CODE;
@@ -430,6 +430,19 @@ public class SuperService implements Observable {
     @Override
     public void addObserver(Observer obs) {
         allObservers.add(obs);
+    }
+
+    public void turnOffNotifications(Long id, Long id1) {
+        eventService.turnOffNotifications(id,id1);
+    }
+
+    public void turnOnNotifications(Long id, Long id1) {
+        eventService.turnOnNotifications(id,id1);
+    }
+
+    public boolean isNotificationOn(Long id, Long id1) {
+        return eventService.isNotificationOn(id,id1);
+
     }
 }
 

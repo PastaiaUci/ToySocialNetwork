@@ -148,4 +148,19 @@ public class MessageDbRepository implements Repository<Long, Message> {
     public Iterable<Message> getAllEventsForUser(Long aLong) {
         return null;
     }
+
+    @Override
+    public void turnOffNotifications(Long aLong, Long id1) {
+
+    }
+
+    @Override
+    public void turnOnNotifications(Long aLong, Long id1) {
+
+    }
+
+    @Override
+    public boolean isNotificationOn(Long aLong, Long id1) {
+        return true;
+    }
 }

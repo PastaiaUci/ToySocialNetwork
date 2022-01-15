@@ -18,6 +18,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 
 public class EventController implements Observer {
@@ -34,13 +36,12 @@ public class EventController implements Observer {
     @FXML
     TableColumn<Event,String> dataColumn;
     @FXML
-    TableColumn<Event,String> statusColumn;
+    DatePicker DatePicker;
     @FXML
     TextField nameTextField;
     @FXML
     TextField descriereTextField;
-    @FXML
-    TextField dataTextField;
+
     @FXML
     Button backButton;
     @FXML
@@ -111,7 +112,8 @@ public class EventController implements Observer {
 
         String nume = nameTextField.getText();
         String descriere = descriereTextField.getText();
-        String data = dataTextField.getText();
+        LocalTime time = LocalTime.of(0,0,0,0);
+        LocalDateTime data = LocalDateTime.of(DatePicker.getValue(), time);
         if(nume.equals("") || descriere.equals("") || data.equals("") ) {
             return;
         }

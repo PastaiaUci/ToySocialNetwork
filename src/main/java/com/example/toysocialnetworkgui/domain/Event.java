@@ -8,14 +8,14 @@ import java.util.Objects;
 
 public class Event extends Entity<Long>{
     private String Descriere;
-    private String date;
+    private LocalDateTime date;
     private String name;
 
 
-    public Event(String nume, String description,String date) {
+    public Event(String nume, String description,LocalDateTime date) {
+        this.name = nume;
         this.Descriere = description;
         this.date = date;
-        this.name = nume;
     }
 
 
@@ -23,7 +23,7 @@ public class Event extends Entity<Long>{
         return Descriere;
     }
 
-    public String getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 

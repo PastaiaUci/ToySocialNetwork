@@ -32,4 +32,15 @@ public class EventService {
         return repo.getAllEventsForUser(id);
     }
 
+    public void turnOffNotifications(Long id, Long id1) {
+        repo.turnOffNotifications(id,id1);
+    }
+
+    public void turnOnNotifications(Long id, Long id1) {
+        repo.turnOnNotifications(id,id1);
+    }
+
+    public boolean isNotificationOn(Long id, Long id1) {
+        return repo.isNotificationOn(id,id1);
+    }
 }

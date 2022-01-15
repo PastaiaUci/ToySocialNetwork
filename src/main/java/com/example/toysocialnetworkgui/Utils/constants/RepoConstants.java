@@ -17,9 +17,13 @@ public class RepoConstants {
     public static final String SAVE_EVENT_DB = "insert into events (nume, descriere,data ) values (?, ?, ?)";
     public static final String DELETE_EVENT_DB = "delete from events where id = ?";
     public static final String UPDATE_EVENT_DB = "update events set nume = ?,descriere = ?,data = ? where id = ?";
-    public static final String SUB_TO_EVENT_DB = "insert into users_events_status (user_id,event_id ) values (?, ?)";
+    public static final String SUB_TO_EVENT_DB = "insert into users_events_status (user_id,event_id,notifications ) values (?, ?, 'On')";
     public static final String UNSUB_TO_EVENT_DB = "delete from users_events_status where user_id = ? and event_id = ?";
     public static final String EVENTS_USER_SUBBED_T0 = "select event_id from users_events_status where user_id = ?";
+    public static  final String TURN_OFF_NOTIFICATIONS = "update  users_events_status set notifications = 'Off' where user_id = ? and event_id = ?";
+    public static final String TURN_ON_NOTIFICATIONS = "update  users_events_status set notifications = 'On' where user_id = ? and event_id = ?";
+    public static final String IS_NOTIFICATION_ON = "select notifications from users_events_status where user_id = ? and event_id = ?";
+
 
     //Return codes for functions
     public static final int SUCCESFUL_OPERATION_RETURN_CODE = 0;

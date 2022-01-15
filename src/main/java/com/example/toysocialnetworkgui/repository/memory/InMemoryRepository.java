@@ -97,4 +97,19 @@ public class InMemoryRepository<ID, E extends Entity<ID>> implements Repository<
     public Iterable<E> getAllEventsForUser(ID id) {
         return null;
     }
+
+    @Override
+    public void turnOffNotifications(ID id, ID id1) {
+
+    }
+
+    @Override
+    public void turnOnNotifications(ID id, ID id1) {
+
+    }
+
+    @Override
+    public boolean isNotificationOn(ID id, ID id1) {
+        return true;
+    }
 }
