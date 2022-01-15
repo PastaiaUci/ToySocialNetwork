@@ -1,5 +1,8 @@
+
 package com.example.toysocialnetworkgui;
 
+import com.example.toysocialnetworkgui.Main;
+import com.example.toysocialnetworkgui.Main2Controller;
 import com.example.toysocialnetworkgui.domain.Friendship;
 import com.example.toysocialnetworkgui.domain.User;
 import com.example.toysocialnetworkgui.service.ServiceException;
@@ -91,3 +94,4 @@ public class FriendsListController {
             this.updateAllFriends();
     }
 }
+

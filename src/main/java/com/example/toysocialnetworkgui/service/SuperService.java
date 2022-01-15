@@ -343,8 +343,6 @@ public class SuperService {
         List<Friendship> sentFriendRequest = new ArrayList<>();
         Iterable<Friendship> pendingFriendships = friendshipService.findAll();
         for(Friendship friendship:pendingFriendships){
-
-
             if(friendship.getFr1() == id || friendship.getFr2() == id)
                 sentFriendRequest.add(friendship);
         }
@@ -371,7 +369,6 @@ public class SuperService {
     }
 
 
-
     public List<Message> findAllSentMassagesToUsers(Long id_user_from){
         return messageService.findAllSentMassagesToUsers(id_user_from);
     }
@@ -379,5 +376,6 @@ public class SuperService {
     public List<Message> findAllReceivedMassagesFromUsers(Long id_to){
         return messageService.findAllReceivedMassagesFromUsers(id_to);
     }
+
 }
 
